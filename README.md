@@ -61,7 +61,7 @@ The `EncodeToolsNative` class will use the native packages `bson-ext` and `xxhas
 
 ## Usage
 
-Please see the documentation located at `...`
+Please see the documentation located at https://etomonusa.github.io/encode-tools/
 
 Generally speaking, all functions return a Buffer.
 
