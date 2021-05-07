@@ -27,7 +27,7 @@ Serializing an object wth msgpack
 let enc = new EncodeTools();
 let obj = { foo: 'bar' };
 let newBuf = await enc.serializeObject(obj, SerializationFormat.msgpack);
-console.log(newBuf.toString('utf8'));
+console.log(newBuf.toString('base64'));
 ```
 
 Generating a base64-encoded UUID v4
