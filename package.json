@@ -1,6 +1,6 @@
 {
     "name": "@etomon/encode-tools",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -12,7 +12,11 @@
         "registry": "https://registry.npmjs.org",
         "access": "public"
     },
-    "author": "Etomon Team <open-source@etomon.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EtomonUSA/encode-tools"
+  },
+  "author": "Etomon Team <open-source@etomon.com>",
     "license": "LGPL-3.0",
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
