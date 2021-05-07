@@ -152,4 +152,4 @@ export class EncodeToolsNative extends EncodeTools {
     }
 }
 
-export { EncodeToolsNative as EncodeTools };
+export default EncodeToolsNative;
