@@ -9,6 +9,16 @@ import EncodeTools, {
     SerializationFormat
 } from './EncodeTools';
 
+export {
+  BinaryEncoding,
+  BinaryInputOutput,
+  EncodingOptions as BaseEncodingOptions,
+  HashAlgorithm,
+  IDFormat,
+  SerializationFormat
+} from './EncodeTools';
+
+
 import * as crypto from 'crypto';
 
 
