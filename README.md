@@ -4,6 +4,39 @@ This package aggregates different libraries for encoding, serializing, generatin
 
 *Many* other packages serve the same purpose, but our objective is to ensure a consistent experience in both node.js and the browser and standardize the api so functions work the same way across different underlying libraries.
 
+## Examples
+Encoding a Buffer as base64url
+
+```
+  let enc = new EncodeTools();
+  let buf = Buffer.from('hello world', 'utf8');
+  let newBuf = enc.encodeBuffer(buf, BinaryEncoding.base64url);
+  console.log(newBuf.toString('utf8'));
+```
+
+Hashing an object wth xxhash
+```
+let enc = new EncodeTools();
+let obj = { foo: 'bar' };
+let newBuf = await enc.hashObject(obj, HashAlgorithm.xxhash64);
+console.log(newBuf.toString('utf8'));
+```
+
+Serializing an object wth msgpack
+```
+let enc = new EncodeTools();
+let obj = { foo: 'bar' };
+let newBuf = await enc.serializeObject(obj, SerializationFormat.msgpack);
+console.log(newBuf.toString('utf8'));
+```
+
+Generating a base64-encoded UUID v4
+```
+let enc = new EncodeTools();
+let newBuf = await enc.uniqueId(IDFormat.uuidv4);
+console.log(newBuf.toString('base64'));
+```
+
 ## Algorithms
 
 Below are a list of supported algorithms, their backing library, and their support in the browser.
