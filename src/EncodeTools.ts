@@ -23,6 +23,8 @@ import {
     xxhash64, BcryptOptions, BcryptVerifyOptions
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
+const LZMA = require('lzma').LZMA;
+
 export enum BinaryEncoding {
     /**
      * Node.js buffer under a compatibility layer for the browser
@@ -146,6 +148,13 @@ export enum SerializationFormat {
     bson = 'bson'
 }
 
+export enum CompressionFormat {
+  /**
+   * LZMA
+   */
+  lzma = 'lzma'
+}
+
 /**
  * Default options for the encoding tools.
  * These will be used if none are passed to the functions used.
@@ -155,6 +164,7 @@ export interface EncodingOptions {
     serializationFormat?: SerializationFormat;
     hashAlgorithm?: HashAlgorithm;
     binaryEncoding?: BinaryEncoding;
+    compressionFormat?: CompressionFormat;
 }
 
 export class InvalidFormat extends Error {
@@ -183,7 +193,8 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   binaryEncoding: BinaryEncoding.base64,
   hashAlgorithm: HashAlgorithm.xxhash64,
   serializationFormat: SerializationFormat.json,
-  uniqueIdFormat: IDFormat.uuidv1String
+  uniqueIdFormat: IDFormat.uuidv1String,
+  compressionFormat: CompressionFormat.lzma
 };
 
 /**
@@ -767,6 +778,61 @@ export class EncodeTools {
         else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(bufferFrom(data)) as T;
         else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(bufferFrom(data)) as T;
         throw new InvalidFormat(serializationFormat);
+    }
+
+  /**
+   * Compresses a buffer using LZMA
+   * @param buf - Buffer
+   * @param mode - Compression mode (1-9)
+   */
+    public static async compressLZMA(buf: Buffer, mode: number): Promise<Buffer> {
+      let lzma = new LZMA();
+      return new Promise<Buffer>((resolve, reject) => {
+        lzma.compress(buf, mode, (result: any, error: any) => {
+          if (error) reject(error);
+          else resolve(EncodeTools.ensureBuffer(result));
+        });
+      });
+    }
+
+  /**
+   * Decompresses a buffer using LZMA
+   * @param buf - Buffer
+   * @param mode - Compression mode (1-9)
+   */
+    public static async decompressLZMA(buf: Buffer): Promise<Buffer> {
+      let lzma = new LZMA();
+      return new Promise<Buffer>((resolve, reject) => {
+        lzma.decompress(buf, (result: any, error: any) => {
+          if (error) reject(error);
+          else resolve(EncodeTools.ensureBuffer(result));
+        });
+      });
+    }
+
+  /**
+   * Compresses arbitrary data using the provided format and any options
+   * @param data - Data to compress
+   * @param format - Format to use
+   * @param args - Options
+   */
+    public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+      if (format === CompressionFormat.lzma) {
+        return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), args[0]);
+      }
+      throw new InvalidFormat(format);
+    }
+
+  /**
+   * Decompresses arbitrary data using the provided format and any options
+   * @param data - Data to decompress
+   * @param format - Format to use
+   */
+    public async decompress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+      if (format === CompressionFormat.lzma) {
+        return EncodeTools.decompressLZMA(EncodeTools.ensureBuffer(data));
+      }
+      throw new InvalidFormat(format);
     }
 
   /**

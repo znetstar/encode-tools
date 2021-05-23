@@ -1,13 +1,16 @@
 import {Buffer} from 'buffer';
 
 import EncodeTools, {
-    BinaryEncoding,
-    BinaryInputOutput,
-    EncodingOptions as BaseEncodingOptions,
-    HashAlgorithm,
-    IDFormat,
-    SerializationFormat
+  BinaryEncoding,
+  BinaryInputOutput,
+  CompressionFormat,
+  EncodingOptions as BaseEncodingOptions,
+  HashAlgorithm,
+  IDFormat,
+  InvalidFormat,
+  SerializationFormat
 } from './EncodeTools';
+import * as crypto from 'crypto';
 
 export {
   BinaryEncoding,
@@ -15,16 +18,14 @@ export {
   EncodingOptions as BaseEncodingOptions,
   HashAlgorithm,
   IDFormat,
-  SerializationFormat
+  SerializationFormat,
+  CompressionFormat
 } from './EncodeTools';
-
-
-import * as crypto from 'crypto';
-
 
 interface EncodingOptionsNative {
     hashAlgorithm: HashAlgorithm
 }
+const lzma = require('lzma-native');
 
 export type EncodingOptions = BaseEncodingOptions&EncodingOptionsNative;
 
@@ -32,7 +33,8 @@ export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
   binaryEncoding: BinaryEncoding.base64,
   hashAlgorithm: HashAlgorithm.xxhash3,
   serializationFormat: SerializationFormat.json,
-  uniqueIdFormat: IDFormat.uuidv1String
+  uniqueIdFormat: IDFormat.uuidv1String,
+  compressionFormat: CompressionFormat.lzma
 };
 
 /**
@@ -45,6 +47,16 @@ export class EncodeToolsNative extends EncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS) {
         super(options);
     }
+
+  /**
+   * Returns an instance of LZMA Native
+   */
+  public static lzmaNative(): any {
+    if (typeof(require) === 'undefined')
+      return null;
+    return require('lzma-native');
+  }
+
 
   /**
    * Returns an instance of XXHash Addon
@@ -145,7 +157,64 @@ export class EncodeToolsNative extends EncodeTools {
         return new EncodeToolsNative();
     }
 
-    /**
+  /**
+   * Compresses a buffer using LZMA
+   * @param buf - Buffer
+   * @param mode - Compression mode (1-9)
+   */
+  public static async compressLZMA(buf: Buffer, mode: number): Promise<Buffer> {
+    let lzma = EncodeToolsNative.lzmaNative();
+    return new Promise<Buffer>((resolve, reject) => {
+      lzma.compress(buf, mode, (result: any, error: any) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    });
+
+  }
+
+  /**
+   * Decompresses a buffer using LZMA
+   * @param buf - Buffer
+   * @param mode - Compression mode (1-9)
+   */
+  public static async decompressLZMA(buf: Buffer): Promise<Buffer> {
+    let lzma = EncodeToolsNative.lzmaNative();
+    return new Promise<Buffer>((resolve, reject) => {
+      lzma.decompress(buf, (result: any, error: any) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    });
+  }
+
+  /**
+   * Compresses arbitrary data using the provided format and any options
+   * @param data - Data to compress
+   * @param format - Format to use
+   * @param args - Options
+   */
+  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+    if (format === CompressionFormat.lzma) {
+      return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), args[0]);
+    }
+    throw new InvalidFormat(format);
+  }
+
+  /**
+   * Decompresses arbitrary data using the provided format and any options
+   * @param data - Data to decompress
+   * @param format - Format to use
+   */
+  public async decompress(data: BinaryInputOutput,  format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+    if (format === CompressionFormat.lzma) {
+      return EncodeToolsNative.decompressLZMA(EncodeToolsNative.ensureBuffer(data));
+    }
+    throw new InvalidFormat(format);
+  }
+
+
+  /**
      * Hashes data using the provided algorithm, returning a node.js Buffer.
      *
      * @param buffer

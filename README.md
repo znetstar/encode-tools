@@ -1,6 +1,6 @@
 # Etomon Encode Tools
 
-This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface. 
+This package aggregates different libraries for encoding, serializing, compressing, generating ids and hashing things, exposing a common interface. 
 
 *Many* other packages serve the same purpose, but our objective is to ensure a consistent experience in both node.js and the browser and standardize the api so functions work the same way across different underlying libraries.
 
@@ -34,6 +34,13 @@ Generating a base64-encoded UUID v4
 ```
 let enc = new EncodeTools();
 let newBuf = await enc.uniqueId(IDFormat.uuidv4);
+console.log(newBuf.toString('base64'));
+```
+
+Compressing a buffer with lzma
+```
+let enc = new EncodeTools();
+let newBuf = await enc.compress(Buffer.from('hi', 'utf8'), CompressionFormat.lzma);
 console.log(newBuf.toString('base64'));
 ```
 
@@ -84,13 +91,19 @@ Below are a list of supported algorithms, their backing library, and their suppo
 |---------|----------|--------------------|
 | json    | ✓        | (built in)         |
 | msgpack | ✓        | @msgpack/msgpack   |
-| bson    | ✓        | bson-ext/bson      |
+| bson    | ✓        | bson-ext/bson      
+
+### Compression
+
+| Name    | Browser? | Underlying Package |
+|---------|----------|--------------------|
+| lzma    | ✓        | lzma/lzma-native   |
 
 ## Requirements
 
-Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson` and `hash-wsam` packages to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
+Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
 
-The `EncodeToolsNative` class will use the native packages `bson-ext` and `xxhash-addon` (and any future native packages). `bson-ext` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext xxhash-addon`.
+The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext xxhash-addon lzma-native`.
 
 ## Usage
 

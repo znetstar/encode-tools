@@ -82,11 +82,16 @@
 				<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">EncodeTools</span><span style="color: #000000">();</span>
 <span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">obj</span><span style="color: #000000"> = { </span><span style="color: #001080">foo:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;bar&#039;</span><span style="color: #000000"> };</span>
 <span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">newBuf</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000">.</span><span style="color: #795E26">serializeObject</span><span style="color: #000000">(</span><span style="color: #001080">obj</span><span style="color: #000000">, </span><span style="color: #001080">SerializationFormat</span><span style="color: #000000">.</span><span style="color: #001080">msgpack</span><span style="color: #000000">);</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">newBuf</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;utf8&#039;</span><span style="color: #000000">));</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">newBuf</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">));</span>
 </code></pre>
 				<p>Generating a base64-encoded UUID v4</p>
 				<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">EncodeTools</span><span style="color: #000000">();</span>
 <span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">newBuf</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000">.</span><span style="color: #795E26">uniqueId</span><span style="color: #000000">(</span><span style="color: #001080">IDFormat</span><span style="color: #000000">.</span><span style="color: #001080">uuidv4</span><span style="color: #000000">);</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">newBuf</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">));</span>
+</code></pre>
+				<p>Compressing a buffer with lzma</p>
+				<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">EncodeTools</span><span style="color: #000000">();</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">newBuf</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">enc</span><span style="color: #000000">.</span><span style="color: #795E26">compress</span><span style="color: #000000">(</span><span style="color: #001080">Buffer</span><span style="color: #000000">.</span><span style="color: #795E26">from</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;hi&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;utf8&#039;</span><span style="color: #000000">), </span><span style="color: #001080">CompressionFormat</span><span style="color: #000000">.</span><span style="color: #001080">lzma</span><span style="color: #000000">);</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #001080">newBuf</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">));</span>
 </code></pre>
 				<a href="#algorithms" id="algorithms" style="color: inherit; text-decoration: none;">
@@ -246,6 +251,33 @@
 				</tbody></table>
 				<a href="#serialization" id="serialization" style="color: inherit; text-decoration: none;">
 					<h3>Serialization</h3>
+				</a>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Browser?</th>
+							<th>Underlying Package</th>
+						</tr>
+					</thead>
+					<tbody><tr>
+							<td>json</td>
+							<td>✓</td>
+							<td>(built in)</td>
+						</tr>
+						<tr>
+							<td>msgpack</td>
+							<td>✓</td>
+							<td>@msgpack/msgpack</td>
+						</tr>
+						<tr>
+							<td>bson</td>
+							<td>✓</td>
+							<td>bson-ext/bson</td>
+						</tr>
+				</tbody></table>
+				<a href="#compression" id="compression" style="color: inherit; text-decoration: none;">
+					<h3>Compression</h3>
 				</a>
 				<table>
 					<thead>
