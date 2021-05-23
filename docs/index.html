@@ -61,7 +61,7 @@
 				<a href="#etomon-encode-tools" id="etomon-encode-tools" style="color: inherit; text-decoration: none;">
 					<h1>Etomon Encode Tools</h1>
 				</a>
-				<p>This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface. </p>
+				<p>This package aggregates different libraries for encoding, serializing, compressing, generating ids and hashing things, exposing a common interface. </p>
 				<p><em>Many</em> other packages serve the same purpose, but our objective is to ensure a consistent experience in both node.js and the browser and standardize the api so functions work the same way across different underlying libraries.</p>
 				<a href="#examples" id="examples" style="color: inherit; text-decoration: none;">
 					<h2>Examples</h2>
@@ -288,26 +288,16 @@
 						</tr>
 					</thead>
 					<tbody><tr>
-							<td>json</td>
+							<td>lzma</td>
 							<td>✓</td>
-							<td>(built in)</td>
-						</tr>
-						<tr>
-							<td>msgpack</td>
-							<td>✓</td>
-							<td>@msgpack/msgpack</td>
-						</tr>
-						<tr>
-							<td>bson</td>
-							<td>✓</td>
-							<td>bson-ext/bson</td>
+							<td>lzma/lzma-native</td>
 						</tr>
 				</tbody></table>
 				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
 					<h2>Requirements</h2>
 				</a>
-				<p>Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The <code>bson-ext</code> and <code>xxhash-addon</code> packages have native bindings, and so cannot run in the browser. For browser compatibility, the <code>EncodeTools</code> class uses the pure javascript <code>bson</code> and <code>hash-wsam</code> packages to provide equivalent support albeit at the cost of performance. Additionally, <code>hash-wsam</code> lacks support for xxhash3.</p>
-				<p>The <code>EncodeToolsNative</code> class will use the native packages <code>bson-ext</code> and <code>xxhash-addon</code> (and any future native packages). <code>bson-ext</code> and <code>xxhash-addon</code> are listed as peer dependencies, so they must be installed manually with <code>npm install --no-save bson-ext xxhash-addon</code>.</p>
+				<p>Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> packages have native bindings, and so cannot run in the browser. For browser compatibility, the <code>EncodeTools</code> class uses the pure javascript <code>bson</code>, <code>lzma</code> and <code>hash-wsam</code> packages to provide equivalent support albeit at the cost of performance. Additionally, <code>hash-wsam</code> lacks support for xxhash3.</p>
+				<p>The <code>EncodeToolsNative</code> class will use the native packages <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> (and any future native packages). <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> are listed as peer dependencies, so they must be installed manually with <code>npm install --no-save bson-ext xxhash-addon lzma-native</code>.</p>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h2>Usage</h2>
 				</a>
