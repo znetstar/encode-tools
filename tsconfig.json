@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "noImplicitAny": true,
     "declaration": true,
     "removeComments": false,
@@ -11,7 +11,9 @@
     "rootDir": "src",
     "outDir": "lib",
     "downlevelIteration": true,
-    "lib": [ "es2017", "DOM" ]
+    "lib": [ "es2017", "DOM" ],
+    "moduleResolution": "Node",
+    "esModuleInterop": true
   },
   "files": [ "src/index.ts", "src/EncodeTools.ts", "src/EncodeToolsNative.ts" ]
 }

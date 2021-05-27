@@ -13,6 +13,8 @@ import {
 import {Buffer} from "buffer";
 import {Chance} from 'chance';
 import {assert} from 'chai';
+import {ImageFormat} from "../../EncodeTools";
+
 const crypto = require('crypto');
 
 const sharp = require('sharp');
@@ -21,8 +23,6 @@ const bson = require('bson-ext');
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 
 import IntegerOptions = Chance.IntegerOptions;
-import {ImageFormat} from "../../EncodeTools";
-import {EncodeToolsRunner} from "./EncodeToolsRunner";
 
 const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
@@ -256,6 +256,8 @@ export class SerializeObjectRunner extends EncodeToolsNativeRunner<any, BinaryIn
 export class CompressRunner extends EncodeToolsNativeRunner<BinaryInputOutput, BinaryInputOutput, CompressionFormat, EncodeTools> {
   constructor(formats: CompressionFormat[] = Object.keys(CompressionFormat).map(enc => (CompressionFormat as any)[enc])) {
     super(formats);
+
+    this.formats.delete(CompressionFormat.zstd);
   }
 
   protected compressionLevel = (new Chance()).integer({ min: 1, max: 9 })

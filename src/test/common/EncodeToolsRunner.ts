@@ -400,6 +400,19 @@ export class CompressRunner extends EncodeToolsRunner<BinaryInputOutput, BinaryI
           });
         }));
         break;
+      case CompressionFormat.zstd:
+        encoded =  Buffer.from(await new Promise<Buffer>((resolve, reject) => {
+          require('zstd-codec').ZstdCodec.run((zstd: any) => {
+            const simple = new zstd.Simple();
+            try {
+              const data = simple.compress(decoded, chance.integer({ min: 1, max: 9 }));
+              resolve(data);
+            } catch (err) {
+              reject(err);
+            }
+          });
+        }));
+        break
       default:
         throw new InvalidFormat();
     }

@@ -16,6 +16,7 @@ import * as hashWasm from "hash-wasm";
 import {BcryptOptions} from "hash-wasm";
 import {serialize as BSONSerialize} from 'bson';
 
+const ZstdCodec = require('zstd-codec').ZstdCodec;
 const LZMA = require('lzma').LZMA;
 import {parse as UUIDParse, stringify as UUIDStringify} from "uuid";
 import * as msgpack from "@msgpack/msgpack";
@@ -748,26 +749,7 @@ describe('EncodeTools', async function () {
     });
   });
 
-
-  describe('compressLZMA', async function () {
-    this.timeout(60e3);
-    it('should compress buffer as lzma', async function () {
-      let inBuf = randomBuffer();
-      let lzma = new LZMA();
-      let buf1 = await EncodeTools.compressLZMA(inBuf, chance.integer({ min: 1, max: 9 }))
-      let buf2 = Buffer.from(await new Promise<Buffer>((resolve, reject) => {
-        lzma.decompress(buf1, (result: any, error: any) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      }));
-
-      assert.isTrue(Buffer.isBuffer(buf2), 'LZMA did not return a buffer');
-      assert.deepEqual(buf2, inBuf, 'Buffers are not the same');
-    });
-  });
-
-  describe('decompressLZMA', async function () {
+  describe('decompressLzma', async function () {
     this.timeout(60e3);
     it('should compress buffer as lzma', async function () {
       let inBuf = randomBuffer();
@@ -785,6 +767,72 @@ describe('EncodeTools', async function () {
       assert.deepEqual(buf2, inBuf, 'Buffers are not the same');
     });
   });
+
+  describe('compressLzma', async function () {
+    this.timeout(60e3);
+    it('should compress buffer as lzma', async function () {
+      let inBuf = randomBuffer();
+      let lzma = new LZMA();
+      let buf1 = await EncodeTools.compressLZMA(inBuf, chance.integer({ min: 1, max: 9 }))
+      let buf2 = Buffer.from(await new Promise<Buffer>((resolve, reject) => {
+        lzma.decompress(buf1, (result: any, error: any) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+      }));
+
+      assert.isTrue(Buffer.isBuffer(buf2), 'LZMA did not return a buffer');
+      assert.deepEqual(buf2, inBuf, 'Buffers are not the same');
+    });
+  });
+
+  describe('decompressZstd', async function () {
+    this.timeout(60e3);
+    it('should compress buffer as lzma', async function () {
+      let inBuf = randomBuffer();
+      let buf1 = Buffer.from(await new Promise<Buffer>((resolve, reject) => {
+        ZstdCodec.run((zstd: any) => {
+          const simple = new zstd.Simple();
+          try {
+            const data = simple.compress(inBuf, chance.integer({ min: 1, max: 9 }));
+            resolve(data);
+          } catch (err) {
+            reject(err);
+          }
+        });
+      }));
+
+      let buf2 = await EncodeTools.decompressZStd(buf1);
+
+      assert.isTrue(Buffer.isBuffer(buf2), 'ZStd did not return a buffer');
+      assert.deepEqual(buf2, inBuf, 'Buffers are not the same');
+    });
+  });
+
+
+  describe('compressZstd', async function () {
+    this.timeout(60e3);
+    it('should compress buffer as lzma', async function () {
+      let inBuf = randomBuffer();
+      let buf1 = await EncodeTools.compressZStd(inBuf, chance.integer({ min: 1, max: 9 }))
+      let buf2 = Buffer.from(await new Promise<Buffer>((resolve, reject) => {
+        ZstdCodec.run((zstd: any) => {
+          const simple = new zstd.Simple();
+          try {
+            const data = simple.decompress(buf1);
+            resolve(data);
+          } catch (err) {
+            reject(err);
+          }
+        });
+      }));
+
+      assert.isTrue(Buffer.isBuffer(buf2), 'ZStd did not return a buffer');
+      assert.deepEqual(buf2, inBuf, 'Buffers are not the same');
+    });
+  });
+
+
 
   describe('get WithDefaults', async function () {
     it('encode tools options should have the default options', async function () {

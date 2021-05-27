@@ -116,6 +116,7 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 | Name    | Browser? | Underlying Package |
 |---------|----------|--------------------|
+| zstd    | ✓        | zstd-codec         |
 | lzma    | ✓        | lzma/lzma-native   |
 
 ### Image Manipulation
@@ -131,7 +132,7 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 ## Requirements
 
-Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
+Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
 
 The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext xxhash-addon lzma-native`.
 

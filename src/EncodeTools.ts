@@ -10,6 +10,7 @@ import {
 const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
 const slugid = require('slugid');
+const ZstdCodec = require('zstd-codec').ZstdCodec;
 const toBuffer = require('typedarray-to-buffer');
 import {
     md5,
@@ -162,6 +163,10 @@ export enum SerializationFormat {
  * Format for compressing/decompressing files
  */
 export enum CompressionFormat {
+  /**
+   * ZStandard (ZStd)
+   */
+  zstd = 'zstd',
   /**
    * LZMA
    */
@@ -896,12 +901,12 @@ export class EncodeTools {
   /**
    * Compresses a buffer using LZMA
    * @param buf - Buffer
-   * @param mode - Compression mode (1-9)
+   * @param level - Compression level (1-9)
    */
-    public static async compressLZMA(buf: Buffer, mode: number): Promise<Buffer> {
+    public static async compressLZMA(buf: Buffer, level: number): Promise<Buffer> {
       let lzma = new LZMA();
       return new Promise<Buffer>((resolve, reject) => {
-        lzma.compress(buf, mode, (result: any, error: any) => {
+        lzma.compress(buf, level, (result: any, error: any) => {
           if (error) reject(error);
           else resolve(EncodeTools.ensureBuffer(result));
         });
@@ -911,17 +916,56 @@ export class EncodeTools {
   /**
    * Decompresses a buffer using LZMA
    * @param buf - Buffer
-   * @param mode - Compression mode (1-9)
+   * @param level - Compression level (1-9)
    */
     public static async decompressLZMA(buf: Buffer): Promise<Buffer> {
       let lzma = new LZMA();
-      return new Promise<Buffer>((resolve, reject) => {
+      return EncodeTools.ensureBuffer(await new Promise<Buffer>((resolve, reject) => {
         lzma.decompress(buf, (result: any, error: any) => {
           if (error) reject(error);
           else resolve(EncodeTools.ensureBuffer(result));
         });
-      });
+      }));
     }
+
+  /**
+   * Compresses a buffer using ZStd
+   * @param buf - Buffer
+   * @param level - Compression level (1-9)
+   */
+  public static async compressZStd(buf: Buffer, level: number): Promise<Buffer> {
+    return EncodeTools.ensureBuffer(await new Promise<Uint8Array>((resolve, reject) => {
+      ZstdCodec.run((zstd: any) => {
+        const simple = new zstd.Simple();
+        try {
+          const data = simple.compress(buf, level);
+          resolve(data);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }));
+  }
+
+  /**
+   * Decompresses a buffer using ZStd
+   * @param buf - Buffer
+   * @param level - Compression level (1-9)
+   */
+  public static async decompressZStd(buf: Buffer): Promise<Buffer> {
+    return EncodeTools.ensureBuffer(await new Promise<Uint8Array>((resolve, reject) => {
+      ZstdCodec.run((zstd: any) => {
+        const simple = new zstd.Simple();
+        try {
+          const data = simple.decompress(buf);
+          resolve(data);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }));
+  }
+
 
   /**
    * Compresses arbitrary data using the provided format and any options
@@ -929,11 +973,15 @@ export class EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-    public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, mode?: number, ...args: any[]): Promise<Buffer>;
-    public async compress(data: BinaryInputOutput, format?: CompressionFormat, mode?: number, ...args: any[]): Promise<Buffer>;
-    public async compress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
+    public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, level?: number, ...args: any[]): Promise<Buffer>;
+    public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.zstd, level?: number, ...args: any[]): Promise<Buffer>;
+    public async compress(data: BinaryInputOutput, format?: CompressionFormat, level?: number, ...args: any[]): Promise<Buffer>;
+    public async compress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, level: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
       if (format === CompressionFormat.lzma) {
-        return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), mode);
+        return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), level);
+      }
+      else if (format === CompressionFormat.zstd) {
+        return EncodeTools.compressZStd(EncodeTools.ensureBuffer(data), level);
       }
       throw new InvalidFormat(format);
     }
@@ -944,10 +992,14 @@ export class EncodeTools {
    * @param format - Format to use
    */
     public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.lzma, ...args: any[]): Promise<Buffer>;
+    public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.zstd, ...args: any[]): Promise<Buffer>;
     public async decompress(data: BinaryInputOutput, format: CompressionFormat, ...args: any[]): Promise<Buffer>;
     public async decompress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, ...args: any[]): Promise<Buffer> {
       if (format === CompressionFormat.lzma) {
         return EncodeTools.decompressLZMA(EncodeTools.ensureBuffer(data));
+      }
+      else if (format === CompressionFormat.zstd) {
+        return EncodeTools.decompressZStd(EncodeTools.ensureBuffer(data));
       }
       throw new InvalidFormat(format);
     }

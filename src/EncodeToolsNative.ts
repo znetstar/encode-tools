@@ -1,5 +1,4 @@
 import {Buffer} from 'buffer';
-
 import EncodeTools, {
   BinaryEncoding,
   BinaryInputOutput,
@@ -150,6 +149,16 @@ export class EncodeToolsNative extends EncodeTools {
   }
 
   /**
+   * Returns an instance of node-zstd
+   */
+  public static async zstdNative(): Promise<any> {
+    if (typeof(require) === 'undefined')
+      return null;
+    // @ts-ignore
+    return require('@etomon/node-zstd');
+  }
+
+  /**
    * Returns an instance of the `bson` node module, using the native `bson-ext` if available.
    *
    */
@@ -286,17 +295,17 @@ export class EncodeToolsNative extends EncodeTools {
   /**
    * Compresses a buffer using LZMA
    * @param buf - Buffer
-   * @param mode - Compression mode (1-9)
+   * @param level - Compression level (1-9)
    */
-  public static async compressLZMA(buf: Buffer, mode: number): Promise<Buffer> {
+  public static async compressLZMA(buf: Buffer, level: number): Promise<Buffer> {
     let lzma = EncodeToolsNative.lzmaNative();
-    return lzma.compress(buf, mode);
+    return lzma.compress(buf, level);
   }
 
   /**
    * Decompresses a buffer using LZMA
    * @param buf - Buffer
-   * @param mode - Compression mode (1-9)
+   * @param level - Compression level (1-9)
    */
   public static async decompressLZMA(buf: Buffer): Promise<Buffer> {
     let lzma = EncodeToolsNative.lzmaNative();
@@ -308,19 +317,41 @@ export class EncodeToolsNative extends EncodeTools {
     });
   }
 
+  // /**
+  //  * Compresses a buffer using ZStd
+  //  * @param buf - Buffer
+  //  * @param level - Compression level (1-9)
+  //  */
+  // public static async compressZStd(buf: Buffer, level: number): Promise<Buffer> {
+  //   return (await EncodeToolsNative.cppzstNative()).compress(buf, level);
+  // }
+  //
+  // /**
+  //  * Decompresses a buffer using ZStd
+  //  * @param buf - Buffer
+  //  * @param level - Compression level (1-9)
+  //  */
+  // public static async decompressZStd(buf: Buffer): Promise<Buffer> {
+  //   return (await EncodeToolsNative.cppzstNative()).decompress(buf);
+  // }
+
   /**
    * Compresses arbitrary data using the provided format and any options
    * @param data - Data to compress
    * @param format - Format to use
    * @param args - Options
    */
-  public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, mode?: number, ...args: any[]): Promise<Buffer>;
-  public async compress(data: BinaryInputOutput, format?: CompressionFormat, mode?: number, ...args: any[]): Promise<Buffer>;
-  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
+  public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, level?: number, ...args: any[]): Promise<Buffer>;
+  public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.zstd, level?: number, ...args: any[]): Promise<Buffer>;
+  public async compress(data: BinaryInputOutput, format?: CompressionFormat, level?: number, ...args: any[]): Promise<Buffer>;
+  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, level: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
-      return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), mode);
+      return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), level);
     }
-    throw new InvalidFormat(format);
+    // else if (format === CompressionFormat.zstd) {
+    //   return EncodeToolsNative.compressZStd(EncodeToolsNative.ensureBuffer(data), level);
+    // }
+    return super.compress(data, format, level);
   }
 
   /**
@@ -329,12 +360,16 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to use
    */
   public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.lzma, ...args: any[]): Promise<Buffer>;
+  public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.zstd, ...args: any[]): Promise<Buffer>;
   public async decompress(data: BinaryInputOutput, format: CompressionFormat, ...args: any[]): Promise<Buffer>;
   public async decompress(data: BinaryInputOutput,  format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.decompressLZMA(EncodeToolsNative.ensureBuffer(data));
     }
-    throw new InvalidFormat(format);
+    // else if (format === CompressionFormat.zstd) {
+    //   return EncodeToolsNative.decompressZStd(EncodeToolsNative.ensureBuffer(data));
+    // }
+    return super.decompress(data, format);
   }
 
   /**
