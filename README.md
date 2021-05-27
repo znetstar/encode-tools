@@ -44,6 +44,20 @@ let newBuf = await enc.compress(Buffer.from('hi', 'utf8'), CompressionFormat.lzm
 console.log(newBuf.toString('base64'));
 ```
 
+Resizing a png image
+```
+let enc = new EncodeTools();
+let imageBuf = await (await new Promise((resolve, reject) => {
+  new (Jimp)(500, 500, '#FFFFFF', (err: unknown, image: any) => {
+    if (err) reject(err);
+    else resolve(image);
+  });
+})).getBufferAsync('image/png');
+
+let myResizedPng = await enc.resizeImage(imageBuf, { width: 250 }, ImageFormat.png);
+```
+
+
 ## Algorithms
 
 Below are a list of supported algorithms, their backing library, and their support in the browser.
@@ -105,13 +119,19 @@ Below are a list of supported algorithms, their backing library, and their suppo
 |---------|----------|--------------------|
 | png     | ✓        | jimp/sharp         |
 | jpeg    | ✓        | jimp/sharp         |
-| bmp     | ✓        | jimp/sharp         |
+| webp    |          | sharp              |
+| avif    |          | sharp              |
+| tiff    |          | sharp              |
+| gif*    |          | sharp              |
+| svg     |          | sharp              |
 
 ## Requirements
 
 Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
 
 The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext xxhash-addon lzma-native`.
+
+The `gif` image format in `EncodeToolsNative` requires `libvips` compiled with ImageMagick support ([as described here](https://zb.gy/qPJH)). I haven't had time to re-build libvips on my machine, so there are no mocha tests for the `gif` format.
 
 ## Usage
 

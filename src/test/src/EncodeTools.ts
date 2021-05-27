@@ -8,7 +8,7 @@ import {
   EncodeToolsFormat,
   EncodeToolsFunction,
   HashAlgorithm,
-  IDFormat,
+  IDFormat, ImageFormat,
   SerializationFormat
 } from '../../EncodeTools';
 import * as _ from 'lodash';
@@ -22,11 +22,20 @@ import * as msgpack from "@msgpack/msgpack";
 import {EncodeOptions} from "@msgpack/msgpack";
 import {
   CompressRunner,
-  EncodeBufferRunner, EncodeObjectRunner,
+  EncodeBufferRunner,
+  EncodeObjectRunner,
   EncodeToolsRunner,
-  HashObjectRunner, HashRunner, HashStringRunner,
+  HashObjectRunner,
+  HashRunner,
+  HashStringRunner,
+  ImageBrightnessRunner,
+  ImageConvertRunner,
+  ImageCropRunner,
+  ImageResizeRunner, ImageRunnerBase,
   randomBuffer,
-  randomObject, randomOptions, SerializeObjectRunner
+  randomObject,
+  randomOptions,
+  SerializeObjectRunner
 } from "../common/EncodeToolsRunner";
 
 
@@ -37,6 +46,8 @@ const toBuffer = require('typedarray-to-buffer');
 const  Hashids = require('hashids/cjs');
 
 const base32 = require('base32.js');
+const Jimp = require('jimp');
+
 
 describe('EncodeTools', async function () {
   let chance = Chance();
@@ -48,7 +59,11 @@ describe('EncodeTools', async function () {
     new HashRunner(),
     new SerializeObjectRunner(),
     new EncodeObjectRunner(),
-    new CompressRunner()
+    new CompressRunner(),
+    new ImageResizeRunner(),
+    new ImageCropRunner(),
+    new ImageConvertRunner(),
+    new ImageBrightnessRunner()
   ];
 
   describe('ensureBuffer', async function () {
@@ -782,6 +797,27 @@ describe('EncodeTools', async function () {
       let opts = randomOptions();
       let enc = new EncodeTools(opts);
       assert.deepEqual(enc.options, opts, 'Options are not the default options');
+    });
+  });
+
+  describe('getImageMetadata', async function () {
+    it('create an image an get the metadata for that image', async function () {
+      let dims = {
+        width: chance.integer({ min: 1, max: 1e3}),
+        height: chance.integer({ min: 1, max: 1e3}),
+        format: chance.shuffle([ ImageFormat.png, ImageFormat.jpeg ])[0]
+      }
+
+      let image = await (await new Promise<any>((resolve, reject) => {
+        new (Jimp)(dims.width, dims.height, ImageRunnerBase.getRandomColor(), (err: unknown, image: any) => {
+          if (err) reject(err);
+          else resolve(image);
+        });
+      })).getBufferAsync('image/'+dims.format);
+
+      let obj2 = await EncodeTools.getImageMetadata(image);
+
+      assert.deepEqual(obj2, dims, 'Image metadata is not the same as the image that was create');
     });
   });
 

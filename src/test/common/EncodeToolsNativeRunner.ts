@@ -15,11 +15,14 @@ import {Chance} from 'chance';
 import {assert} from 'chai';
 const crypto = require('crypto');
 
+const sharp = require('sharp');
 const bson = require('bson-ext');
 
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 
 import IntegerOptions = Chance.IntegerOptions;
+import {ImageFormat} from "../../EncodeTools";
+import {EncodeToolsRunner} from "./EncodeToolsRunner";
 
 const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
@@ -286,3 +289,148 @@ export class CompressRunner extends EncodeToolsNativeRunner<BinaryInputOutput, B
     };
   };
 }
+
+export abstract class ImageRunnerBase extends EncodeToolsNativeRunner<BinaryInputOutput, BinaryInputOutput, ImageFormat, EncodeTools> {
+  constructor(formats: ImageFormat[] = Object.keys(ImageFormat).map(enc => (ImageFormat as any)[enc])) {
+    super(formats);
+
+    // this.formats.delete(ImageFormat.avif);
+    this.formats.delete(ImageFormat.gif);
+    // this.formats.delete(ImageFormat.svg);
+    // this.formats.delete(ImageFormat.webp);
+  }
+
+  /**
+   * Taken from https://zb.gy/4CP5
+   */
+  public static getRandomColor() {
+    let s = Math.floor(Math.random()*16777215).toString(16);
+    return s + `000000`.substr(s.length);
+  }
+
+  public abstract encode(input: BinaryEncoding, format: ImageFormat): Promise<BinaryInputOutput>;
+  public decode?: (input: BinaryInputOutput, format: ImageFormat) => Promise<BinaryInputOutput> = void(0);
+  public abstract get functionName(): FunctionNameSet;
+  public abstract generate(format: ImageFormat): Promise<GenerateResult<BinaryInputOutput, BinaryInputOutput>>;
+  public async generateBuffer(format: ImageFormat = ImageFormat.png, opts: IntegerOptions = { min: 500, max: 1e3 }): Promise<Buffer> {
+    let chance =  new Chance();
+
+    let wh = chance.integer(opts);
+    let decoded: Buffer = await sharp({
+      create: {
+        width: wh,
+        height: wh,
+        channels: 3,
+        background: '#'+ImageRunnerBase.getRandomColor()
+      }
+    })[format]().toBuffer();
+
+    return decoded;
+  };
+}
+
+export class ImageResizeRunner extends ImageRunnerBase {
+  constructor(protected width: number = (() => { let c = Chance(); return c.integer({ min: 1, max: 1e3 }) })()) {
+    super();
+  }
+
+  public async encode(input: BinaryEncoding, format: ImageFormat): Promise<BinaryInputOutput> {
+    let enc = await this.encodeToolsFactory();
+
+    return enc.resizeImage(input, {width: this.width, height: this.width}, format);
+  }
+
+  public decode?: (input: BinaryInputOutput, format: ImageFormat) => Promise<BinaryInputOutput> = void (0);
+
+  public get functionName(): FunctionNameSet {
+    return {encodeName: 'resizeImage'};
+  }
+
+  public async generate(format: ImageFormat): Promise<GenerateResult<BinaryInputOutput, BinaryInputOutput>> {
+    let decoded = await this.generateBuffer(format);
+    let encoded = await sharp(decoded)
+      .resize(this.width, this.width)[format]().toBuffer();
+
+    return {
+      decoded,
+      encoded
+    }
+  }
+}
+
+
+export class ImageCropRunner extends ImageRunnerBase {
+  constructor(protected width: number = (() => { let c = Chance(); return c.integer({ min: 500, max: 1e3 }) })(), protected x: number = 0) {
+    super();
+  }
+  public async encode(input: BinaryEncoding, format: ImageFormat): Promise<BinaryInputOutput> {
+    let enc = await this.encodeToolsFactory();
+
+    return enc.cropImage(input, { width: this.width, height: this.width, left: this.x, top: this.x }, format);
+  }
+  public decode?: (input: BinaryInputOutput, format: ImageFormat) => Promise<BinaryInputOutput> = void(0);
+  public get functionName(): FunctionNameSet {
+    return { encodeName: 'cropImage' };
+  }
+  public async generate(format: ImageFormat): Promise<GenerateResult<BinaryInputOutput, BinaryInputOutput>> {
+    let decoded = await this.generateBuffer(format, { min: this.width+1, max: (this.width+1)*2 });
+    let encoded = await sharp(decoded)
+      .extract({ width: this.width, height: this.width, left: this.x, top: this.x })[format]().toBuffer();
+
+    return {
+      decoded,
+      encoded
+    }
+  }
+}
+
+export class ImageConvertRunner extends ImageRunnerBase {
+  constructor() {
+    super();
+  }
+  public async encode(input: BinaryEncoding, format: ImageFormat): Promise<BinaryInputOutput> {
+    let enc = await this.encodeToolsFactory();
+
+    return enc.convertImage(input, format);
+  }
+  public decode?: (input: BinaryInputOutput, format: ImageFormat) => Promise<BinaryInputOutput> = void(0);
+  public get functionName(): FunctionNameSet {
+    return { encodeName: 'convertImage' };
+  }
+  public async generate(format: ImageFormat): Promise<GenerateResult<BinaryInputOutput, BinaryInputOutput>> {
+    let decoded = await this.generateBuffer(format);
+    let encoded = await sharp(decoded)[format]().toBuffer();
+
+    return {
+      decoded,
+      encoded
+    }
+  }
+}
+
+
+
+export class ImageBrightnessRunner extends ImageRunnerBase {
+  constructor(protected brightnessFactor: number = (() => { let c = Chance(); return c.floating({ min: -1, max: 1 }) })()) {
+    super();
+  }
+  public async encode(input: BinaryEncoding, format: ImageFormat): Promise<BinaryInputOutput> {
+    let enc = await this.encodeToolsFactory();
+
+    return enc.adjustImageBrightness(input, this.brightnessFactor, format);
+  }
+  public decode?: (input: BinaryInputOutput, format: ImageFormat) => Promise<BinaryInputOutput> = void(0);
+  public get functionName(): FunctionNameSet {
+    return { encodeName: 'adjustImageBrightness' };
+  }
+  public async generate(format: ImageFormat): Promise<GenerateResult<BinaryInputOutput, BinaryInputOutput>> {
+    let decoded = await this.generateBuffer(format);
+    let encoded = await sharp(decoded).modulate({ brightness: 1+this.brightnessFactor })[format]().toBuffer();
+
+    return {
+      decoded,
+      encoded
+    }
+  }
+}
+

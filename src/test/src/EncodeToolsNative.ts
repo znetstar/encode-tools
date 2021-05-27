@@ -1,7 +1,7 @@
 import {assert} from 'chai';
 import {Chance} from 'chance';
 import {Buffer} from 'buffer';
-import {
+import EncodeToolsNative, {
   default as EncodeTools,
   BinaryInputOutput,
   DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS as DEFAULT_ENCODE_TOOLS_OPTIONS,
@@ -13,9 +13,14 @@ import {
   HashRunner,
   HashStringRunner,
   randomBuffer,
-  randomOptions, SerializeObjectRunner
+  randomOptions, SerializeObjectRunner,
+  ImageResizeRunner, ImageConvertRunner, ImageCropRunner, ImageBrightnessRunner
 } from "../common/EncodeToolsNativeRunner";
+import {ImageFormat} from "../../EncodeTools";
+import {ImageRunnerBase} from "../common/EncodeToolsRunner";
 const crypto = require('crypto');
+
+const sharp = require('sharp');
 
 
 const toBuffer = require('typedarray-to-buffer');
@@ -31,9 +36,12 @@ describe('EncodeToolsNative', async function () {
     new HashStringRunner(),
     new HashRunner(),
     new SerializeObjectRunner(),
-    new CompressRunner()
+    new CompressRunner(),
+    new ImageResizeRunner(),
+    new ImageCropRunner(),
+    new ImageConvertRunner(),
+    new ImageBrightnessRunner()
   ];
-
 
   for (let xxhash of [ 'XXHash3', 'XXHash64', 'XXHash32' ]) {
     let xxhashLowercase = xxhash.toLowerCase();
@@ -121,6 +129,30 @@ describe('EncodeToolsNative', async function () {
       assert.deepEqual(enc.options, opts, 'Options are not the default options');
     });
   });
+
+  describe('getImageMetadata', async function () {
+    it('create an image an get the metadata for that image', async function () {
+      let dims = {
+        width: chance.integer({ min: 1, max: 1e3}),
+        height: chance.integer({ min: 1, max: 1e3}),
+        format: chance.shuffle([ ImageFormat.png, ImageFormat.jpeg ])[0]
+      }
+
+      let image: Buffer = await sharp({
+        create: {
+          width: dims.width,
+          height: dims.height,
+          channels: 3,
+          background: '#'+ImageRunnerBase.getRandomColor()
+        }
+      })[dims.format]().toBuffer();
+
+      let obj2 = await EncodeToolsNative.getImageMetadata(image);
+
+      assert.deepEqual(obj2, dims, 'Image metadata is not the same as the image that was create');
+    });
+  });
+
 
   for (let test of tests) {
     await test.testEncode();

@@ -3,20 +3,19 @@ import {Buffer} from 'buffer';
 import EncodeTools, {
   BinaryEncoding,
   BinaryInputOutput,
-  CompressionFormat,
+  CompressionFormat, CropDims,
   EncodingOptions as BaseEncodingOptions,
-  HashAlgorithm,
-  IDFormat,
+  HashAlgorithm as HashAlgorithmBase,
+  IDFormat, ImageMetadata,
   InvalidFormat,
   SerializationFormat
 } from './EncodeTools';
 import * as crypto from 'crypto';
-
+import * as Jimp from "jimp";
 export {
   BinaryEncoding,
   BinaryInputOutput,
   EncodingOptions as BaseEncodingOptions,
-  HashAlgorithm,
   InvalidFormat,
   IDFormat,
   SerializationFormat,
@@ -25,19 +24,108 @@ export {
   EncodeToolsFunction
 } from './EncodeTools';
 
-interface EncodingOptionsNative {
-    hashAlgorithm: HashAlgorithm
+
+export enum HashAlgorithm {
+  /**
+   * XXHash3
+   */
+  xxhash3 = 'xxhash3',
+  crc32 = 'crc32',
+  /**
+   * Super fast non-cryptographic hashing algorithm.
+   */
+  xxhash64 = 'xxhash64',
+  /**
+   * Super fast non-cryptographic hashing algorithm.
+   */
+  xxhash32 = 'xxhash32',
+  /**
+   * Super fast non-cryptographic hashing algorithm.
+   */
+  /**
+   * Insecure hashing algorithm, included for backwards compatibility.
+   */
+  md5 = 'md5',
+  /**
+   * SHA2 hashing algorithm.
+   */
+  sha1 = 'sha1',
+  /**
+   * SHA512 hashing algorithm.
+   */
+  sha512 = 'sha512',
+  /**
+   * SHA2 hashing algorithm.
+   * @deprecated Use SHA512
+   */
+  sha2 = 'sha2',
+  /**
+   * SHA3 hashing algorithm.
+   */
+  sha3 = 'sha3',
+  /**
+   * BCrypt hashing algorithm
+   */
+  bcrypt = 'bcrypt',
+
+}
+
+
+/**
+ * Format for converting images
+ */
+export enum ImageFormat {
+  /**
+   * PNG Format
+   */
+  png = 'png',
+  /**
+   * JPEG Format
+   */
+  jpeg = 'jpeg',
+  // bmp = 'bmp',
+  /**
+   * WEBP Format
+   */
+  webp = 'webp',
+  /**
+   * AVIF Format
+   */
+  avif = 'avif',
+  /**
+   * TIFF Format
+   */
+  tiff = 'tiff',
+  /**
+   * Need to fix the libvips/ImageMagick error (https://zb.gy/qPJH).
+   * @deprecated
+   */
+  gif = 'gif'
+  /**
+   * Export to svg does not work
+   * @deprecated
+   */
+  // svg = 'svg',
+}
+
+export interface EncodingOptions {
+  uniqueIdFormat?: IDFormat;
+  serializationFormat?: SerializationFormat;
+  hashAlgorithm?: HashAlgorithm;
+  binaryEncoding?: BinaryEncoding;
+  compressionFormat?: CompressionFormat;
+  compressionLevel?: number;
+  imageFormat?: ImageFormat;
 }
 const lzma = require('lzma-native');
 
-export type EncodingOptions = BaseEncodingOptions&EncodingOptionsNative;
-
 export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
   binaryEncoding: BinaryEncoding.base64,
-  hashAlgorithm: HashAlgorithm.xxhash3,
+  hashAlgorithm: HashAlgorithm.xxhash64,
   serializationFormat: SerializationFormat.json,
   uniqueIdFormat: IDFormat.uuidv1String,
-  compressionFormat: CompressionFormat.lzma
+  compressionFormat: CompressionFormat.lzma,
+  imageFormat: ImageFormat.png
 };
 
 
@@ -82,6 +170,16 @@ export class EncodeToolsNative extends EncodeTools {
     }
 
     /**
+     * Returns an instance of Sharp
+     */
+    public static sharpNative(): any {
+      if (typeof(require) === 'undefined')
+        return null;
+      return require('sharp');
+    }
+
+
+  /**
      * Hashes using XXHash-3 (https://zb.gy/l4kN), a fast, non-cryptographic,
      * hashing function.
      *
@@ -216,6 +314,8 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
+  public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, mode?: number, ...args: any[]): Promise<Buffer>;
+  public async compress(data: BinaryInputOutput, format?: CompressionFormat, mode?: number, ...args: any[]): Promise<Buffer>;
   public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), mode);
@@ -228,11 +328,117 @@ export class EncodeToolsNative extends EncodeTools {
    * @param data - Data to decompress
    * @param format - Format to use
    */
+  public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.lzma, ...args: any[]): Promise<Buffer>;
+  public async decompress(data: BinaryInputOutput, format: CompressionFormat, ...args: any[]): Promise<Buffer>;
   public async decompress(data: BinaryInputOutput,  format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.decompressLZMA(EncodeToolsNative.ensureBuffer(data));
     }
     throw new InvalidFormat(format);
+  }
+
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.png): Promise<Buffer>;
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.webp): Promise<Buffer>;
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.avif): Promise<Buffer>;
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.tiff): Promise<Buffer>;
+  // public async cropImage(buffer: Buffer|ArrayBuffer|string, dims: CropDims, format?: ImageFormat.svg): Promise<Buffer>;
+  public async cropImage(data: BinaryInputOutput, dims: CropDims, format?: ImageFormat): Promise<Buffer>;
+  public async cropImage(data: BinaryInputOutput, dims: CropDims, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    // if (format === ImageFormat.bmp)
+    //   return super.resizeImage(data, dims, format);
+
+    let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
+
+    return await sharp.extract(dims).toFormat(format.toString()).toBuffer();
+  }
+
+
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.png): Promise<Buffer>;
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.webp): Promise<Buffer>;
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.avif): Promise<Buffer>;
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.tiff): Promise<Buffer>;
+  // public async resizeImage(buffer: Buffer|ArrayBuffer|string, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.svg): Promise<Buffer>;
+  public async resizeImage(data: BinaryInputOutput, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat): Promise<Buffer>;
+  public async resizeImage(data: BinaryInputOutput, dims: { height: number, width?: number }|{ height?: number, width: number }, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    // if (format === ImageFormat.bmp)
+    //   return super.resizeImage(data, dims, format);
+
+    let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
+
+    return await sharp.resize(dims).toFormat(format.toString()).toBuffer();
+  }
+
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.png): Promise<Buffer>;
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.webp): Promise<Buffer>;
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.avif): Promise<Buffer>;
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.tiff): Promise<Buffer>;
+  // public async convertImage(buffer: Buffer|ArrayBuffer|string, format?: ImageFormat.svg): Promise<Buffer>;
+  public async convertImage(data: BinaryInputOutput, format?: ImageFormat): Promise<Buffer>;
+  public async convertImage(data: BinaryInputOutput, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    // if (format === ImageFormat.bmp)
+    //   return super.resizeImage(data, format);
+
+    let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
+
+    return await sharp.toFormat(format.toString()).toBuffer();
+  }
+
+  /**
+   * Adjust brightness of image
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.png): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.webp): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.avif): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.tiff): Promise<Buffer>;
+  // public async adjustImageBrightness(buffer: Buffer|ArrayBuffer|string, factor: number, format?: ImageFormat.svg): Promise<Buffer>;
+  public async adjustImageBrightness(data: BinaryInputOutput, factor: number, format?: ImageFormat): Promise<Buffer>;
+  public async adjustImageBrightness(data: BinaryInputOutput, factor: number, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
+
+    return await sharp.modulate({ brightness: 1+factor }).toFormat(format.toString()).toBuffer();
+  }
+
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param data - Image
+   */
+  public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  public static async getImageMetadata(buffer: string): Promise<ImageMetadata>;
+  public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata>;
+  public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata> {
+    let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
+
+    let meta = await sharp.metadata();
+    return {
+      format: meta.format as ImageFormat,
+      height: meta.height,
+      width: meta.width
+    }
   }
 
 

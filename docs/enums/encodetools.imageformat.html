@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CompressionFormat | @etomon/encode-tools</title>
+	<title>ImageFormat | @etomon/encode-tools</title>
 	<meta name="description" content="Documentation for @etomon/encode-tools">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/encodetools.html">EncodeTools</a>
 				</li>
 				<li>
-					<a href="encodetools.compressionformat.html">CompressionFormat</a>
+					<a href="encodetools.imageformat.html">ImageFormat</a>
 				</li>
 			</ul>
-			<h1>Enumeration CompressionFormat</h1>
+			<h1>Enumeration ImageFormat</h1>
 		</div>
 	</div>
 </header>
@@ -71,7 +71,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Format for compressing/decompressing files</p>
+						<p>Format for converting images</p>
 					</div>
 				</div>
 			</section>
@@ -82,7 +82,9 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="encodetools.compressionformat.html#lzma" class="tsd-kind-icon">lzma</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="encodetools.imageformat.html#bmp" class="tsd-kind-icon">bmp</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="encodetools.imageformat.html#jpeg" class="tsd-kind-icon">jpeg</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="encodetools.imageformat.html#png" class="tsd-kind-icon">png</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,19 +93,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="lzma" class="tsd-anchor"></a>
-					<h3>lzma</h3>
-					<div class="tsd-signature tsd-kind-icon">lzma<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;lzma&quot;</span></div>
+					<a name="bmp" class="tsd-anchor"></a>
+					<h3>bmp</h3>
+					<div class="tsd-signature tsd-kind-icon">bmp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;bmp&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/3a8ce56/src/EncodeTools.ts#L163">src/EncodeTools.ts:163</a></li>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/3a8ce56/src/EncodeTools.ts#L172">src/EncodeTools.ts:172</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>LZMA</p>
-						</div>
-					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="jpeg" class="tsd-anchor"></a>
+					<h3>jpeg</h3>
+					<div class="tsd-signature tsd-kind-icon">jpeg<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;jpeg&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/3a8ce56/src/EncodeTools.ts#L171">src/EncodeTools.ts:171</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="png" class="tsd-anchor"></a>
+					<h3>png</h3>
+					<div class="tsd-signature tsd-kind-icon">png<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;png&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/3a8ce56/src/EncodeTools.ts#L170">src/EncodeTools.ts:170</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 		</div>
@@ -132,27 +149,33 @@
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.binaryencoding.html" class="tsd-kind-icon">Binary<wbr>Encoding</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-module">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.compressionformat.html" class="tsd-kind-icon">Compression<wbr>Format</a>
-						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="encodetools.compressionformat.html#lzma" class="tsd-kind-icon">lzma</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.hashalgorithm.html" class="tsd-kind-icon">Hash<wbr>Algorithm</a>
 					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.idformat.html" class="tsd-kind-icon">IDFormat</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.imageformat.html" class="tsd-kind-icon">Image<wbr>Format</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="encodetools.imageformat.html#bmp" class="tsd-kind-icon">bmp</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="encodetools.imageformat.html#jpeg" class="tsd-kind-icon">jpeg</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="encodetools.imageformat.html#png" class="tsd-kind-icon">png</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-module">
 						<a href="encodetools.serializationformat.html" class="tsd-kind-icon">Serialization<wbr>Format</a>
 					</li>

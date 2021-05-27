@@ -24,6 +24,7 @@ import {
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
+import * as Jimp from 'jimp';
 
 export enum BinaryEncoding {
     /**
@@ -58,7 +59,6 @@ export enum BinaryEncoding {
 
 export enum HashAlgorithm {
     crc32 = 'crc32',
-    xxhash3 = 'xxhash3',
     /**
      * Super fast non-cryptographic hashing algorithm.
      */
@@ -94,7 +94,12 @@ export enum HashAlgorithm {
     /**
      * BCrypt hashing algorithm
      */
-    bcrypt = 'bcrypt'
+    bcrypt = 'bcrypt',
+    /**
+     * Must use EncodeToolsNative
+     * @deprecated
+     */
+    xxhash3 = 'xxhash3'
 }
 
 /**
@@ -166,11 +171,41 @@ export enum CompressionFormat {
 /**
  * Format for converting images
  */
+
+/**
+ * Format for converting images
+ */
 export enum ImageFormat {
   png = 'png',
   jpeg = 'jpeg',
-  bmp = 'bmp'
+  // bmp = 'bmp',
+  /**
+   * Must use EncodeToolsNative to use this format
+   * @deprecated
+   */
+  webp = 'webp',
+  /**
+   * Must use EncodeToolsNative to use this format
+   * @deprecated
+   */
+  avif = 'avif',
+  /**
+   * Must use EncodeToolsNative to use this format
+   * @deprecated
+   */
+  tiff = 'tiff',
+  /**
+   * Must use EncodeToolsNative to use this format
+   * @deprecated
+   */
+  gif = 'gif',
+  /**
+   * Must use EncodeToolsNative to use this format
+   * @deprecated
+   */
+  // svg = 'svg'
 }
+
 
 /**
  * Default options for the encoding tools.
@@ -183,6 +218,7 @@ export interface EncodingOptions {
     binaryEncoding?: BinaryEncoding;
     compressionFormat?: CompressionFormat;
     compressionLevel?: number;
+    imageFormat?: ImageFormat;
 }
 export class InvalidFormat extends Error {
     constructor(format?: any) {
@@ -193,13 +229,14 @@ export class InvalidFormat extends Error {
         );
     }
 }
-
+export type ImageDims = { height: number, width?: number }|{ height?: number, width: number }
+export type CropDims = { height: number, width: number, left: number, top: number };
 /**
  * The input type commonly acceped by most functions
  */
 export type BinaryInputOutput = Buffer|string|ArrayBuffer;
 
-export type EncodeToolsFormat = IDFormat|SerializationFormat|HashAlgorithm|BinaryEncoding|CompressionFormat;
+export type EncodeToolsFormat = IDFormat|SerializationFormat|HashAlgorithm|BinaryEncoding|CompressionFormat|ImageFormat;
 export type EncodeToolsFunction<F extends EncodeToolsFormat, R extends BinaryInputOutput> = (input: BinaryInputOutput, format?: F, ...args: any[]) => Promise<R>|R;
 
 function bufferFrom(...args: any[]): Buffer {
@@ -214,8 +251,15 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   hashAlgorithm: HashAlgorithm.xxhash64,
   serializationFormat: SerializationFormat.json,
   uniqueIdFormat: IDFormat.uuidv1String,
-  compressionFormat: CompressionFormat.lzma
+  compressionFormat: CompressionFormat.lzma,
+  imageFormat: ImageFormat.png
 };
+
+export interface ImageMetadata {
+  format: ImageFormat;
+  width: number;
+  height: number;
+}
 
 /**
  * Contains tools for encoding/decoding data in different circumstances.
@@ -395,13 +439,13 @@ export class EncodeTools {
      * @param buffer
      * @param format
      */
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.nodeBuffer, ...args: any[]): Buffer;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.arrayBuffer, ...args: any[]): ArrayBuffer;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.hex, ...args: any[]): string;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base64, ...args: any[]): string;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base32, ...args: any[]): string;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base64url, ...args: any[]): string;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.hashids, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer, format?: BinaryEncoding.nodeBuffer, ...args: any[]): Buffer;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer, format?: BinaryEncoding.arrayBuffer, ...args: any[]): ArrayBuffer;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.hex, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.base64, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.base32, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.base64url, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.hashids, ...args: any[]): string;
     public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
     public encodeBuffer(inputBuffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): BinaryInputOutput {
         const buffer: Buffer = EncodeTools.ensureBuffer(inputBuffer);
@@ -778,6 +822,10 @@ export class EncodeTools {
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
    */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json): string;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat): Buffer;
     public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat): Buffer|string {
         if (serializationFormat === SerializationFormat.json) return EncodeTools.objectToJson<T>(obj);
         else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.objectToMsgpack<T>(obj);
@@ -790,12 +838,16 @@ export class EncodeTools {
    * @param data Data to deserialize
    * @param serializationFormat - Algorithm to deserialize with
    */
-    public deserializeObject<T>(data: Buffer|string, serializationFormat: SerializationFormat = this.options.serializationFormat): T {
-        if (serializationFormat === SerializationFormat.json) return EncodeTools.jsonToObject<T>(data.toString()) as T;
-        else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(bufferFrom(data)) as T;
-        else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(bufferFrom(data)) as T;
-        throw new InvalidFormat(serializationFormat);
-    }
+  public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat?: SerializationFormat.json): T;
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat.msgpack): T;
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat.bson): T;
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat): T;
+  public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat: SerializationFormat = this.options.serializationFormat): T {
+      if (serializationFormat === SerializationFormat.json) return EncodeTools.jsonToObject<T>(data.toString()) as T;
+      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(bufferFrom(data)) as T;
+      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(bufferFrom(data)) as T;
+      throw new InvalidFormat(serializationFormat);
+  }
 
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
@@ -877,7 +929,9 @@ export class EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-    public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
+    public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, mode?: number, ...args: any[]): Promise<Buffer>;
+    public async compress(data: BinaryInputOutput, format?: CompressionFormat, mode?: number, ...args: any[]): Promise<Buffer>;
+    public async compress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
       if (format === CompressionFormat.lzma) {
         return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), mode);
       }
@@ -889,14 +943,94 @@ export class EncodeTools {
    * @param data - Data to decompress
    * @param format - Format to use
    */
-    public async decompress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+    public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.lzma, ...args: any[]): Promise<Buffer>;
+    public async decompress(data: BinaryInputOutput, format: CompressionFormat, ...args: any[]): Promise<Buffer>;
+    public async decompress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, ...args: any[]): Promise<Buffer> {
       if (format === CompressionFormat.lzma) {
         return EncodeTools.decompressLZMA(EncodeTools.ensureBuffer(data));
       }
       throw new InvalidFormat(format);
     }
 
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.png): Promise<Buffer>;
+  public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async cropImage(data: BinaryInputOutput, dims: CropDims, format?: ImageFormat): Promise<Buffer>;
+  public async cropImage(data: BinaryInputOutput, dims: CropDims, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
 
+    jimp.crop(dims.left, dims.top, dims.width, dims.height);
+    return await jimp.getBufferAsync(`image/${format}`);
+  }
+
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.png): Promise<Buffer>;
+  public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async resizeImage(data: BinaryInputOutput, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat): Promise<Buffer>;
+  public async resizeImage(data: BinaryInputOutput, dims: ImageDims, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
+
+    jimp.resize(dims.width || Jimp.AUTO, dims.height || Jimp.AUTO);
+    return await jimp.getBufferAsync(`image/${format}`);
+  }
+
+  /**
+   * Adjust brightness of image
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.png): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async adjustImageBrightness(buffer: BinaryInputOutput, factor: number, format?: ImageFormat): Promise<Buffer>;
+  public async adjustImageBrightness(data: BinaryInputOutput, factor: number, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
+
+    jimp.brightness(factor);
+    return await jimp.getBufferAsync(`image/${format}`);
+  }
+
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.png): Promise<Buffer>;
+  public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.jpeg): Promise<Buffer>;
+  public async convertImage(data: BinaryInputOutput, format?: ImageFormat): Promise<Buffer>;
+  public async convertImage(data: BinaryInputOutput, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
+    let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
+
+    return await jimp.getBufferAsync(`image/${format}`);
+  }
+
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param data - Image
+   */
+  public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata>;
+  public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata> {
+    let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
+    let format: ImageFormat = (jimp.getExtension()).replace('jpg', 'jpeg') as ImageFormat;
+
+    return {
+      format,
+      height: jimp.getHeight(),
+      width: jimp.getWidth()
+    };
+  }
 
   /**
    * Returns an EncodeTools instance with the default properties

@@ -10,7 +10,7 @@ module.exports = function(grunt) {
           out: './docs',
           name: pkg.name
         },
-        src: ['./src/**/*']
+        src: ['./src/*.ts']
       }
     },
     ts: {
