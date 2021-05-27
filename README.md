@@ -128,7 +128,6 @@ Below are a list of supported algorithms, their backing library, and their suppo
 | avif    |          | sharp              |
 | tiff    |          | sharp              |
 | gif*    |          | sharp              |
-| svg     |          | sharp              |
 
 ## Requirements
 
