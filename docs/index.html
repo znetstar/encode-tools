@@ -301,6 +301,11 @@
 						</tr>
 					</thead>
 					<tbody><tr>
+							<td>zstd</td>
+							<td>✓</td>
+							<td>zstd-codec</td>
+						</tr>
+						<tr>
 							<td>lzma</td>
 							<td>✓</td>
 							<td>lzma/lzma-native</td>
@@ -347,16 +352,11 @@
 							<td></td>
 							<td>sharp</td>
 						</tr>
-						<tr>
-							<td>svg</td>
-							<td></td>
-							<td>sharp</td>
-						</tr>
 				</tbody></table>
 				<a href="#requirements" id="requirements" style="color: inherit; text-decoration: none;">
 					<h2>Requirements</h2>
 				</a>
-				<p>Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> packages have native bindings, and so cannot run in the browser. For browser compatibility, the <code>EncodeTools</code> class uses the pure javascript <code>bson</code>, <code>lzma</code> and <code>hash-wsam</code> packages to provide equivalent support albeit at the cost of performance. Additionally, <code>hash-wsam</code> lacks support for xxhash3.</p>
+				<p>Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> packages have native bindings, and so cannot run in the browser. For browser compatibility, the <code>EncodeTools</code> class uses the pure javascript <code>bson</code>, <code>lzma</code> and <code>hash-wsam</code> packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, <code>hash-wsam</code> lacks support for xxhash3.</p>
 				<p>The <code>EncodeToolsNative</code> class will use the native packages <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> (and any future native packages). <code>bson-ext</code>, <code>lzma-native</code> and <code>xxhash-addon</code> are listed as peer dependencies, so they must be installed manually with <code>npm install --no-save bson-ext xxhash-addon lzma-native</code>.</p>
 				<p>The <code>gif</code> image format in <code>EncodeToolsNative</code> requires <code>libvips</code> compiled with ImageMagick support (<a href="https://zb.gy/qPJH">as described here</a>). I haven&#39;t had time to re-build libvips on my machine, so there are no mocha tests for the <code>gif</code> format.</p>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
