@@ -1,5 +1,9 @@
 # Etomon Encode Tools
 
+[![NPM](https://nodei.co/npm/@etomon/encode-tools.png)](https://nodei.co/npm/@etomon/encode-tool/)
+
+[![Build Status](https://travis-ci.com/EtomonUSA/encode-tools.svg?branch=master)](https://travis-ci.com/EtomonUSA/encode-tools)
+
 This package aggregates different libraries for encoding, serializing, compressing, generating ids and hashing things, exposing a common interface. 
 
 *Many* other packages serve the same purpose, but our objective is to ensure a consistent experience in both node.js and the browser and standardize the api so functions work the same way across different underlying libraries.

@@ -1,6 +1,13 @@
 language: node_js
 node_js:
-  - '14'
+- '14'
 cache:
   directories:
-    - node_modules
+  - node_modules
+deploy:
+  provider: npm
+  email: zachary@zacharyboyd.nyc
+  api_key:
+    secure: PnSSt/W5rc0+9JglSW9prLeaJHub45PPkTSI9iITN61mlDlNZvpyqb3H2vPHM0DR7m/qLHZ0OcnGiFbccRnx3Kkxq+tzKpV2w5fO5M6Lc4IWbQt8DkTCs1xNSglyUArIFAvfCXNkuDfUto6A1ZO/aaRPWGn3a+hDWPAAfpy11N0ajzLJtJ33INq1d1urlRLj3bO6vLoAFrkDNPU4eO64qMWeImRs+nSAuIFwupxsDkWEH51JHY+YPeXgj9Boufzd350jSlUQimbaWRIDXBS8hMVrY3O4tsmBydKCHuaIaTWcZ4RuVYKL/4x3ysuWysWHrXiRJ7eB6kGC15Bo5Bdiqxsf58N3mD61jsqPsbsl84n2kEWHJVH1ZlVopZvysHrKHGBOSkFO1n9eApPZvH1et0wSW1NZfNEv7Tjt8ELcqHBeuOIwnokUCRKv9o6uSRY0Fn1Mjvce2yX0WbySo/IS9j4RfR3Z6BJ5BDLhkWm70GeEIEpZs09IXEjB5Ac0TQX9k6mfsCugD7KzXEznSFVbEL+X46FRpiYd7klAigwWYj6llAsVtEvSyy5lUT4YkYB4HgiSZ5drxzNZeeGwbQ3xBXS7swEefuaP0TwBRuuV0uivcZB7ALC3wZDt+caM+jYy8eeHdLBfIF8V/agliwrSrd9o/fhYQnEGCPLzIFyaXLQ=
+  on:
+    tags: true
