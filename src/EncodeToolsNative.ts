@@ -17,9 +17,12 @@ export {
   BinaryInputOutput,
   EncodingOptions as BaseEncodingOptions,
   HashAlgorithm,
+  InvalidFormat,
   IDFormat,
   SerializationFormat,
-  CompressionFormat
+  CompressionFormat,
+  EncodeToolsFormat,
+  EncodeToolsFunction
 } from './EncodeTools';
 
 interface EncodingOptionsNative {
@@ -36,6 +39,7 @@ export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
   uniqueIdFormat: IDFormat.uuidv1String,
   compressionFormat: CompressionFormat.lzma
 };
+
 
 /**
  * Contains tools for encoding/decoding data in different circumstances.
@@ -57,6 +61,16 @@ export class EncodeToolsNative extends EncodeTools {
     return require('lzma-native');
   }
 
+  /**
+   * Returns an instance of the `bson` node module, using the native `bson-ext` if available.
+   *
+   */
+  protected static get bson(): any {
+    let bson = EncodeTools.safeLoadModule('bson-ext');
+    if (!bson)
+      bson = require('bson');
+    return bson;
+  }
 
   /**
    * Returns an instance of XXHash Addon
@@ -133,12 +147,26 @@ export class EncodeToolsNative extends EncodeTools {
      * Uses 512bit SHA from node.js api
      * @param buffer
      * @param args
+     * @deprecated Use sha512
      */
     public static async sha2(buffer: BinaryInputOutput): Promise<Buffer> {
-        return EncodeToolsNative.nativeHash(buffer, 'sha512');
+        return EncodeToolsNative.sha512(buffer);
     }
 
-    /**
+  /**
+   * Uses the popular, but UNSAFE, 512bit SHA- cryptographic algorithm.
+   * Use SHA3 for new projects.
+   *
+   * Uses 512bit SHA from node.js api
+   * @param buffer
+   * @param args
+   */
+  public static async sha512(buffer: BinaryInputOutput): Promise<Buffer> {
+    return EncodeToolsNative.nativeHash(buffer, 'sha512');
+  }
+
+
+  /**
      * Uses the very popular, but VERY VERY UNSAFE, MD5 cryptographic algorithm.
      * Use SHA3 for new projects.
      *
@@ -164,13 +192,7 @@ export class EncodeToolsNative extends EncodeTools {
    */
   public static async compressLZMA(buf: Buffer, mode: number): Promise<Buffer> {
     let lzma = EncodeToolsNative.lzmaNative();
-    return new Promise<Buffer>((resolve, reject) => {
-      lzma.compress(buf, mode, (result: any, error: any) => {
-        if (error) reject(error);
-        else resolve(result);
-      });
-    });
-
+    return lzma.compress(buf, mode);
   }
 
   /**
@@ -194,9 +216,9 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
-      return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), args[0]);
+      return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), mode);
     }
     throw new InvalidFormat(format);
   }
@@ -221,13 +243,14 @@ export class EncodeToolsNative extends EncodeTools {
      * @param algorithm
      */
     public async hash(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
-        if (algorithm === HashAlgorithm.xxhash3) return EncodeToolsNative.xxhash3(buffer, ...args);
-        else if (algorithm === HashAlgorithm.xxhash64) return EncodeToolsNative.xxhash64(buffer, ...args);
-        else if (algorithm === HashAlgorithm.xxhash32) return EncodeToolsNative.xxhash32(buffer, ...args);
-        else if (algorithm === HashAlgorithm.sha1) return EncodeToolsNative.sha1(buffer);
-        else if (algorithm === HashAlgorithm.sha2) return EncodeToolsNative.sha2(buffer);
-        else if (algorithm === HashAlgorithm.md5) return EncodeToolsNative.md5(buffer);
-        return super.hash(buffer, algorithm);
+      if (algorithm === HashAlgorithm.xxhash3) return EncodeToolsNative.xxhash3(buffer, ...args);
+      else if (algorithm === HashAlgorithm.xxhash64) return EncodeToolsNative.xxhash64(buffer, ...args);
+      else if (algorithm === HashAlgorithm.xxhash32) return EncodeToolsNative.xxhash32(buffer, ...args);
+      else if (algorithm === HashAlgorithm.sha1) return EncodeToolsNative.sha1(buffer);
+      else if (algorithm === HashAlgorithm.sha2) return EncodeToolsNative.sha2(buffer);
+      else if (algorithm === HashAlgorithm.sha512) return EncodeToolsNative.sha512(buffer);
+      else if (algorithm === HashAlgorithm.md5) return EncodeToolsNative.md5(buffer);
+      return super.hash(buffer, algorithm);
     }
 }
 

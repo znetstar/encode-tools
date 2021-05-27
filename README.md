@@ -99,6 +99,14 @@ Below are a list of supported algorithms, their backing library, and their suppo
 |---------|----------|--------------------|
 | lzma    | ✓        | lzma/lzma-native   |
 
+### Image Manipulation
+
+| Name    | Browser? | Underlying Package |
+|---------|----------|--------------------|
+| png     | ✓        | jimp/sharp         |
+| jpeg    | ✓        | jimp/sharp         |
+| bmp     | ✓        | jimp/sharp         |
+
 ## Requirements
 
 Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
@@ -109,7 +117,9 @@ The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-nat
 
 Please see the documentation located at https://etomonusa.github.io/encode-tools/
 
-Generally speaking, all functions return a Buffer.
+## Tests
+
+Tests are written in Mocha, to run use `npm test`.
 
 ## License
 

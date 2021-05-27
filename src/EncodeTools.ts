@@ -79,7 +79,12 @@ export enum HashAlgorithm {
      */
     sha1 = 'sha1',
     /**
+     * SHA512 hashing algorithm.
+     */
+    sha512 = 'sha512',
+    /**
      * SHA2 hashing algorithm.
+     * @deprecated Use SHA512
      */
     sha2 = 'sha2',
     /**
@@ -148,11 +153,23 @@ export enum SerializationFormat {
     bson = 'bson'
 }
 
+/**
+ * Format for compressing/decompressing files
+ */
 export enum CompressionFormat {
   /**
    * LZMA
    */
   lzma = 'lzma'
+}
+
+/**
+ * Format for converting images
+ */
+export enum ImageFormat {
+  png = 'png',
+  jpeg = 'jpeg',
+  bmp = 'bmp'
 }
 
 /**
@@ -165,8 +182,8 @@ export interface EncodingOptions {
     hashAlgorithm?: HashAlgorithm;
     binaryEncoding?: BinaryEncoding;
     compressionFormat?: CompressionFormat;
+    compressionLevel?: number;
 }
-
 export class InvalidFormat extends Error {
     constructor(format?: any) {
         super(
@@ -181,6 +198,9 @@ export class InvalidFormat extends Error {
  * The input type commonly acceped by most functions
  */
 export type BinaryInputOutput = Buffer|string|ArrayBuffer;
+
+export type EncodeToolsFormat = IDFormat|SerializationFormat|HashAlgorithm|BinaryEncoding|CompressionFormat;
+export type EncodeToolsFunction<F extends EncodeToolsFormat, R extends BinaryInputOutput> = (input: BinaryInputOutput, format?: F, ...args: any[]) => Promise<R>|R;
 
 function bufferFrom(...args: any[]): Buffer {
   return (Buffer.from as any)(...args);
@@ -265,7 +285,11 @@ export class EncodeTools {
      * using npm:Buffer if node.js Buffer is not available.
      * @param nodeBuffer
      */
-    public static nodeBufferToArrayBuffer(nodeBuffer: BinaryInputOutput): ArrayBuffer { return EncodeTools.ensureBuffer(nodeBuffer).buffer; }
+    public static nodeBufferToArrayBuffer(nodeBuffer: BinaryInputOutput): ArrayBuffer {
+      let outBuf = EncodeTools.ensureBuffer(nodeBuffer);
+
+      return outBuf.buffer.slice(outBuf.byteOffset, outBuf.byteOffset + outBuf.byteLength);
+    }
 
     /**
      * Decodes a hashids string, first to hex, then to a node.js buffer
@@ -371,42 +395,14 @@ export class EncodeTools {
      * @param buffer
      * @param format
      */
-    public encodeObject(inputObject: any, format?: BinaryEncoding, ...args: any[]): Buffer;
-    public encodeObject(inputObject: any, format?: BinaryEncoding, ...args: any[]): ArrayBuffer;
-    public encodeObject(inputObject: any, format?: BinaryEncoding, ...args: any[]): string;
-    public encodeObject(inputObject: any, format = this.options.binaryEncoding, ...args: any[]): BinaryInputOutput {
-        const buffer: Buffer = EncodeTools.ensureBuffer(
-            this.serializeObject(inputObject)
-        );
-
-        return this.encodeBuffer(
-            buffer,
-            format,
-            ...args
-        );
-    }
-
-    /**
-     * Decodes binary data from the provided format returning either a node.js buffer.
-     * @param buffer
-     * @param format
-     */
-    public decodeObject(buffer: ArrayBuffer, format?: BinaryEncoding, ...args: any[]): any;
-    public decodeObject(buffer: Buffer, format?: BinaryEncoding, ...args: any[]): any;
-    public decodeObject(input: string, format?: BinaryEncoding, ...args: any[]): any;
-    public decodeObject(inputBuffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): any {
-        const buffer: Buffer = this.decodeBuffer(EncodeTools.ensureBuffer(inputBuffer), format, ...args);
-        return this.deserializeObject(buffer);
-    }
-
-    /**
-     * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
-     * @param buffer
-     * @param format
-     */
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): Buffer;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): ArrayBuffer;
-    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.nodeBuffer, ...args: any[]): Buffer;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.arrayBuffer, ...args: any[]): ArrayBuffer;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.hex, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base64, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base32, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.base64url, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding.hashids, ...args: any[]): string;
+    public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
     public encodeBuffer(inputBuffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): BinaryInputOutput {
         const buffer: Buffer = EncodeTools.ensureBuffer(inputBuffer);
         if (format === BinaryEncoding.nodeBuffer) return buffer;
@@ -424,9 +420,14 @@ export class EncodeTools {
      * @param buffer
      * @param format
      */
-    public decodeBuffer(buffer: ArrayBuffer, format?: BinaryEncoding, ...args: any[]): Buffer;
-    public decodeBuffer(buffer: Buffer, format?: BinaryEncoding, ...args: any[]): Buffer;
-    public decodeBuffer(input: string, format?: BinaryEncoding, ...args: any[]): Buffer;
+    public decodeBuffer(buffer: ArrayBuffer, format?: BinaryEncoding.arrayBuffer, ...args: any[]): Buffer;
+    public decodeBuffer(buffer: Buffer, format?: BinaryEncoding.nodeBuffer, ...args: any[]): Buffer;
+    public decodeBuffer(input: string, format?: BinaryEncoding.hex, ...args: any[]): Buffer;
+    public decodeBuffer(input: string, format?: BinaryEncoding.base32, ...args: any[]): Buffer;
+    public decodeBuffer(input: string, format?: BinaryEncoding.hashids, ...args: any[]): Buffer;
+    public decodeBuffer(input: string, format?: BinaryEncoding.base64, ...args: any[]): Buffer;
+    public decodeBuffer(input: string, format?: BinaryEncoding.base64url, ...args: any[]): Buffer;
+    public decodeBuffer(buffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): Buffer;
     public decodeBuffer(buffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): Buffer {
         if (format === BinaryEncoding.nodeBuffer)
             return bufferFrom(buffer);
@@ -440,7 +441,7 @@ export class EncodeTools {
     }
 
     public static async crc32(buffer: BinaryInputOutput): Promise<Buffer> {
-        return bufferFrom(await crc32(EncodeTools.ensureBuffer(buffer)));
+        return bufferFrom(await crc32(EncodeTools.ensureBuffer(buffer)), 'hex');
     }
 
     /* Hashing functions */
@@ -453,7 +454,7 @@ export class EncodeTools {
      * @param args
      */
     public static async xxhash32(buffer: BinaryInputOutput, ...args: any[]): Promise<Buffer> {
-        return bufferFrom(await xxhash32(EncodeTools.ensureBuffer(buffer), ...args));
+        return bufferFrom(await xxhash32(EncodeTools.ensureBuffer(buffer), ...args), 'hex');
     }
     /**
      * Hashes using XXHash-64 (https://zb.gy/l4kN), a fast, non-cryptographic,
@@ -464,7 +465,7 @@ export class EncodeTools {
      * @param args
      */
     public static async xxhash64(buffer: BinaryInputOutput, ...args: any[]): Promise<Buffer> {
-        return bufferFrom(await xxhash64(EncodeTools.ensureBuffer(buffer), ...args));
+        return bufferFrom(await xxhash64(EncodeTools.ensureBuffer(buffer), ...args), 'hex');
     }
     /**
      * Uses the very popular, but UNSAFE, SHA-1 cryptographic algorithm.
@@ -474,7 +475,7 @@ export class EncodeTools {
      * @param buffer
      * @param args
      */
-    public static async sha1(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha1(EncodeTools.ensureBuffer(buffer))); }
+    public static async sha1(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha1(EncodeTools.ensureBuffer(buffer)), 'hex'); }
     /**
      * Uses the popular, but UNSAFE, 512bit SHA-2 cryptographic algorithm.
      * Use SHA3 for new projects.
@@ -483,7 +484,17 @@ export class EncodeTools {
      * @param buffer
      * @param args
      */
-    public static async sha2(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha512(EncodeTools.ensureBuffer(buffer))); }
+    public static async sha512(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha512(EncodeTools.ensureBuffer(buffer)), 'hex'); }
+  /**
+   * Uses the popular, but UNSAFE, 512bit SHA-2 cryptographic algorithm.
+   * Use SHA3 for new projects.
+   *
+   * Uses 512bit SHA from npm:hash-wasm
+   * @param buffer
+   * @param args
+   * @deprecated Use SHA512 instead
+   */
+    public static async sha2(buffer: BinaryInputOutput): Promise<Buffer> { return EncodeTools.sha512(buffer); }
     /**
      * Uses the new SHA-3 cryptographic algorithm.
      *
@@ -491,7 +502,7 @@ export class EncodeTools {
      * @param buffer
      * @param args
      */
-    public static async sha3(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha3(EncodeTools.ensureBuffer(buffer))); }
+    public static async sha3(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await sha3(EncodeTools.ensureBuffer(buffer)), 'hex'); }
     /**
      * Uses the very popular, but VERY VERY UNSAFE, MD5 cryptographic algorithm.
      * Use SHA3 for new projects.
@@ -500,7 +511,7 @@ export class EncodeTools {
      * @param buffer
      * @param args
      */
-    public static async md5(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await md5(EncodeTools.ensureBuffer(buffer))); }
+    public static async md5(buffer: BinaryInputOutput): Promise<Buffer> { return bufferFrom(await md5(EncodeTools.ensureBuffer(buffer)), 'hex'); }
 
   /**
    * Hashes using bcrypt
@@ -519,7 +530,7 @@ export class EncodeTools {
 
         let key = await Bcrypt(options);
 
-        return bufferFrom(EncodeTools.ensureBuffer(key));
+        return bufferFrom(EncodeTools.ensureBuffer(key), 'hex');
     }
 
   /**
@@ -544,15 +555,16 @@ export class EncodeTools {
      * @param algorithm
      */
     public async hash(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
-        if (algorithm === HashAlgorithm.xxhash64) return EncodeTools.xxhash64(buffer, ...args);
-        else if (algorithm === HashAlgorithm.xxhash32) return EncodeTools.xxhash32(buffer, ...args);
-        else if (algorithm === HashAlgorithm.sha1) return EncodeTools.sha1(buffer);
-        else if (algorithm === HashAlgorithm.sha2) return EncodeTools.sha2(buffer);
-        else if (algorithm === HashAlgorithm.sha3) return EncodeTools.sha3(buffer);
-        else if (algorithm === HashAlgorithm.md5) return EncodeTools.md5(buffer);
-        else if (algorithm === HashAlgorithm.bcrypt) return EncodeTools.bcrypt(buffer, ...args);
-        else if (algorithm === HashAlgorithm.crc32) return EncodeTools.crc32(buffer);
-        throw new InvalidFormat(algorithm);
+      if (algorithm === HashAlgorithm.xxhash64) return EncodeTools.xxhash64(buffer, ...args);
+      else if (algorithm === HashAlgorithm.xxhash32) return EncodeTools.xxhash32(buffer, ...args);
+      else if (algorithm === HashAlgorithm.sha1) return EncodeTools.sha1(buffer);
+      else if (algorithm === HashAlgorithm.sha512) return EncodeTools.sha512(buffer);
+      else if (algorithm === HashAlgorithm.sha2) return EncodeTools.sha2(buffer);
+      else if (algorithm === HashAlgorithm.sha3) return EncodeTools.sha3(buffer);
+      else if (algorithm === HashAlgorithm.md5) return EncodeTools.md5(buffer);
+      else if (algorithm === HashAlgorithm.bcrypt) return EncodeTools.bcrypt(buffer, ...args);
+      else if (algorithm === HashAlgorithm.crc32) return EncodeTools.crc32(buffer);
+      throw new InvalidFormat(algorithm);
     }
 
     /**
@@ -561,8 +573,9 @@ export class EncodeTools {
      * @param buffer
      * @param algorithm
      */
-    public async hashString(buffer: Buffer, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<string> {
-        return (await this.hash(buffer, algorithm, ...args)).toString('utf8');
+    public async hashString(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<string> {
+        let buf = (await this.hash(EncodeTools.ensureBuffer(buffer), algorithm, ...args));
+        return buf.toString('hex');
     }
 
     /**
@@ -676,12 +689,10 @@ export class EncodeTools {
    * Returns an instance of the `bson` node module, using the native `bson-ext` if available.
    *
    */
-    protected static get bson(): any {
-        let bson = EncodeTools.safeLoadModule('bson-ext');
-        if (!bson)
-            bson = require('bson');
-        return bson;
-    }
+  protected static get bson(): any {
+    let bson = require('bson');
+    return bson;
+  }
 
   /**
    * Returns an instance of the `ObjectId` constructor `bson` node module, using the native `bson-ext` if available.
@@ -703,7 +714,13 @@ export class EncodeTools {
    * @param idFormat Algorithm to use to generate the unique id
    * @param args Extra args to pass to the ID generation function
    */
-    public uniqueId(idFormat?: IDFormat): Buffer|string|number;
+    public uniqueId(idFormat: IDFormat.uuidv4): Buffer;
+    public uniqueId(idFormat: IDFormat.uuidv1): Buffer;
+    public uniqueId(idFormat: IDFormat.uuidv4String): string;
+    public uniqueId(idFormat: IDFormat.uuidv1String): string;
+    public uniqueId(idFormat: IDFormat.objectId): Buffer;
+    public uniqueId(idFormat: IDFormat.nanoid, size?: number): string;
+    public uniqueId(idFormat: IDFormat.timestamp): number;
     public uniqueId(idFormat?: IDFormat, ...args: any[]): Buffer|string|number;
     public uniqueId(idFormat: IDFormat = this.options.uniqueIdFormat, ...args: any[]): Buffer|string|number {
         if (idFormat === IDFormat.uuidv1) return EncodeTools.uuidv1();
@@ -781,6 +798,50 @@ export class EncodeTools {
     }
 
   /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param buffer
+   * @param format
+   */
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.nodeBuffer, ...args: any[]): Buffer;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.base64, ...args: any[]): string;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.base64url, ...args: any[]): string;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.hex, ...args: any[]): string;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.base32, ...args: any[]): string;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.hashids, ...args: any[]): string;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.arrayBuffer, ...args: any[]): ArrayBuffer;
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
+  public encodeObject<T>(inputObject: T, format = this.options.binaryEncoding, ...args: any[]): BinaryInputOutput {
+    const buffer: Buffer = EncodeTools.ensureBuffer(
+      this.serializeObject<T>(inputObject)
+    );
+
+    return this.encodeBuffer(
+      buffer,
+      format,
+      ...args
+    );
+  }
+
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeObject<T>(buffer: Buffer, format?: BinaryEncoding.nodeBuffer, ...args: any[]): T;
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.base64, ...args: any[]): T;
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.base64url, ...args: any[]): T;
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.hex, ...args: any[]): T;
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.base32, ...args: any[]): T;
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.hashids, ...args: any[]): T;
+  public decodeObject<T>(buffer: ArrayBuffer, format?: BinaryEncoding.arrayBuffer, ...args: any[]): T;
+  public decodeObject<T>(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): T;
+  public decodeObject<T>(inputBuffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): T {
+    const buffer: Buffer = this.decodeBuffer(EncodeTools.ensureBuffer(inputBuffer), format, ...args);
+    return this.deserializeObject<T>(buffer);
+  }
+
+
+  /**
    * Compresses a buffer using LZMA
    * @param buf - Buffer
    * @param mode - Compression mode (1-9)
@@ -816,9 +877,9 @@ export class EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-    public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+    public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, mode: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
       if (format === CompressionFormat.lzma) {
-        return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), args[0]);
+        return EncodeTools.compressLZMA(EncodeTools.ensureBuffer(data), mode);
       }
       throw new InvalidFormat(format);
     }
@@ -834,6 +895,8 @@ export class EncodeTools {
       }
       throw new InvalidFormat(format);
     }
+
+
 
   /**
    * Returns an EncodeTools instance with the default properties

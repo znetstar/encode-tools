@@ -10,6 +10,7 @@
     "target": "es2018",
     "rootDir": "src",
     "outDir": "lib",
+    "downlevelIteration": true,
     "lib": [ "es2017", "DOM" ]
   },
   "files": [ "src/index.ts", "src/EncodeTools.ts", "src/EncodeToolsNative.ts" ]
