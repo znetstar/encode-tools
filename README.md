@@ -37,6 +37,7 @@ let newBuf = await enc.uniqueId(IDFormat.uuidv4);
 console.log(newBuf.toString('base64'));
 ```
 
+
 Compressing a buffer with lzma
 ```
 let enc = new EncodeTools();
