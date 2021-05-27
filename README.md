@@ -1,6 +1,6 @@
 # Etomon Encode Tools
 
-[![NPM](https://nodei.co/npm/@etomon/encode-tools.png)](https://nodei.co/npm/@etomon/encode-tool/)
+[![NPM](https://nodei.co/npm/@etomon/encode-tools.png)](https://nodei.co/npm/@etomon/encode-tools/)
 
 [![Build Status](https://travis-ci.com/EtomonUSA/encode-tools.svg?branch=master)](https://travis-ci.com/EtomonUSA/encode-tools)
 
