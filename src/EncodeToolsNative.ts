@@ -148,15 +148,15 @@ export class EncodeToolsNative extends EncodeTools {
     return require('lzma-native');
   }
 
-  /**
-   * Returns an instance of node-zstd
-   */
-  public static async zstdNative(): Promise<any> {
-    if (typeof(require) === 'undefined')
-      return null;
-    // @ts-ignore
-    return require('@etomon/node-zstd');
-  }
+  // /**
+  //  * Returns an instance of node-zstd
+  //  */
+  // public static async zstdNative(): Promise<any> {
+  //   if (typeof(require) === 'undefined')
+  //     return null;
+  //   // @ts-ignore
+  //   return require('@etomon/node-zstd');
+  // }
 
   /**
    * Returns an instance of the `bson` node module, using the native `bson-ext` if available.
