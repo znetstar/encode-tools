@@ -116,7 +116,6 @@ export interface EncodingOptions {
   compressionLevel?: number;
   imageFormat?: ImageFormat;
 }
-const lzma = require('lzma-native');
 
 export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
   binaryEncoding: BinaryEncoding.base64,
