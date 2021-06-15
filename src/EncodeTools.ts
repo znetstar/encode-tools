@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import * as msgpack from '@msgpack/msgpack';
-import { nanoid } from 'nanoid';
+const nanoid = require('nanoid');
 import {
     v1 as UUIDv1,
     v4 as UUIDv4,
