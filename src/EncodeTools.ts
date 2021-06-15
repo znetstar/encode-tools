@@ -25,7 +25,6 @@ import {
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
-require('lzma/src/lzma_worker.js');
 import * as Jimp from 'jimp';
 
 export enum BinaryEncoding {
