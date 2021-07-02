@@ -65,7 +65,7 @@
         "xxhash-addon": "^1.4.0"
     },
     "peerDependencies": {
-        "bson-ext": "^4.x",
+        "bson-ext": "^2.x",
         "xxhash-addon": "^1.x",
         "lzma-native": "^8.x",
         "sharp": "^0.x"
