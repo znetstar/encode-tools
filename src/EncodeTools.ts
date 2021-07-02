@@ -778,7 +778,8 @@ export class EncodeTools {
         else if (idFormat === IDFormat.uuidv4String) return EncodeTools.uuidv4String();
         else if (idFormat === IDFormat.objectId) return EncodeTools.newObjectId();
         else if (idFormat === IDFormat.timestamp) return EncodeTools.timestamp();
-        else if (idFormat === IDFormat.nanoid) return require('nanoid')(...args);
+        // @ts-ignore
+        else if (idFormat === IDFormat.nanoid) return require('nanoid').nanoid(...args);
         throw new InvalidFormat(idFormat);
     }
 
