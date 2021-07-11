@@ -8,6 +8,8 @@ This package aggregates different libraries for encoding, serializing, compressi
 
 *Many* other packages serve the same purpose, but our objective is to ensure a consistent experience in both node.js and the browser and standardize the api so functions work the same way across different underlying libraries.
 
+Etomon Encode Tools also has a command line wrapper [`encode-cli`](https://github.com/znetstar/encode-cli).
+
 ## Examples
 Encoding a Buffer as base64url
 
