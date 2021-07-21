@@ -7,6 +7,7 @@
         "test": "mocha -r ts-node/register --timeout 0 --ui bdd src/test/src/*",
         "test-bail": "mocha -r ts-node/register --timeout 0 --ui bdd src/test/src/* --bail",
         "prepack": "grunt",
+        "docs": "grunt docs",
         "build": "grunt"
     },
     "publishConfig": {

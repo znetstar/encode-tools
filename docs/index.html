@@ -369,6 +369,21 @@
 					<h2>Usage</h2>
 				</a>
 				<p>Please see the documentation located at <a href="https://etomonusa.github.io/encode-tools/">https://etomonusa.github.io/encode-tools/</a></p>
+				<a href="#webpack" id="webpack" style="color: inherit; text-decoration: none;">
+					<h2>Webpack</h2>
+				</a>
+				<p>For issues with Webpack, try adding all the native dependencies to the <code>externals</code> section:</p>
+				<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  externals: {</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;xxhash-addon&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs xxhash-addon&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;bson-ext&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs bson-ext&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;shelljs&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs shelljs&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;lzma-native&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs lzma-native&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;sharp&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs sharp&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;cbor-extract&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs cbor-extract&#039;</span>
+<span style="color: #000000">  }</span>
+<span style="color: #000000">}</span>
+</code></pre>
 				<a href="#tests" id="tests" style="color: inherit; text-decoration: none;">
 					<h2>Tests</h2>
 				</a>
