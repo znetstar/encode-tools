@@ -13,12 +13,14 @@ import {
 import {Buffer} from "buffer";
 import {Chance} from 'chance';
 import {assert} from 'chai';
+const cborX = require('cbor-x');
 import {ImageFormat} from "../../EncodeTools";
 
 const crypto = require('crypto');
 
 const sharp = require('sharp');
-const bson = require('bson-ext');
+const bson = require('bson');
+
 
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 
@@ -225,6 +227,7 @@ export class SerializeObjectRunner extends EncodeToolsNativeRunner<any, BinaryIn
 
     this.formats.delete(SerializationFormat.json);
     this.formats.delete(SerializationFormat.msgpack);
+    this.formats.delete(SerializationFormat.cbor);
   }
   public async encode(input: any, format: SerializationFormat): Promise<BinaryInputOutput> {
     const enc = await this.createEncodeTools();

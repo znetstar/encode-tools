@@ -1,10 +1,11 @@
 {
     "name": "@etomon/encode-tools",
-    "version": "2.0.11",
+    "version": "2.1.0",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
         "test": "mocha -r ts-node/register --timeout 0 --ui bdd src/test/src/*",
+        "test-bail": "mocha -r ts-node/register --timeout 0 --ui bdd src/test/src/* --bail",
         "prepack": "grunt",
         "build": "grunt"
     },
@@ -21,8 +22,9 @@
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
         "base32.js": "^0.1.0",
-        "bson": "^4.3.0",
+        "bson": "^4.4.1",
         "buffer": "^6.0.3",
+        "cbor-x": "^0.8.3",
         "hash-wasm": "^4.6.0",
         "hashids": "^2.2.8",
         "jimp": "^0.16.1",
@@ -44,7 +46,8 @@
         "@types/node": "^15.0.2",
         "@types/sharp": "^0.28.1",
         "@types/uuid": "^8.3.0",
-        "bson-ext": "^4.0.0",
+        "bson-ext": "^2",
+        "cbor-extract": "^0.3.1",
         "chai": "^4.3.4",
         "chance": "^1.1.7",
         "docdash": "^1.2.0",
@@ -64,7 +67,8 @@
         "typescript": "^4.2.4",
         "xxhash-addon": "^1.4.0"
     },
-    "peerDependencies": {
+    "optionalDependencies": {
+        "cbor-extract": "^0.3.1",
         "bson-ext": "^2.x",
         "xxhash-addon": "^1.x",
         "lzma-native": "^8.x",

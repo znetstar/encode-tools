@@ -341,8 +341,26 @@ export class EncodeToolsNative extends EncodeTools {
    * @param args - Options
    */
   public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.lzma, level?: number, ...args: any[]): Promise<Buffer>;
+  /**
+   * Compresses arbitrary data using the provided format and any options
+   * @param data - Data to compress
+   * @param format - Format to use
+   * @param args - Options
+   */
   public async compress(data: Buffer|ArrayBuffer, format?: CompressionFormat.zstd, level?: number, ...args: any[]): Promise<Buffer>;
+  /**
+   * Compresses arbitrary data using the provided format and any options
+   * @param data - Data to compress
+   * @param format - Format to use
+   * @param args - Options
+   */
   public async compress(data: BinaryInputOutput, format?: CompressionFormat, level?: number, ...args: any[]): Promise<Buffer>;
+  /**
+   * Compresses arbitrary data using the provided format and any options
+   * @param data - Data to compress
+   * @param format - Format to use
+   * @param args - Options
+   */
   public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, level: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), level);
@@ -359,8 +377,23 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to use
    */
   public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.lzma, ...args: any[]): Promise<Buffer>;
+  /**
+   * Decompresses arbitrary data using the provided format and any options
+   * @param data - Data to decompress
+   * @param format - Format to use
+   */
   public async decompress(data: Buffer|ArrayBuffer, format: CompressionFormat.zstd, ...args: any[]): Promise<Buffer>;
+  /**
+   * Decompresses arbitrary data using the provided format and any options
+   * @param data - Data to decompress
+   * @param format - Format to use
+   */
   public async decompress(data: BinaryInputOutput, format: CompressionFormat, ...args: any[]): Promise<Buffer>;
+  /**
+   * Decompresses arbitrary data using the provided format and any options
+   * @param data - Data to decompress
+   * @param format - Format to use
+   */
   public async decompress(data: BinaryInputOutput,  format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.decompressLZMA(EncodeToolsNative.ensureBuffer(data));
@@ -373,17 +406,53 @@ export class EncodeToolsNative extends EncodeTools {
 
   /**
    * Crops an image and returns a Buffer containing the result in the provided format
-   * @param data - Image
+   * @param buffer - Image
    * @param dims - Height/Width to resize to
    * @param format - Format to save result as
    */
   public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.png): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.jpeg): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.webp): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.avif): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(buffer: Buffer|ArrayBuffer, dims: CropDims, format?: ImageFormat.tiff): Promise<Buffer>;
   // public async cropImage(buffer: Buffer|ArrayBuffer|string, dims: CropDims, format?: ImageFormat.svg): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(data: BinaryInputOutput, dims: CropDims, format?: ImageFormat): Promise<Buffer>;
+  /**
+   * Crops an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async cropImage(data: BinaryInputOutput, dims: CropDims, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
     // if (format === ImageFormat.bmp)
     //   return super.resizeImage(data, dims, format);
@@ -396,17 +465,53 @@ export class EncodeToolsNative extends EncodeTools {
 
   /**
    * Resizes an image and returns a Buffer containing the result in the provided format
-   * @param data - Image
+   * @param buffer - Image
    * @param dims - Height/Width to resize to
    * @param format - Format to save result as
    */
   public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.png): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.jpeg): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.webp): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.avif): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(buffer: Buffer|ArrayBuffer, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.tiff): Promise<Buffer>;
   // public async resizeImage(buffer: Buffer|ArrayBuffer|string, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat.svg): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(data: BinaryInputOutput, dims: { height: number, width?: number }|{ height?: number, width: number }, format?: ImageFormat): Promise<Buffer>;
+  /**
+   * Resizes an image and returns a Buffer containing the result in the provided format
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async resizeImage(data: BinaryInputOutput, dims: { height: number, width?: number }|{ height?: number, width: number }, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
     // if (format === ImageFormat.bmp)
     //   return super.resizeImage(data, dims, format);
@@ -422,12 +527,42 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to save result as
    */
   public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.png): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.jpeg): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.webp): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.avif): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(buffer: Buffer|ArrayBuffer, format?: ImageFormat.tiff): Promise<Buffer>;
   // public async convertImage(buffer: Buffer|ArrayBuffer|string, format?: ImageFormat.svg): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(data: BinaryInputOutput, format?: ImageFormat): Promise<Buffer>;
+  /**
+   * Saves an image in the provided format, performing no operations on the image
+   * @param data - Image
+   * @param format - Format to save result as
+   */
   public async convertImage(data: BinaryInputOutput, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
     // if (format === ImageFormat.bmp)
     //   return super.resizeImage(data, format);
@@ -439,17 +574,59 @@ export class EncodeToolsNative extends EncodeTools {
 
   /**
    * Adjust brightness of image
-   * @param data - Image
+   * @param buffer - Image
    * @param dims - Height/Width to resize to
    * @param format - Format to save result as
    */
   public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.png): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.jpeg): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.webp): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.avif): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param buffer - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(buffer: Buffer|ArrayBuffer, factor: number, format?: ImageFormat.tiff): Promise<Buffer>;
   // public async adjustImageBrightness(buffer: Buffer|ArrayBuffer|string, factor: number, format?: ImageFormat.svg): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(data: BinaryInputOutput, factor: number, format?: ImageFormat): Promise<Buffer>;
+
+  /**
+   * Adjust brightness of image
+   * @param data - Image
+   * @param dims - Height/Width to resize to
+   * @param format - Format to save result as
+   */
   public async adjustImageBrightness(data: BinaryInputOutput, factor: number, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
     let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
 
@@ -458,12 +635,28 @@ export class EncodeToolsNative extends EncodeTools {
 
   /**
    * Gets metadata of the image provided as a buffer
-   * @param data - Image
+   * @param buffer - Image
    */
   public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param buffer - Image
+   */
   public static async getImageMetadata(buffer: Buffer|ArrayBuffer): Promise<ImageMetadata>;
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param buffer - Image
+   */
   public static async getImageMetadata(buffer: string): Promise<ImageMetadata>;
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param data - Image
+   */
   public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata>;
+  /**
+   * Gets metadata of the image provided as a buffer
+   * @param data - Image
+   */
   public static async getImageMetadata(data: BinaryInputOutput): Promise<ImageMetadata> {
     let sharp = EncodeToolsNative.sharpNative()(EncodeTools.ensureBuffer(data));
 
@@ -474,7 +667,6 @@ export class EncodeToolsNative extends EncodeTools {
       width: meta.width
     }
   }
-
 
   /**
      * Hashes data using the provided algorithm, returning a node.js Buffer.

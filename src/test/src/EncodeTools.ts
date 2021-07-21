@@ -15,6 +15,7 @@ import * as _ from 'lodash';
 import * as hashWasm from "hash-wasm";
 import {BcryptOptions} from "hash-wasm";
 import {serialize as BSONSerialize} from 'bson';
+const cborX = require('cbor-x');
 
 const ZstdCodec = require('zstd-codec').ZstdCodec;
 const LZMA = require('lzma').LZMA;
@@ -601,7 +602,7 @@ describe('EncodeTools', async function () {
     });
   });
 
-  describe('unqiueId/uuidv4', async function () {
+  describe('uniqueId/uuidv4', async function () {
     it('should return a Buffer of 16 bytes', async function () {
       let enc = new EncodeTools();
       let buf = enc.uniqueId(IDFormat.uuidv4) as Buffer;
@@ -725,6 +726,26 @@ describe('EncodeTools', async function () {
       let obj2 = EncodeTools.msgpackToObject<unknown>(Buffer.from(buf1));
 
       assert.deepEqual(obj2, obj, 'object from msgpack buffer is not the same');
+    });
+  });
+
+  describe('objectToCbor', async function () {
+    it('should convert object to cbor', async function () {
+      let obj = randomObject();
+      let buf1 = cborX.encode(obj);
+      let buf2 = EncodeTools.objectToCbor<unknown>(obj);
+
+      assert.deepEqual(buf2, buf1, 'cbor buffer of the object is not the same');
+    });
+  });
+
+  describe('cborToObject', async function () {
+    it('should convert cbor to object', async function () {
+      let obj = randomObject();
+      let buf1 = cborX.encode(obj);
+      let obj2 = EncodeTools.cborToObject<unknown>(Buffer.from(buf1));
+
+      assert.deepEqual(obj2, obj, 'object from cbor buffer is not the same');
     });
   });
 

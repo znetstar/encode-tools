@@ -13,7 +13,7 @@ Etomon Encode Tools also has a command line wrapper [`encode-cli`](https://githu
 ## Examples
 Encoding a Buffer as base64url
 
-```
+```javascript
   let enc = new EncodeTools();
   let buf = Buffer.from('hello world', 'utf8');
   let newBuf = enc.encodeBuffer(buf, BinaryEncoding.base64url);
@@ -21,7 +21,7 @@ Encoding a Buffer as base64url
 ```
 
 Hashing an object wth xxhash
-```
+```javascript
 let enc = new EncodeTools();
 let obj = { foo: 'bar' };
 let newBuf = await enc.hashObject(obj, HashAlgorithm.xxhash64);
@@ -29,7 +29,7 @@ console.log(newBuf.toString('utf8'));
 ```
 
 Serializing an object wth msgpack
-```
+```javascript
 let enc = new EncodeTools();
 let obj = { foo: 'bar' };
 let newBuf = await enc.serializeObject(obj, SerializationFormat.msgpack);
@@ -37,7 +37,7 @@ console.log(newBuf.toString('base64'));
 ```
 
 Generating a base64-encoded UUID v4
-```
+```javascript
 let enc = new EncodeTools();
 let newBuf = await enc.uniqueId(IDFormat.uuidv4);
 console.log(newBuf.toString('base64'));
@@ -45,14 +45,14 @@ console.log(newBuf.toString('base64'));
 
 
 Compressing a buffer with lzma
-```
+```javascript
 let enc = new EncodeTools();
 let newBuf = await enc.compress(Buffer.from('hi', 'utf8'), CompressionFormat.lzma);
 console.log(newBuf.toString('base64'));
 ```
 
 Resizing a png image
-```
+```javascript
 let enc = new EncodeTools();
 let imageBuf = await (await new Promise((resolve, reject) => {
   new (Jimp)(500, 500, '#FFFFFF', (err: unknown, image: any) => {
@@ -73,7 +73,7 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 | Name        | Browser? | Underlying Package |
 |-------------|----------|--------------------|
-| nodeBuffer  | ✓        | buffer             |
+| nodeBuffer  | ✓        | buffer/(built-in)  |
 | base64      | ✓        | (built-in)         |
 | base64url   | ✓        | (built-in)         |
 | hex         | ✓        | (built-in)         |
@@ -111,8 +111,9 @@ Below are a list of supported algorithms, their backing library, and their suppo
 | Name    | Browser? | Underlying Package |
 |---------|----------|--------------------|
 | json    | ✓        | (built in)         |
+| cbor    | ✓        | cbor/cbor-web      |
 | msgpack | ✓        | @msgpack/msgpack   |
-| bson    | ✓        | bson-ext/bson      
+| bson    | ✓        | bson-ext/bson      |
 
 ### Compression
 
@@ -134,9 +135,9 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 ## Requirements
 
-Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native` and `xxhash-addon` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma` and `hash-wsam` packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
+Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native`, `xxhash-addon` and `cbor-extract` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma`, `hash-wsam`, and `cbor-x` packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
 
-The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext xxhash-addon lzma-native`.
+The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext@2 xxhash-addon lzma-native cbor-extract`.
 
 The `gif` image format in `EncodeToolsNative` requires `libvips` compiled with ImageMagick support ([as described here](https://zb.gy/qPJH)). I haven't had time to re-build libvips on my machine, so there are no mocha tests for the `gif` format.
 
