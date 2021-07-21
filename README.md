@@ -145,6 +145,23 @@ The `gif` image format in `EncodeToolsNative` requires `libvips` compiled with I
 
 Please see the documentation located at https://etomonusa.github.io/encode-tools/
 
+## Webpack
+
+For issues with Webpack, try adding all the native dependencies to the `externals` section:
+
+```javascript
+{
+  externals: {
+      'xxhash-addon': 'commonjs xxhash-addon',
+      'bson-ext': 'commonjs bson-ext',
+      'shelljs': 'commonjs shelljs',
+      'lzma-native': 'commonjs lzma-native',
+      'sharp': 'commonjs sharp',
+      'cbor-extract': 'commonjs cbor-extract'
+  }
+}
+```
+
 ## Tests
 
 Tests are written in Mocha, to run use `npm test`.
