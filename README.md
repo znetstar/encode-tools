@@ -147,7 +147,9 @@ Please see the documentation located at https://etomonusa.github.io/encode-tools
 
 ## Webpack
 
-For issues with Webpack, try adding all the native dependencies to the `externals` section:
+For issues with Webpack, try adding all the native dependencies to the `externals` section.
+
+Also make sure `cbor-x` resolves to the `index.js` file in the root folder of the repository, instead of the `dist` folder.
 
 ```javascript
 {
@@ -158,6 +160,12 @@ For issues with Webpack, try adding all the native dependencies to the `external
       'lzma-native': 'commonjs lzma-native',
       'sharp': 'commonjs sharp',
       'cbor-extract': 'commonjs cbor-extract'
+  },
+  resolve: {
+    extensions: [ '.css', '.scss', '.html', '.ejs', '.ts', '.js' ],
+      alias: {
+        'cbor-x': path.resolve('./node_modules/cbor-x/index.js')
+    }
   }
 }
 ```

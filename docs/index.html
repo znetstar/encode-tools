@@ -372,7 +372,8 @@
 				<a href="#webpack" id="webpack" style="color: inherit; text-decoration: none;">
 					<h2>Webpack</h2>
 				</a>
-				<p>For issues with Webpack, try adding all the native dependencies to the <code>externals</code> section:</p>
+				<p>For issues with Webpack, try adding all the native dependencies to the <code>externals</code> section.</p>
+				<p>Also make sure <code>cbor-x</code> resolves to the <code>index.js</code> file in the root folder of the repository, instead of the <code>dist</code> folder.</p>
 				<pre><code class="language-javascript"><span style="color: #000000">{</span>
 <span style="color: #000000">  externals: {</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;xxhash-addon&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs xxhash-addon&#039;</span><span style="color: #000000">,</span>
@@ -381,6 +382,12 @@
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;lzma-native&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs lzma-native&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;sharp&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs sharp&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;cbor-extract&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs cbor-extract&#039;</span>
+<span style="color: #000000">  },</span>
+<span style="color: #000000">  resolve: {</span>
+<span style="color: #000000">    extensions: [ </span><span style="color: #A31515">&#039;.css&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.scss&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.html&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.ejs&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.ts&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.js&#039;</span><span style="color: #000000"> ],</span>
+<span style="color: #000000">      alias: {</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;cbor-x&#039;</span><span style="color: #000000">: </span><span style="color: #001080">path</span><span style="color: #000000">.</span><span style="color: #795E26">resolve</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;./node_modules/cbor-x/index.js&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">    }</span>
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
 </code></pre>
