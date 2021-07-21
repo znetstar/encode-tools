@@ -279,6 +279,37 @@ export interface ImageMetadata {
 }
 
 /**
+ * MIME Types for all serialization formats
+ */
+export const SerializationFormatMimeTypes: Map<SerializationFormat, string> = new Map<SerializationFormat, string>([
+  [ SerializationFormat.json, 'application/json' ],
+  /**
+   * Per https://zb.gy/DlNu
+   */
+  [ SerializationFormat.msgpack, 'application/msgpack' ],
+  /**
+   * Per https://zb.gy/cb-T
+   */
+  [SerializationFormat.cbor, 'application/cbor'],
+  /**
+   * Seems to be https://zb.gy/AYR1
+   */
+  [ SerializationFormat.bson, 'application/bson' ]
+]);
+
+/**
+ * MIME Types for all image formats
+ */
+export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageFormat, string>([
+  [ ImageFormat.avif, 'image/avif' ],
+  [ ImageFormat.tiff, 'image/tiff' ],
+  [ ImageFormat.gif, 'image/gif' ],
+  [ ImageFormat.png, 'image/png' ],
+  [ ImageFormat.jpeg, 'image/jpeg' ],
+  [ ImageFormat.webp, 'image/webp' ]
+]);
+
+/**
  * Contains tools for encoding/decoding data in different circumstances.
  *
  * Will attempt to use the native version of the underlying algorithm when
@@ -1367,7 +1398,7 @@ export class EncodeTools {
     let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
 
     jimp.crop(dims.left, dims.top, dims.width, dims.height);
-    return await jimp.getBufferAsync(`image/${format}`);
+    return await jimp.getBufferAsync(ImageFormatMimeTypes.get(format));
   }
 
   /**
@@ -1401,7 +1432,7 @@ export class EncodeTools {
     let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
 
     jimp.resize(dims.width || Jimp.AUTO, dims.height || Jimp.AUTO);
-    return await jimp.getBufferAsync(`image/${format}`);
+    return await jimp.getBufferAsync(ImageFormatMimeTypes.get(format));
   }
 
   /**
@@ -1435,7 +1466,7 @@ export class EncodeTools {
     let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
 
     jimp.brightness(factor);
-    return await jimp.getBufferAsync(`image/${format}`);
+    return await jimp.getBufferAsync(ImageFormatMimeTypes.get(format));
   }
 
   /**
@@ -1464,7 +1495,7 @@ export class EncodeTools {
   public async convertImage(data: BinaryInputOutput, format: ImageFormat = this.options.imageFormat): Promise<Buffer> {
     let jimp = await Jimp.read(EncodeTools.ensureBuffer(data));
 
-    return await jimp.getBufferAsync(`image/${format}`);
+    return await jimp.getBufferAsync(ImageFormatMimeTypes.get(format));
   }
 
   /**

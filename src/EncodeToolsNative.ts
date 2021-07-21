@@ -20,8 +20,10 @@ export {
   SerializationFormat,
   CompressionFormat,
   EncodeToolsFormat,
-  EncodeToolsFunction
+  EncodeToolsFunction,
+  SerializationFormatMimeTypes,
 } from './EncodeTools';
+
 
 
 export enum HashAlgorithm {
@@ -70,6 +72,7 @@ export enum HashAlgorithm {
 }
 
 
+
 /**
  * Format for converting images
  */
@@ -106,6 +109,18 @@ export enum ImageFormat {
    */
   // svg = 'svg',
 }
+
+/**
+ * MIME Types for all image formats
+ */
+export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageFormat, string>([
+  [ ImageFormat.avif, 'image/avif' ],
+  [ ImageFormat.tiff, 'image/tiff' ],
+  [ ImageFormat.gif, 'image/gif' ],
+  [ ImageFormat.png, 'image/png' ],
+  [ ImageFormat.jpeg, 'image/jpeg' ],
+  [ ImageFormat.webp, 'image/webp' ]
+]);
 
 export interface EncodingOptions {
   uniqueIdFormat?: IDFormat;
