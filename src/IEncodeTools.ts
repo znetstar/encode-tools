@@ -100,7 +100,7 @@ export interface IEncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-  compress(data: BinaryInputOutput, format: CompressionFormat, level: number , ...args: any[]): Promise<Buffer>;
+  compress(data: BinaryInputOutput, format: CompressionFormat, level?: number , ...args: any[]): Promise<Buffer>;
 
   /**
    * Decompresses arbitrary data using the provided format and any options
