@@ -8,7 +8,7 @@ import {
   HashAlgorithm,
   IDFormat,
   InvalidFormat,
-  SerializationFormat, AvailableMethods, DEFAULT_ENCODE_TOOLS_OPTIONS
+  SerializationFormat, AvailableNativeModules, DEFAULT_ENCODE_TOOLS_OPTIONS
 } from "../../EncodeToolsAuto";
 import {Buffer} from "buffer";
 import {Chance} from 'chance';
@@ -72,15 +72,15 @@ export function randomOptions(): EncodingOptions {
   }
 }
 
-class EncodeToolsCustomAvailableMethods extends EncodeTools {
+class EncodeToolsCustomAvailableNativeModules extends EncodeTools {
   constructor(public useNative: boolean, protected nativeOptions: Native.EncodingOptions = DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS, protected fallbackOptions: Regular.EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
     super(nativeOptions, fallbackOptions);
   }
 
-  public availableMethodsOverrides?: AvailableMethods;
+  public availableNativeModulesOverrides?: AvailableNativeModules;
 
-  get availableMethods(): AvailableMethods {
-    return this.availableMethodsOverrides || {
+  get availableNativeModules(): AvailableNativeModules {
+    return this.availableNativeModulesOverrides || {
       lzmaNative: this.useNative,
       sharp: this.useNative,
       bsonExt: this.useNative,
@@ -96,7 +96,7 @@ export type EncodeToolsFactory<E extends EncodeTools> = () => Promise<E>;
 
 export abstract class EncodeToolsAutoRunner<I, O extends BinaryInputOutput, F extends EncodeToolsFormat, E extends EncodeTools> {
   public formats: Set<F>;
-  constructor(protected native: boolean, formats: F[], protected encodeToolsFactory: EncodeToolsFactory<E> = async () => { return new EncodeToolsCustomAvailableMethods(this.native) as unknown as E; }, public timeout: number = 60e3) {
+  constructor(protected native: boolean, formats: F[], protected encodeToolsFactory: EncodeToolsFactory<E> = async () => { return new EncodeToolsCustomAvailableNativeModules(this.native) as unknown as E; }, public timeout: number = 60e3) {
     this.formats = new Set<F>(formats);
   }
   public abstract get functionName(): FunctionNameSet;

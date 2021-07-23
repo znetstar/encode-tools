@@ -240,11 +240,13 @@ export class EncodeToolsAuto implements IEncodeTools {
    * @param algorithm
    */
   public async hash(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
-    if ((
-      this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3
-    ) || (
-      this.availableNativeModules.crypto
-    )) {
+    if ((this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3) || (this.availableNativeModules.crypto && [
+      HashAlgorithm.sha2,
+      HashAlgorithm.md5,
+      HashAlgorithm.sha512,
+      HashAlgorithm.sha1,
+      HashAlgorithm.md5
+    ].includes(algorithm))) {
       return this.native.hash(buffer, algorithm, ...args);
     } else {
       return this.regular.hash(buffer, algorithm, ...args);
@@ -258,11 +260,13 @@ export class EncodeToolsAuto implements IEncodeTools {
    * @param algorithm
    */
   public async hashString(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<string> {
-    if ((
-      this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3
-    ) || (
-      this.availableNativeModules.crypto
-    )) {
+    if ((this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3) || (this.availableNativeModules.crypto && [
+      HashAlgorithm.sha2,
+      HashAlgorithm.md5,
+      HashAlgorithm.sha512,
+      HashAlgorithm.sha1,
+      HashAlgorithm.md5
+    ].includes(algorithm))) {
       return this.native.hashString(buffer, algorithm, ...args);
     } else {
       return this.regular.hashString(buffer, algorithm, ...args);
@@ -276,11 +280,13 @@ export class EncodeToolsAuto implements IEncodeTools {
    * @param algorithm
    */
   public async hashObject(obj: any, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
-    if ((
-      this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3
-    ) || (
-      this.availableNativeModules.crypto
-    )) {
+    if ((this.availableNativeModules.xxhashAddon && algorithm === HashAlgorithm.xxhash3) || (this.availableNativeModules.crypto && [
+      HashAlgorithm.sha2,
+      HashAlgorithm.md5,
+      HashAlgorithm.sha512,
+      HashAlgorithm.sha1,
+      HashAlgorithm.md5
+    ].includes(algorithm))) {
       return this.native.hashObject(obj, algorithm, ...args);
     } else {
       return this.regular.hashObject(obj, algorithm, ...args);

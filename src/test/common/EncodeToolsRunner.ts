@@ -29,7 +29,7 @@ import IntegerOptions = Chance.IntegerOptions;
 const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
 
-export function randomBuffer(opts: IntegerOptions = { min: 0, max: 1000e3 }): Buffer {
+export function randomBuffer(opts: IntegerOptions = { min: 0, max: 50e3 }): Buffer {
   let chance = Chance();
   return require("crypto").randomBytes(chance.integer(opts));
 }
