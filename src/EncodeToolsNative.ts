@@ -9,8 +9,10 @@ import EncodeTools, {
   InvalidFormat,
   SerializationFormat
 } from './EncodeTools';
+
+const ObjSorter = require('node-object-hash/dist/objectSorter');
 import * as crypto from 'crypto';
-import * as Jimp from "jimp";
+import {IEncodeTools} from "./IEncodeTools";
 export {
   BinaryEncoding,
   BinaryInputOutput,
@@ -148,7 +150,7 @@ export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
  * Will only attempt to use the native compiled npm libraries, returning an error if they aren't available.
  * This class will not work in browsers.
  */
-export class EncodeToolsNative extends EncodeTools {
+export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS) {
         super(options);
     }
@@ -376,7 +378,7 @@ export class EncodeToolsNative extends EncodeTools {
    * @param format - Format to use
    * @param args - Options
    */
-  public async compress(data: BinaryInputOutput, format: CompressionFormat = CompressionFormat.lzma, level: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
+  public async compress(data: BinaryInputOutput, format: CompressionFormat = this.options.compressionFormat, level: number = this.options.compressionLevel, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.compressLZMA(EncodeToolsNative.ensureBuffer(data), level);
     }
@@ -409,7 +411,7 @@ export class EncodeToolsNative extends EncodeTools {
    * @param data - Data to decompress
    * @param format - Format to use
    */
-  public async decompress(data: BinaryInputOutput,  format: CompressionFormat = CompressionFormat.lzma, ...args: any[]): Promise<Buffer> {
+  public async decompress(data: BinaryInputOutput,  format: CompressionFormat = this.options.compressionFormat, ...args: any[]): Promise<Buffer> {
     if (format === CompressionFormat.lzma) {
       return EncodeToolsNative.decompressLZMA(EncodeToolsNative.ensureBuffer(data));
     }
@@ -681,6 +683,33 @@ export class EncodeToolsNative extends EncodeTools {
       height: meta.height,
       width: meta.width
     }
+  }
+
+  /**
+   * Hashes data using the provided algorithm, returning a node.js Buffer.
+   *
+   * @param buffer
+   * @param algorithm
+   */
+  public async hashString(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<string> {
+    let buf = (await this.hash(EncodeTools.ensureBuffer(buffer), algorithm, ...args));
+    return buf.toString('hex');
+  }
+
+  /**
+   * Hashes an object using the provided algorithm, returning a node.js Buffer.
+   *
+   * @param buffer
+   * @param algorithm
+   */
+  public async hashObject(obj: any, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
+    // @ts-ignore
+    let sorter = ObjSorter();
+
+    let buffer = EncodeTools.ensureBuffer(
+      sorter(obj)
+    );
+    return (await this.hash(buffer, algorithm, ...args));
   }
 
   /**

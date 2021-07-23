@@ -5,7 +5,7 @@
     "declaration": true,
     "removeComments": false,
     "preserveConstEnums": true,
-    "allowJs": true,
+    "allowJs": false,
     "sourceMap": true,
     "target": "es2018",
     "rootDir": "src",

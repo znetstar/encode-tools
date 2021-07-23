@@ -135,11 +135,22 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 ## Requirements
 
-Etomon Encode Tools runs in the browser and in node.js, with two exceptions. The `bson-ext`, `lzma-native`, `xxhash-addon` and `cbor-extract` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma`, `hash-wsam`, and `cbor-x` packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
+Etomon Encode Tools runs in the browser and in node.js, with a few exceptions. The `bson-ext`, `lzma-native`, `xxhash-addon` and `cbor-extract` packages have native bindings, and so cannot run in the browser. For browser compatibility, the `EncodeTools` class uses the pure javascript `bson`, `lzma`, `hash-wsam`, and `cbor-x` packages, respectively,  to provide equivalent support albeit at the cost of performance. Additionally, `hash-wsam` lacks support for xxhash3.
 
-The `EncodeToolsNative` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as peer dependencies, so they must be installed manually with `npm install --no-save bson-ext@2 xxhash-addon lzma-native cbor-extract`.
+The `EncodeToolsAuto` class will use the native packages `bson-ext`, `lzma-native` and `xxhash-addon` (and any future native packages). `bson-ext`, `lzma-native` and `xxhash-addon` are listed as optional dependencies, and NPM will attempt to install them automatically. 
 
-The `gif` image format in `EncodeToolsNative` requires `libvips` compiled with ImageMagick support ([as described here](https://zb.gy/qPJH)). I haven't had time to re-build libvips on my machine, so there are no mocha tests for the `gif` format.
+The constructor of `EncodeToolsAuto` takes a second set of default `EncodingOptions` to use as a fallback if it cannot
+find the needed module.
+
+```javascript
+const enc = new EncodeToolsAuto({ hashAlgorithm: HashAlgorithm.xxhash3 }, { hashAlgorithm: HashAlgorithm.xxhash64 });
+if (enc.availableNativeModules.xxhashAddon)
+    console.log('should be xxhash3', await enc.hashString('Test'));
+else
+    console.log('should be xxhash64', await enc.hashString('Test'));
+```
+
+The `gif` image format in `EncodeToolsAuto` requires `libvips` compiled with ImageMagick support ([as described here](https://zb.gy/qPJH)). I haven't had time to re-build libvips on my machine, so there are no mocha tests for the `gif` format.
 
 ## Usage
 

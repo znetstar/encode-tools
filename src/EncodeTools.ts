@@ -26,6 +26,7 @@ import {
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
 import * as Jimp from 'jimp';
+import {IEncodeTools} from "./IEncodeTools";
 const cborX = require('cbor-x');
 
 export enum BinaryEncoding {
@@ -312,10 +313,8 @@ export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageForma
 /**
  * Contains tools for encoding/decoding data in different circumstances.
  *
- * Will attempt to use the native version of the underlying algorithm when
- * available.
  */
-export class EncodeTools {
+export class EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
     }
 
@@ -533,8 +532,8 @@ export class EncodeTools {
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
    * @param buffer
-   * @param format
-   */
+     * @param format
+     */
     public encodeBuffer(inputBuffer: BinaryInputOutput, format = this.options.binaryEncoding, ...args: any[]): BinaryInputOutput {
         const buffer: Buffer = EncodeTools.ensureBuffer(inputBuffer);
         if (format === BinaryEncoding.nodeBuffer) return buffer;
@@ -1098,9 +1097,9 @@ export class EncodeTools {
    */
   public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat: SerializationFormat = this.options.serializationFormat): T {
       if (serializationFormat === SerializationFormat.json) return EncodeTools.jsonToObject<T>(data.toString()) as T;
-      else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.cborToObject<T>(ensureBuffer(data)) as T;
-      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(ensureBuffer(data)) as T;
-      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(ensureBuffer(data)) as T;
+      else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.cborToObject<T>(EncodeTools.ensureBuffer(data)) as T;
+      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(EncodeTools.ensureBuffer(data)) as T;
+      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(EncodeTools.ensureBuffer(data)) as T;
       throw new InvalidFormat(serializationFormat);
   }
 
