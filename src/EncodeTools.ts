@@ -299,6 +299,13 @@ export const SerializationFormatMimeTypes: Map<SerializationFormat, string> = ne
 ]);
 
 /**
+ * Serialization formats for each MIME Type
+ */
+export const MimeTypesSerializationFormat: Map<string, SerializationFormat> = new Map<string, SerializationFormat>(Array.from(
+  SerializationFormatMimeTypes.entries()
+).map(([a,b]) => [b,a]));
+
+/**
  * MIME Types for all image formats
  */
 export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageFormat, string>([
@@ -309,6 +316,14 @@ export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageForma
   [ ImageFormat.jpeg, 'image/jpeg' ],
   [ ImageFormat.webp, 'image/webp' ]
 ]);
+
+/**
+ * Image formats for each MIME Type
+ */
+export const MimeTypesImageFormat: Map<string, ImageFormat> = new Map<string, ImageFormat>(
+  Array.from(ImageFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
+
 
 /**
  * Contains tools for encoding/decoding data in different circumstances.

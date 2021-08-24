@@ -8,8 +8,8 @@ import {
   EncodeToolsFormat,
   EncodeToolsFunction,
   HashAlgorithm,
-  IDFormat, ImageFormat,
-  SerializationFormat
+  IDFormat, ImageFormat, ImageFormatMimeTypes, MimeTypesImageFormat, MimeTypesSerializationFormat,
+  SerializationFormat, SerializationFormatMimeTypes
 } from '../../EncodeTools';
 import * as _ from 'lodash';
 import * as hashWasm from "hash-wasm";
@@ -50,6 +50,25 @@ const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
 const Jimp = require('jimp');
 
+describe('MimeTypesImageFormat', async function  () {
+  it('should have the same entries as ImageFormatMimeType except the key and value reversed', async function () {
+    assert.deepEqual(
+      Array.from(MimeTypesImageFormat.entries()),
+      Array.from(ImageFormatMimeTypes.entries())
+        .map(([k,v]) => [v,k]),
+    );
+  });
+});
+
+describe('MimeTypesSerializationFormat', async function  () {
+  it('should have the same entries as SerializationFormatMimeTypes except the key and value reversed', async function () {
+    assert.deepEqual(
+      Array.from(MimeTypesSerializationFormat.entries()),
+      Array.from(SerializationFormatMimeTypes.entries())
+        .map(([k,v]) => [v,k]),
+    );
+  });
+});
 
 describe('EncodeTools', async function () {
   let chance = Chance();
