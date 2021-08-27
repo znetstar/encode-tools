@@ -1,7 +1,8 @@
 import * as Regular from "./EncodeTools";
 import * as Native from "./EncodeToolsNative";
 import {Buffer} from "buffer";
-import {CropDims, ImageDims} from "./EncodeTools";
+import {ConvertableFormatMimeTypes} from "./EncodeToolsNative";
+import {ConvertableFormat, MimeTypesConvertableFormat} from "./EncodeTools";
 
 export type EncodingOptions = Regular.EncodingOptions|Native.EncodingOptions;
 export type BaseEncodingOptions = EncodingOptions;
@@ -16,8 +17,89 @@ export type EncodeToolsFormat = Regular.EncodeToolsFormat|Native.EncodeToolsForm
 export type ImageFormatMimeTypesCollection =  Map<ImageFormat, string>;
 export type SerializationFormatMimeTypesCollection =  Map<SerializationFormat, string>;
 
+/**
+ * Image dimensions for resize
+ */
+export type ImageDims = { height: number, width?: number }|{ height?: number, width: number }
+/**
+ * Image dimensions for crop
+ */
+export type CropDims = { height: number, width: number, left: number, top: number };
+
+/**
+ * Format and content type extracted from the HTTP request
+ */
+export interface ExtractedContentType<T extends ConvertableFormat>  {
+  /**
+   * Extracted format if found, or the default value, if provided
+   */
+  format: T|null;
+  /**
+   * Content type if found or null
+   */
+  mimeType: string|null;
+  /**
+   * Header that was used to extract
+   */
+  header: string;
+}
+
+/**
+ * `SerializationFormat` and content type extracted from the HTTP request
+ */
+export type ExtractedSerializationFormatContentType = ExtractedContentType<SerializationFormat>;
+/**
+ * `ImageFormat` and content type extracted from the HTTP request
+ */
+export type ExtractedImageFormatContentType = ExtractedContentType<ImageFormat>;
+
+
+/**
+ * Metadata specific to each image
+ */
+export interface ImageMetadataBase<I> {
+  format: I;
+  width: number;
+  height: number;
+}
+
+export type HTTPRequestWithHeader = { headers: { [name: string]: string; } };
+
 export interface IEncodeTools {
   options: EncodingOptions;
+  /**
+   * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+   */
+  convertableFormatMimeTypes: Map<ConvertableFormat, string>;
+  /**
+   * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+   */
+  mimeTypesConvertableFormat: Map<string, ConvertableFormat>;
+
+  /**
+   * Extracts a `SerializationFormat` or `ImageFormat` from the specified HTTP header,
+   * or defaults to the `SerializationFormat` or `Image Format` in the options of the encoder.
+   * @param req HTTP Request
+   * @param key Name of the header to extract from
+   */
+  headerToConvertableFormat(req: HTTPRequestWithHeader, key: string, defaultValue?: ConvertableFormat): ExtractedContentType<ConvertableFormat>;
+  /**
+   * Extracts a `ImageFormat` from the specified HTTP header,
+   * or defaults to the `Image Format` in the options of the encoder.
+   * @param req HTTP Request
+   * @param key Name of the header to extract from
+   */
+  headerToImageFormat(req: HTTPRequestWithHeader, key: string): ExtractedImageFormatContentType;
+
+  /**
+   * Extracts a `SerializationFormat` from the specified HTTP header,
+   * or defaults to the `SerializationFormat` in the options of the encoder.
+   * @param req HTTP Request
+   * @param key Name of the header to extract from
+   */
+  headerToSerializationFormat(req: HTTPRequestWithHeader, key: string): ExtractedSerializationFormatContentType;
+
+
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
    * @param buffer

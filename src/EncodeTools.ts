@@ -26,8 +26,37 @@ import {
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
 import * as Jimp from 'jimp';
-import {IEncodeTools} from "./IEncodeTools";
+import {
+  CropDims,
+  ExtractedContentType, ExtractedImageFormatContentType,
+  ExtractedSerializationFormatContentType, HTTPRequestWithHeader,
+  IEncodeTools,
+  ImageDims,
+  ImageMetadataBase
+} from "./IEncodeTools";
+import {IncomingMessage} from "http";
 const cborX = require('cbor-x');
+import * as ContentType from 'content-type';
+import * as _ from 'lodash';
+
+/**
+ * Is thrown when a content type cannot be determined
+ */
+export class InvalidContentTypeError extends Error {
+  constructor(contentType: string) {
+    super(`Invalid content type ${contentType}`);
+  }
+}
+
+/**
+ * Is thrown when a header cannot be found
+ */
+export class InvalidHeaderError extends Error {
+  constructor(contentType: string) {
+    super(`Invalid header ${contentType}`);
+  }
+}
+
 
 export enum BinaryEncoding {
     /**
@@ -241,14 +270,7 @@ export class InvalidFormat extends Error {
     }
 }
 
-/**
- * Image dimensions for resize
- */
-export type ImageDims = { height: number, width?: number }|{ height?: number, width: number }
-/**
- * Image dimensions for crop
- */
-export type CropDims = { height: number, width: number, left: number, top: number };
+
 /**
  * The input type commonly accepted by most functions
  */
@@ -273,11 +295,12 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   imageFormat: ImageFormat.png
 };
 
-export interface ImageMetadata {
-  format: ImageFormat;
-  width: number;
-  height: number;
-}
+export type ImageMetadata = ImageMetadataBase<ImageFormat>;
+
+/**
+ * A `SerializationFormat` or `ImageFormat`
+ */
+export type ConvertableFormat = ImageFormat|SerializationFormat;
 
 /**
  * MIME Types for all serialization formats
@@ -324,6 +347,23 @@ export const MimeTypesImageFormat: Map<string, ImageFormat> = new Map<string, Im
   Array.from(ImageFormatMimeTypes.entries()).map(([a,b]) => [b,a])
 );
 
+/**
+ * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+ */
+export const ConvertableFormatMimeTypes: Map<ConvertableFormat, string>  = new  Map<ConvertableFormat, string>(
+  [
+    ...Array.from(ImageFormatMimeTypes),
+    ...Array.from(SerializationFormatMimeTypes),
+  ]
+);
+
+
+/**
+ * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+ */
+export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Map<string, ConvertableFormat>(
+  Array.from(ConvertableFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
 
 /**
  * Contains tools for encoding/decoding data in different circumstances.
@@ -332,6 +372,46 @@ export const MimeTypesImageFormat: Map<string, ImageFormat> = new Map<string, Im
 export class EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
     }
+
+  /**
+   * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+   */
+    public get convertableFormatMimeTypes()  { return ConvertableFormatMimeTypes; }
+  /**
+   * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+   */
+    public get mimeTypesConvertableFormat()  { return MimeTypesConvertableFormat; }
+
+  public headerToConvertableFormat(req: HTTPRequestWithHeader, key: string, defaultValue?: ConvertableFormat): ExtractedContentType<ConvertableFormat> {
+    let format: ConvertableFormat|null = defaultValue || null;
+    let mimeType: string|null = null;
+
+    if (req.headers[key] && !_.isEmpty(req.headers[key])) {
+      try {
+        const contentType = ContentType.parse(req.headers[key] as string);
+        mimeType = contentType?.type || null;
+      } catch (err) { }
+    }
+
+    if (mimeType) {
+      if (MimeTypesConvertableFormat.has(mimeType) )
+        format = MimeTypesConvertableFormat.get(mimeType);
+    }
+
+    return {
+      format,
+      mimeType,
+      header: key
+    };
+  }
+
+  public headerToSerializationFormat(req: HTTPRequestWithHeader, key: string): ExtractedSerializationFormatContentType {
+    return this.headerToConvertableFormat(req, key, this.options.serializationFormat) as ExtractedSerializationFormatContentType;
+  }
+
+  public headerToImageFormat(req: HTTPRequestWithHeader, key: string): ExtractedImageFormatContentType {
+    return this.headerToConvertableFormat(req, key, this.options.imageFormat) as ExtractedImageFormatContentType;
+  }
 
   /**
    * Always returns the provided data as a `Buffer`, passing the data through `Buffer.from` if not already a Buffer

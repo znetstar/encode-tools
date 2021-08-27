@@ -2,26 +2,25 @@ import {assert} from 'chai';
 import {Chance} from 'chance';
 import {Buffer} from 'buffer';
 import {
-  BinaryEncoding,
-  BinaryInputOutput, DEFAULT_ENCODE_TOOLS_OPTIONS,
+  ConvertableFormatMimeTypes,
+  DEFAULT_ENCODE_TOOLS_OPTIONS,
   EncodeTools,
-  EncodeToolsFormat,
-  EncodeToolsFunction,
   HashAlgorithm,
-  IDFormat, ImageFormat, ImageFormatMimeTypes, MimeTypesImageFormat, MimeTypesSerializationFormat,
-  SerializationFormat, SerializationFormatMimeTypes
+  IDFormat,
+  ImageFormat,
+  ImageFormatMimeTypes,
+  MimeTypesConvertableFormat,
+  MimeTypesImageFormat,
+  MimeTypesSerializationFormat,
+  SerializationFormat,
+  SerializationFormatMimeTypes
 } from '../../EncodeTools';
 import * as _ from 'lodash';
 import * as hashWasm from "hash-wasm";
 import {BcryptOptions} from "hash-wasm";
 import {serialize as BSONSerialize} from 'bson';
-const cborX = require('cbor-x');
-
-const ZstdCodec = require('zstd-codec').ZstdCodec;
-const LZMA = require('lzma').LZMA;
 import {parse as UUIDParse, stringify as UUIDStringify} from "uuid";
 import * as msgpack from "@msgpack/msgpack";
-import {EncodeOptions} from "@msgpack/msgpack";
 import {
   CompressRunner,
   EncodeBufferRunner,
@@ -33,12 +32,18 @@ import {
   ImageBrightnessRunner,
   ImageConvertRunner,
   ImageCropRunner,
-  ImageResizeRunner, ImageRunnerBase,
+  ImageResizeRunner,
+  ImageRunnerBase,
   randomBuffer,
   randomObject,
   randomOptions,
   SerializeObjectRunner
 } from "../common/EncodeToolsRunner";
+
+const cborX = require('cbor-x');
+
+const ZstdCodec = require('zstd-codec').ZstdCodec;
+const LZMA = require('lzma').LZMA;
 
 
 const slugid = require('slugid');
@@ -70,6 +75,16 @@ describe('MimeTypesSerializationFormat', async function  () {
   });
 });
 
+describe('MimeTypesConvertableFormat', async function  () {
+  it('should have the same entries as SerializationFormatMimeTypes except the key and value reversed', async function () {
+    assert.deepEqual(
+      Array.from(MimeTypesConvertableFormat.entries()),
+      Array.from(ConvertableFormatMimeTypes.entries())
+        .map(([k,v]) => [v,k]),
+    );
+  });
+});
+
 describe('EncodeTools', async function () {
   let chance = Chance();
 
@@ -86,6 +101,75 @@ describe('EncodeTools', async function () {
     new ImageConvertRunner(),
     new ImageBrightnessRunner()
   ];
+
+  describe('convertableFormatMimeTypes', async function () {
+    const enc = new EncodeTools();
+    it('should be the same as static map', async function () {
+      assert.deepEqual(
+        Array.from(enc.convertableFormatMimeTypes.entries()),
+        Array.from(ConvertableFormatMimeTypes.entries())
+      )
+    });
+  });
+
+  describe('mimeTypesConvertableFormat', async function () {
+    const enc = new EncodeTools();
+    it('should be the same as static map', async function () {
+      assert.deepEqual(
+        Array.from(enc.mimeTypesConvertableFormat.entries()),
+        Array.from(MimeTypesConvertableFormat.entries())
+      )
+    });
+  });
+
+  describe('headerToConvertableFormat', async function () {
+    it('should retrieve an image format provided an image content type',async function () {
+      const enc = new EncodeTools();
+
+      const req = { headers: { 'content-type': 'image/png' } };
+      const format = enc.headerToConvertableFormat(req, 'content-type');
+      assert.deepEqual(format, {
+        format: ImageFormat.png,
+        header: 'content-type',
+        mimeType: 'image/png'
+      });
+    });
+
+    it('header key should be the same as the input',async function () {
+      const enc = new EncodeTools();
+
+      const req = { headers: {} };
+      const format = enc.headerToConvertableFormat(req, 'content-type', ImageFormat.png);
+      assert.equal(format.header, 'content-type');
+    });
+
+    it('mime type should be null if it cannot be detected',async function () {
+      const enc = new EncodeTools();
+
+      const req = { headers: {} };
+      const format = enc.headerToConvertableFormat(req, 'content-type', ImageFormat.png);
+      assert.isNull(format.mimeType);
+      assert.equal(format.format, ImageFormat.png);
+    });
+
+    it('both format and mime type should be null if the mime type cannot be detected and no default was given',async function () {
+      const enc = new EncodeTools();
+
+      const req = { headers: {} };
+      const format = enc.headerToConvertableFormat(req, 'content-type');
+      assert.isNull(format.mimeType);
+      assert.isNull(format.format);
+    });
+
+    it('format should be null if it cannot be matched to a mime type',async function () {
+      const enc = new EncodeTools();
+
+      const req = { headers: { accept: 'text/html; charset=utf-8' } };
+      const format = enc.headerToConvertableFormat(req, 'accept');
+      assert.isNull(format.format);
+      assert.equal(format.mimeType, 'text/html');
+    });
+  });
 
   describe('ensureBuffer', async function () {
     it('should convert string to a Buffer, and Buffer should contain the same data', async function () {

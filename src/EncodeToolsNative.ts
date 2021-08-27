@@ -2,17 +2,17 @@ import {Buffer} from 'buffer';
 import EncodeTools, {
   BinaryEncoding,
   BinaryInputOutput,
-  CompressionFormat, CropDims,
+  CompressionFormat,
   EncodingOptions as BaseEncodingOptions,
   HashAlgorithm as HashAlgorithmBase,
-  IDFormat, ImageMetadata,
+  IDFormat,
   InvalidFormat,
-  SerializationFormat
+  SerializationFormat, SerializationFormatMimeTypes
 } from './EncodeTools';
 
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 import * as crypto from 'crypto';
-import {IEncodeTools} from "./IEncodeTools";
+import {CropDims, IEncodeTools, ImageMetadataBase} from "./IEncodeTools";
 export {
   BinaryEncoding,
   BinaryInputOutput,
@@ -144,6 +144,31 @@ export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
 };
 
 
+export type ImageMetadata = ImageMetadataBase<ImageFormat>;
+
+/**
+ * A `SerializationFormat` or `ImageFormat`
+ */
+export type ConvertableFormat = ImageFormat|SerializationFormat;
+
+/**
+ * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+ */
+export const ConvertableFormatMimeTypes: Map<ConvertableFormat, string>  = new  Map<ConvertableFormat, string>(
+  [
+    ...Array.from(ImageFormatMimeTypes),
+    ...Array.from(SerializationFormatMimeTypes),
+  ]
+);
+
+
+/**
+ * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+ */
+export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Map<string, ConvertableFormat>(
+  Array.from(ConvertableFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
+
 /**
  * Contains tools for encoding/decoding data in different circumstances.
  *
@@ -154,6 +179,15 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS) {
         super(options);
     }
+
+  /**
+   * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+   */
+  public get convertableFormatMimeTypes()  { return ConvertableFormatMimeTypes; }
+  /**
+   * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+   */
+  public get mimeTypesConvertableFormat()  { return MimeTypesConvertableFormat; }
 
   /**
    * Returns an instance of LZMA Native
@@ -173,6 +207,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
   //   // @ts-ignore
   //   return require('@etomon/node-zstd');
   // }
+
 
   /**
    * Returns an instance of the `bson` node module, using the native `bson-ext` if available.

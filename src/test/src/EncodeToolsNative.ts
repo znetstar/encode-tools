@@ -5,6 +5,8 @@ import EncodeToolsNative, {
   default as EncodeTools,
   BinaryInputOutput,
   DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS as DEFAULT_ENCODE_TOOLS_OPTIONS,
+  ConvertableFormatMimeTypes, MimeTypesConvertableFormat, SerializationFormatMimeTypes,
+  ImageFormat
 } from '../../EncodeToolsNative';
 const LZMA = require('lzma-native').LZMA;
 import {
@@ -16,7 +18,6 @@ import {
   randomOptions, SerializeObjectRunner,
   ImageResizeRunner, ImageConvertRunner, ImageCropRunner, ImageBrightnessRunner
 } from "../common/EncodeToolsNativeRunner";
-import {ImageFormat} from "../../EncodeTools";
 import {ImageRunnerBase} from "../common/EncodeToolsRunner";
 const crypto = require('crypto');
 
@@ -27,6 +28,16 @@ const toBuffer = require('typedarray-to-buffer');
 const  Hashids = require('hashids/cjs');
 
 const base32 = require('base32.js');
+
+describe('MimeTypesConvertableFormat', async function  () {
+  it('should have the same entries as SerializationFormatMimeTypes except the key and value reversed', async function () {
+    assert.deepEqual(
+      Array.from(MimeTypesConvertableFormat.entries()),
+      Array.from(ConvertableFormatMimeTypes.entries())
+        .map(([k,v]) => [v,k]),
+    );
+  });
+});
 
 describe('EncodeToolsNative', async function () {
   let chance = Chance();
@@ -42,6 +53,26 @@ describe('EncodeToolsNative', async function () {
     new ImageConvertRunner(),
     new ImageBrightnessRunner()
   ];
+
+  describe('convertableFormatMimeTypes', async function () {
+    const enc = new EncodeTools();
+    it('should be the same as static map', async function () {
+      assert.deepEqual(
+        Array.from(enc.convertableFormatMimeTypes.entries()),
+        Array.from(ConvertableFormatMimeTypes.entries())
+      )
+    });
+  });
+
+  describe('mimeTypesConvertableFormat', async function () {
+    const enc = new EncodeTools();
+    it('should be the same as static map', async function () {
+      assert.deepEqual(
+        Array.from(enc.mimeTypesConvertableFormat.entries()),
+        Array.from(MimeTypesConvertableFormat.entries())
+      )
+    });
+  });
 
   for (let xxhash of [ 'XXHash3', 'XXHash64', 'XXHash32' ]) {
     let xxhashLowercase = xxhash.toLowerCase();
