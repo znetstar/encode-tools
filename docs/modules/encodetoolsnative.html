@@ -105,10 +105,19 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="encodetoolsnative.html#convertableformat" class="tsd-kind-icon">Convertable<wbr>Format</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="encodetoolsnative.html#imagemetadata" class="tsd-kind-icon">Image<wbr>Metadata</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="encodetoolsnative.html#convertableformatmimetypes" class="tsd-kind-icon">Convertable<wbr>Format<wbr>Mime<wbr>Types</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="encodetoolsnative.html#default_encode_tools_native_options" class="tsd-kind-icon">DEFAULT_<wbr>ENCODE_<wbr>TOOLS_<wbr>NATIVE_<wbr>OPTIONS</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="encodetoolsnative.html#imageformatmimetypes" class="tsd-kind-icon">Image<wbr>Format<wbr>Mime<wbr>Types</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="encodetoolsnative.html#mimetypesconvertableformat" class="tsd-kind-icon">Mime<wbr>Types<wbr>Convertable<wbr>Format</a></li>
 							</ul>
 						</section>
 					</div>
@@ -173,14 +182,57 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="convertableformat" class="tsd-anchor"></a>
+					<h3>Convertable<wbr>Format</h3>
+					<div class="tsd-signature tsd-kind-icon">Convertable<wbr>Format<span class="tsd-signature-symbol">:</span> <a href="../enums/encodetoolsnative.imageformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ImageFormat</a><span class="tsd-signature-symbol"> | </span><a href="../enums/encodetools.serializationformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">SerializationFormat</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L152">src/EncodeToolsNative.ts:152</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A <code>SerializationFormat</code> or <code>ImageFormat</code></p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="imagemetadata" class="tsd-anchor"></a>
+					<h3>Image<wbr>Metadata</h3>
+					<div class="tsd-signature tsd-kind-icon">Image<wbr>Metadata<span class="tsd-signature-symbol">:</span> <a href="../interfaces/iencodetools.imagemetadatabase.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadataBase</a><span class="tsd-signature-symbol">&lt;</span><a href="../enums/encodetoolsnative.imageformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ImageFormat</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L147">src/EncodeToolsNative.ts:147</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="convertableformatmimetypes" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Convertable<wbr>Format<wbr>Mime<wbr>Types</h3>
+					<div class="tsd-signature tsd-kind-icon">Convertable<wbr>Format<wbr>Mime<wbr>Types<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="encodetoolsnative.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L157">src/EncodeToolsNative.ts:157</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Combined map of all <code>SerializationFormat</code> and <code>ImageFormat</code> entries to their respective MIME Types</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
 					<a name="default_encode_tools_native_options" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> DEFAULT_<wbr>ENCODE_<wbr>TOOLS_<wbr>NATIVE_<wbr>OPTIONS</h3>
 					<div class="tsd-signature tsd-kind-icon">DEFAULT_<wbr>ENCODE_<wbr>TOOLS_<wbr>NATIVE_<wbr>OPTIONS<span class="tsd-signature-symbol">:</span> <a href="../interfaces/encodetoolsnative.encodingoptions.html" class="tsd-signature-type" data-tsd-kind="Interface">EncodingOptions</a><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeToolsNative.ts#L137">src/EncodeToolsNative.ts:137</a></li>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L137">src/EncodeToolsNative.ts:137</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -190,12 +242,27 @@
 					<div class="tsd-signature tsd-kind-icon">Image<wbr>Format<wbr>Mime<wbr>Types<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../enums/encodetoolsnative.imageformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ImageFormat</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeToolsNative.ts#L118">src/EncodeToolsNative.ts:118</a></li>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L118">src/EncodeToolsNative.ts:118</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>MIME Types for all image formats</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="mimetypesconvertableformat" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Mime<wbr>Types<wbr>Convertable<wbr>Format</h3>
+					<div class="tsd-signature tsd-kind-icon">Mime<wbr>Types<wbr>Convertable<wbr>Format<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="encodetoolsnative.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeToolsNative.ts#L168">src/EncodeToolsNative.ts:168</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Map of MIME Type to each <code>ImageFormat</code> or <code>SerializationFormat</code>.</p>
 						</div>
 					</div>
 				</section>
@@ -271,11 +338,23 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/encodetoolsnative.encodingoptions.html" class="tsd-kind-icon">Encoding<wbr>Options</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="encodetoolsnative.html#convertableformat" class="tsd-kind-icon">Convertable<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="encodetoolsnative.html#imagemetadata" class="tsd-kind-icon">Image<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="encodetoolsnative.html#convertableformatmimetypes" class="tsd-kind-icon">Convertable<wbr>Format<wbr>Mime<wbr>Types</a>
+					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="encodetoolsnative.html#default_encode_tools_native_options" class="tsd-kind-icon">DEFAULT_<wbr>ENCODE_<wbr>TOOLS_<wbr>NATIVE_<wbr>OPTIONS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="encodetoolsnative.html#imageformatmimetypes" class="tsd-kind-icon">Image<wbr>Format<wbr>Mime<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="encodetoolsnative.html#mimetypesconvertableformat" class="tsd-kind-icon">Mime<wbr>Types<wbr>Convertable<wbr>Format</a>
 					</li>
 				</ul>
 			</nav>
@@ -292,10 +371,11 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>

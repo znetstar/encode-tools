@@ -113,6 +113,8 @@
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#convertableformatmimetypes" class="tsd-kind-icon">convertable<wbr>Format<wbr>Mime<wbr>Types</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#mimetypesconvertableformat" class="tsd-kind-icon">mime<wbr>Types<wbr>Convertable<wbr>Format</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="encodetools.encodetools-1.html#objectid" class="tsd-kind-icon">Object<wbr>Id</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-static"><a href="encodetools.encodetools-1.html#withdefaults" class="tsd-kind-icon">With<wbr>Defaults</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-protected tsd-is-static"><a href="encodetools.encodetools-1.html#bson" class="tsd-kind-icon">bson</a></li>
@@ -134,6 +136,9 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#hash" class="tsd-kind-icon">hash</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#hashobject" class="tsd-kind-icon">hash<wbr>Object</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#hashstring" class="tsd-kind-icon">hash<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#headertoconvertableformat" class="tsd-kind-icon">header<wbr>ToConvertable<wbr>Format</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#headertoimageformat" class="tsd-kind-icon">header<wbr>ToImage<wbr>Format</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#headertoserializationformat" class="tsd-kind-icon">header<wbr>ToSerialization<wbr>Format</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#resizeimage" class="tsd-kind-icon">resize<wbr>Image</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="encodetools.encodetools-1.html#serializeobject" class="tsd-kind-icon">serialize<wbr>Object</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="encodetools.encodetools-1.html#uniqueid" class="tsd-kind-icon">unique<wbr>Id</a></li>
@@ -204,7 +209,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L332">src/EncodeTools.ts:332</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L372">src/EncodeTools.ts:372</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -231,6 +236,52 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="convertableformatmimetypes" class="tsd-anchor"></a>
+					<h3>convertable<wbr>Format<wbr>Mime<wbr>Types</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> convertableFormatMimeTypes<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#convertableformatmimetypes">convertableFormatMimeTypes</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L379">src/EncodeTools.ts:379</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Combined map of all <code>SerializationFormat</code> and <code>ImageFormat</code> entries to their respective MIME Types</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="mimetypesconvertableformat" class="tsd-anchor"></a>
+					<h3>mime<wbr>Types<wbr>Convertable<wbr>Format</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> mimeTypesConvertableFormat<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#mimetypesconvertableformat">mimeTypesConvertableFormat</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L383">src/EncodeTools.ts:383</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Map of MIME Type to each <code>ImageFormat</code> or <code>SerializationFormat</code>.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
 					<a name="objectid" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> Object<wbr>Id</h3>
@@ -241,7 +292,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L887">src/EncodeTools.ts:887</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L967">src/EncodeTools.ts:967</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1548">src/EncodeTools.ts:1548</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1628">src/EncodeTools.ts:1628</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -285,7 +336,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L878">src/EncodeTools.ts:878</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L958">src/EncodeTools.ts:958</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -313,7 +364,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#adjustimagebrightness">adjustImageBrightness</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1458">src/EncodeTools.ts:1458</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1538">src/EncodeTools.ts:1538</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -345,7 +396,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.adjustImageBrightness</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1465">src/EncodeTools.ts:1465</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1545">src/EncodeTools.ts:1545</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -377,7 +428,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.adjustImageBrightness</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1472">src/EncodeTools.ts:1472</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1552">src/EncodeTools.ts:1552</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -420,7 +471,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#compress">compress</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1320">src/EncodeTools.ts:1320</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1400">src/EncodeTools.ts:1400</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -458,7 +509,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.compress</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1327">src/EncodeTools.ts:1327</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1407">src/EncodeTools.ts:1407</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -496,7 +547,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.compress</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1334">src/EncodeTools.ts:1334</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1414">src/EncodeTools.ts:1414</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -545,7 +596,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#convertimage">convertImage</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1491">src/EncodeTools.ts:1491</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1571">src/EncodeTools.ts:1571</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -574,7 +625,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.convertImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1497">src/EncodeTools.ts:1497</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1577">src/EncodeTools.ts:1577</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -603,7 +654,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.convertImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1503">src/EncodeTools.ts:1503</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1583">src/EncodeTools.ts:1583</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -634,16 +685,16 @@
 					<a name="cropimage" class="tsd-anchor"></a>
 					<h3>crop<wbr>Image</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html#png" class="tsd-signature-type" data-tsd-kind="Enumeration member">png</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html#jpeg" class="tsd-signature-type" data-tsd-kind="Enumeration member">jpeg</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#binaryinputoutput" class="tsd-signature-type" data-tsd-kind="Type alias">BinaryInputOutput</a>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ImageFormat</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html#png" class="tsd-signature-type" data-tsd-kind="Enumeration member">png</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html#jpeg" class="tsd-signature-type" data-tsd-kind="Enumeration member">jpeg</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">crop<wbr>Image<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#binaryinputoutput" class="tsd-signature-type" data-tsd-kind="Type alias">BinaryInputOutput</a>, dims<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a>, format<span class="tsd-signature-symbol">?: </span><a href="../enums/encodetools.imageformat.html" class="tsd-signature-type" data-tsd-kind="Enumeration">ImageFormat</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#cropimage">cropImage</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1390">src/EncodeTools.ts:1390</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1470">src/EncodeTools.ts:1470</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -660,7 +711,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>dims: <a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
+									<h5>dims: <a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Height/Width to resize to</p>
 									</div>
@@ -678,7 +729,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.cropImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1397">src/EncodeTools.ts:1397</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1477">src/EncodeTools.ts:1477</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -695,7 +746,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>dims: <a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
+									<h5>dims: <a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Height/Width to resize to</p>
 									</div>
@@ -713,7 +764,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.cropImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1404">src/EncodeTools.ts:1404</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1484">src/EncodeTools.ts:1484</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -730,7 +781,7 @@
 									</div>
 								</li>
 								<li>
-									<h5>dims: <a href="../modules/encodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
+									<h5>dims: <a href="../modules/iencodetools.html#cropdims" class="tsd-signature-type" data-tsd-kind="Type alias">CropDims</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Height/Width to resize to</p>
 									</div>
@@ -764,7 +815,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#decodebuffer">decodeBuffer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L569">src/EncodeTools.ts:569</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L649">src/EncodeTools.ts:649</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -792,7 +843,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L575">src/EncodeTools.ts:575</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L655">src/EncodeTools.ts:655</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -820,7 +871,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L581">src/EncodeTools.ts:581</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L661">src/EncodeTools.ts:661</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -848,7 +899,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L587">src/EncodeTools.ts:587</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L667">src/EncodeTools.ts:667</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -876,7 +927,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L593">src/EncodeTools.ts:593</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L673">src/EncodeTools.ts:673</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -904,7 +955,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L599">src/EncodeTools.ts:599</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L679">src/EncodeTools.ts:679</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -932,7 +983,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L605">src/EncodeTools.ts:605</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L685">src/EncodeTools.ts:685</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -960,7 +1011,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L611">src/EncodeTools.ts:611</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L691">src/EncodeTools.ts:691</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1004,7 +1055,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#decodeobject">decodeObject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1191">src/EncodeTools.ts:1191</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1271">src/EncodeTools.ts:1271</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1038,7 +1089,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1197">src/EncodeTools.ts:1197</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1277">src/EncodeTools.ts:1277</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1072,7 +1123,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1203">src/EncodeTools.ts:1203</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1283">src/EncodeTools.ts:1283</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1106,7 +1157,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1209">src/EncodeTools.ts:1209</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1289">src/EncodeTools.ts:1289</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1140,7 +1191,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1215">src/EncodeTools.ts:1215</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1295">src/EncodeTools.ts:1295</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1174,7 +1225,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1221">src/EncodeTools.ts:1221</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1301">src/EncodeTools.ts:1301</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1208,7 +1259,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1227">src/EncodeTools.ts:1227</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1307">src/EncodeTools.ts:1307</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1242,7 +1293,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1233">src/EncodeTools.ts:1233</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1313">src/EncodeTools.ts:1313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1287,7 +1338,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#decompress">decompress</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1356">src/EncodeTools.ts:1356</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1436">src/EncodeTools.ts:1436</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1319,7 +1370,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decompress</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1362">src/EncodeTools.ts:1362</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1442">src/EncodeTools.ts:1442</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1351,7 +1402,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.decompress</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1368">src/EncodeTools.ts:1368</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1448">src/EncodeTools.ts:1448</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1396,7 +1447,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#deserializeobject">deserializeObject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1078">src/EncodeTools.ts:1078</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1158">src/EncodeTools.ts:1158</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1431,7 +1482,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.deserializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1085">src/EncodeTools.ts:1085</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1165">src/EncodeTools.ts:1165</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1466,7 +1517,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.deserializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1092">src/EncodeTools.ts:1092</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1172">src/EncodeTools.ts:1172</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1501,7 +1552,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.deserializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1099">src/EncodeTools.ts:1099</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1179">src/EncodeTools.ts:1179</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1536,7 +1587,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.deserializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1106">src/EncodeTools.ts:1106</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1186">src/EncodeTools.ts:1186</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1587,7 +1638,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#encodebuffer">encodeBuffer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L504">src/EncodeTools.ts:504</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L584">src/EncodeTools.ts:584</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1615,7 +1666,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L510">src/EncodeTools.ts:510</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L590">src/EncodeTools.ts:590</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1643,7 +1694,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L516">src/EncodeTools.ts:516</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L596">src/EncodeTools.ts:596</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1671,7 +1722,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L522">src/EncodeTools.ts:522</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L602">src/EncodeTools.ts:602</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1699,7 +1750,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L528">src/EncodeTools.ts:528</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L608">src/EncodeTools.ts:608</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1727,7 +1778,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L534">src/EncodeTools.ts:534</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L614">src/EncodeTools.ts:614</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1755,7 +1806,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L540">src/EncodeTools.ts:540</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L620">src/EncodeTools.ts:620</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1783,7 +1834,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeBuffer</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L546">src/EncodeTools.ts:546</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L626">src/EncodeTools.ts:626</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1827,7 +1878,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#encodeobject">encodeObject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1126">src/EncodeTools.ts:1126</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1206">src/EncodeTools.ts:1206</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1861,7 +1912,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1132">src/EncodeTools.ts:1132</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1212">src/EncodeTools.ts:1212</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1895,7 +1946,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1138">src/EncodeTools.ts:1138</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1218">src/EncodeTools.ts:1218</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1929,7 +1980,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1144">src/EncodeTools.ts:1144</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1224">src/EncodeTools.ts:1224</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1963,7 +2014,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1150">src/EncodeTools.ts:1150</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1230">src/EncodeTools.ts:1230</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1997,7 +2048,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1156">src/EncodeTools.ts:1156</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1236">src/EncodeTools.ts:1236</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2031,7 +2082,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1162">src/EncodeTools.ts:1162</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1242">src/EncodeTools.ts:1242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2065,7 +2116,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.encodeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1168">src/EncodeTools.ts:1168</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1248">src/EncodeTools.ts:1248</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2108,7 +2159,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#hash">hash</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L743">src/EncodeTools.ts:743</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L823">src/EncodeTools.ts:823</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2145,7 +2196,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#hashobject">hashObject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L773">src/EncodeTools.ts:773</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L853">src/EncodeTools.ts:853</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2182,7 +2233,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#hashstring">hashString</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L762">src/EncodeTools.ts:762</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L842">src/EncodeTools.ts:842</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2209,6 +2260,108 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="headertoconvertableformat" class="tsd-anchor"></a>
+					<h3>header<wbr>ToConvertable<wbr>Format</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">header<wbr>ToConvertable<wbr>Format<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, defaultValue<span class="tsd-signature-symbol">?: </span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/iencodetools.extractedcontenttype.html" class="tsd-signature-type" data-tsd-kind="Interface">ExtractedContentType</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#headertoconvertableformat">headerToConvertableFormat</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L385">src/EncodeTools.ts:385</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts a <code>SerializationFormat</code> or <code>ImageFormat</code> from the specified HTTP header,
+									or defaults to the <code>SerializationFormat</code> or <code>Image Format</code> in the options of the encoder.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a></h5>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> defaultValue: <a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/iencodetools.extractedcontenttype.html" class="tsd-signature-type" data-tsd-kind="Interface">ExtractedContentType</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#convertableformat" class="tsd-signature-type" data-tsd-kind="Type alias">ConvertableFormat</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="headertoimageformat" class="tsd-anchor"></a>
+					<h3>header<wbr>ToImage<wbr>Format</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">header<wbr>ToImage<wbr>Format<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#extractedimageformatcontenttype" class="tsd-signature-type" data-tsd-kind="Type alias">ExtractedImageFormatContentType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#headertoimageformat">headerToImageFormat</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L412">src/EncodeTools.ts:412</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts a <code>ImageFormat</code> from the specified HTTP header,
+									or defaults to the <code>Image Format</code> in the options of the encoder.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a></h5>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/iencodetools.html#extractedimageformatcontenttype" class="tsd-signature-type" data-tsd-kind="Type alias">ExtractedImageFormatContentType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="headertoserializationformat" class="tsd-anchor"></a>
+					<h3>header<wbr>ToSerialization<wbr>Format</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">header<wbr>ToSerialization<wbr>Format<span class="tsd-signature-symbol">(</span>req<span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/iencodetools.html#extractedserializationformatcontenttype" class="tsd-signature-type" data-tsd-kind="Type alias">ExtractedSerializationFormatContentType</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#headertoserializationformat">headerToSerializationFormat</a></p>
+								<ul>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L408">src/EncodeTools.ts:408</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Extracts a <code>SerializationFormat</code> from the specified HTTP header,
+									or defaults to the <code>SerializationFormat</code> in the options of the encoder.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>req: <a href="../modules/iencodetools.html#httprequestwithheader" class="tsd-signature-type" data-tsd-kind="Type alias">HTTPRequestWithHeader</a></h5>
+								</li>
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/iencodetools.html#extractedserializationformatcontenttype" class="tsd-signature-type" data-tsd-kind="Type alias">ExtractedSerializationFormatContentType</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="resizeimage" class="tsd-anchor"></a>
 					<h3>resize<wbr>Image</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -2221,7 +2374,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#resizeimage">resizeImage</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1424">src/EncodeTools.ts:1424</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1504">src/EncodeTools.ts:1504</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2256,7 +2409,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.resizeImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1431">src/EncodeTools.ts:1431</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1511">src/EncodeTools.ts:1511</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2291,7 +2444,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.resizeImage</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1438">src/EncodeTools.ts:1438</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1518">src/EncodeTools.ts:1518</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2339,7 +2492,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#serializeobject">serializeObject</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1030">src/EncodeTools.ts:1030</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1110">src/EncodeTools.ts:1110</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2374,7 +2527,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.serializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1037">src/EncodeTools.ts:1037</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1117">src/EncodeTools.ts:1117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2409,7 +2562,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.serializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1044">src/EncodeTools.ts:1044</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1124">src/EncodeTools.ts:1124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2444,7 +2597,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.serializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1051">src/EncodeTools.ts:1051</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1131">src/EncodeTools.ts:1131</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2479,7 +2632,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.serializeObject</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1058">src/EncodeTools.ts:1058</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1138">src/EncodeTools.ts:1138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2530,7 +2683,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/iencodetools.iencodetools-1.html">IEncodeTools</a>.<a href="../interfaces/iencodetools.iencodetools-1.html#uniqueid">uniqueId</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L903">src/EncodeTools.ts:903</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L983">src/EncodeTools.ts:983</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2553,7 +2706,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L910">src/EncodeTools.ts:910</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L990">src/EncodeTools.ts:990</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2576,7 +2729,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L917">src/EncodeTools.ts:917</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L997">src/EncodeTools.ts:997</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2599,7 +2752,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L924">src/EncodeTools.ts:924</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1004">src/EncodeTools.ts:1004</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2622,7 +2775,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L931">src/EncodeTools.ts:931</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1011">src/EncodeTools.ts:1011</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2645,7 +2798,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L938">src/EncodeTools.ts:938</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1018">src/EncodeTools.ts:1018</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2671,7 +2824,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L945">src/EncodeTools.ts:945</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1025">src/EncodeTools.ts:1025</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2694,7 +2847,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of IEncodeTools.uniqueId</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L952">src/EncodeTools.ts:952</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1032">src/EncodeTools.ts:1032</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2731,7 +2884,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L387">src/EncodeTools.ts:387</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L467">src/EncodeTools.ts:467</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2762,7 +2915,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L493">src/EncodeTools.ts:493</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L573">src/EncodeTools.ts:573</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2800,7 +2953,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L442">src/EncodeTools.ts:442</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L522">src/EncodeTools.ts:522</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2828,7 +2981,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L454">src/EncodeTools.ts:454</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L534">src/EncodeTools.ts:534</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2861,7 +3014,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L707">src/EncodeTools.ts:707</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L787">src/EncodeTools.ts:787</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2892,7 +3045,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L727">src/EncodeTools.ts:727</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L807">src/EncodeTools.ts:807</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2926,7 +3079,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1022">src/EncodeTools.ts:1022</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1102">src/EncodeTools.ts:1102</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2963,7 +3116,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L982">src/EncodeTools.ts:982</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1062">src/EncodeTools.ts:1062</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3000,7 +3153,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1250">src/EncodeTools.ts:1250</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1330">src/EncodeTools.ts:1330</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3037,7 +3190,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1280">src/EncodeTools.ts:1280</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1360">src/EncodeTools.ts:1360</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3074,7 +3227,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L629">src/EncodeTools.ts:629</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L709">src/EncodeTools.ts:709</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3097,7 +3250,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1554">src/EncodeTools.ts:1554</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1634">src/EncodeTools.ts:1634</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3125,7 +3278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L861">src/EncodeTools.ts:861</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L941">src/EncodeTools.ts:941</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3156,7 +3309,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1265">src/EncodeTools.ts:1265</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1345">src/EncodeTools.ts:1345</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3187,7 +3340,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1299">src/EncodeTools.ts:1299</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1379">src/EncodeTools.ts:1379</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3218,7 +3371,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L870">src/EncodeTools.ts:870</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L950">src/EncodeTools.ts:950</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3249,7 +3402,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L342">src/EncodeTools.ts:342</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L422">src/EncodeTools.ts:422</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3276,15 +3429,15 @@
 					<a name="getimagemetadata" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Image<wbr>Metadata</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#binaryinputoutput" class="tsd-signature-type" data-tsd-kind="Type alias">BinaryInputOutput</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>buffer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Buffer</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Image<wbr>Metadata<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../modules/encodetools.html#binaryinputoutput" class="tsd-signature-type" data-tsd-kind="Type alias">BinaryInputOutput</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1519">src/EncodeTools.ts:1519</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1599">src/EncodeTools.ts:1599</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3301,12 +3454,12 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1524">src/EncodeTools.ts:1524</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1604">src/EncodeTools.ts:1604</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3323,12 +3476,12 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1529">src/EncodeTools.ts:1529</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1609">src/EncodeTools.ts:1609</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3345,7 +3498,7 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/encodetools.imagemetadata.html" class="tsd-signature-type" data-tsd-kind="Interface">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/encodetools.html#imagemetadata" class="tsd-signature-type" data-tsd-kind="Type alias">ImageMetadata</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -3359,7 +3512,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L368">src/EncodeTools.ts:368</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L448">src/EncodeTools.ts:448</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3390,7 +3543,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L407">src/EncodeTools.ts:407</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L487">src/EncodeTools.ts:487</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3429,7 +3582,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L431">src/EncodeTools.ts:431</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L511">src/EncodeTools.ts:511</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3459,7 +3612,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L996">src/EncodeTools.ts:996</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1076">src/EncodeTools.ts:1076</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3496,7 +3649,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L700">src/EncodeTools.ts:700</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L780">src/EncodeTools.ts:780</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3526,7 +3679,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1009">src/EncodeTools.ts:1009</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1089">src/EncodeTools.ts:1089</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3563,7 +3716,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L813">src/EncodeTools.ts:813</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L893">src/EncodeTools.ts:893</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3594,7 +3747,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L895">src/EncodeTools.ts:895</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L975">src/EncodeTools.ts:975</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3616,7 +3769,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L394">src/EncodeTools.ts:394</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L474">src/EncodeTools.ts:474</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3647,7 +3800,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L481">src/EncodeTools.ts:481</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L561">src/EncodeTools.ts:561</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3685,7 +3838,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L447">src/EncodeTools.ts:447</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L527">src/EncodeTools.ts:527</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3713,7 +3866,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L466">src/EncodeTools.ts:466</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L546">src/EncodeTools.ts:546</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3746,7 +3899,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L421">src/EncodeTools.ts:421</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L501">src/EncodeTools.ts:501</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3782,7 +3935,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L436">src/EncodeTools.ts:436</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L516">src/EncodeTools.ts:516</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3810,7 +3963,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1016">src/EncodeTools.ts:1016</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1096">src/EncodeTools.ts:1096</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3847,7 +4000,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L976">src/EncodeTools.ts:976</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1056">src/EncodeTools.ts:1056</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3884,7 +4037,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L990">src/EncodeTools.ts:990</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1070">src/EncodeTools.ts:1070</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3921,7 +4074,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L1003">src/EncodeTools.ts:1003</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L1083">src/EncodeTools.ts:1083</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3958,7 +4111,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L353">src/EncodeTools.ts:353</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L433">src/EncodeTools.ts:433</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3991,7 +4144,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L664">src/EncodeTools.ts:664</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L744">src/EncodeTools.ts:744</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4021,7 +4174,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L683">src/EncodeTools.ts:683</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L763">src/EncodeTools.ts:763</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4056,7 +4209,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L691">src/EncodeTools.ts:691</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L771">src/EncodeTools.ts:771</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4085,7 +4238,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L673">src/EncodeTools.ts:673</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L753">src/EncodeTools.ts:753</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4115,7 +4268,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L820">src/EncodeTools.ts:820</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L900">src/EncodeTools.ts:900</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4137,7 +4290,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L828">src/EncodeTools.ts:828</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L908">src/EncodeTools.ts:908</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4159,7 +4312,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L789">src/EncodeTools.ts:789</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L869">src/EncodeTools.ts:869</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4181,7 +4334,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L844">src/EncodeTools.ts:844</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L924">src/EncodeTools.ts:924</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4203,7 +4356,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L836">src/EncodeTools.ts:836</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L916">src/EncodeTools.ts:916</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4225,7 +4378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L801">src/EncodeTools.ts:801</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L881">src/EncodeTools.ts:881</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4247,7 +4400,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L852">src/EncodeTools.ts:852</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L932">src/EncodeTools.ts:932</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4269,7 +4422,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L642">src/EncodeTools.ts:642</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L722">src/EncodeTools.ts:722</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4304,7 +4457,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/9b3b635/src/EncodeTools.ts#L653">src/EncodeTools.ts:653</a></li>
+									<li>Defined in <a href="https://github.com/EtomonUSA/encode-tools/blob/b1ddffe/src/EncodeTools.ts#L733">src/EncodeTools.ts:733</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4388,6 +4541,12 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="encodetools.encodetools-1.html#options" class="tsd-kind-icon">options</a>
 							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="encodetools.encodetools-1.html#convertableformatmimetypes" class="tsd-kind-icon">convertable<wbr>Format<wbr>Mime<wbr>Types</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="encodetools.encodetools-1.html#mimetypesconvertableformat" class="tsd-kind-icon">mime<wbr>Types<wbr>Convertable<wbr>Format</a>
+							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-static">
 								<a href="encodetools.encodetools-1.html#objectid" class="tsd-kind-icon">Object<wbr>Id</a>
 							</li>
@@ -4435,6 +4594,15 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="encodetools.encodetools-1.html#hashstring" class="tsd-kind-icon">hash<wbr>String</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="encodetools.encodetools-1.html#headertoconvertableformat" class="tsd-kind-icon">header<wbr>ToConvertable<wbr>Format</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="encodetools.encodetools-1.html#headertoimageformat" class="tsd-kind-icon">header<wbr>ToImage<wbr>Format</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="encodetools.encodetools-1.html#headertoserializationformat" class="tsd-kind-icon">header<wbr>ToSerialization<wbr>Format</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="encodetools.encodetools-1.html#resizeimage" class="tsd-kind-icon">resize<wbr>Image</a>
@@ -4600,19 +4768,22 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="encodetools.invalidcontenttypeerror.html" class="tsd-kind-icon">Invalid<wbr>Content<wbr>Type<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="encodetools.invalidformat.html" class="tsd-kind-icon">Invalid<wbr>Format</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="encodetools.invalidheadererror.html" class="tsd-kind-icon">Invalid<wbr>Header<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/encodetools.encodingoptions.html" class="tsd-kind-icon">Encoding<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="../interfaces/encodetools.imagemetadata.html" class="tsd-kind-icon">Image<wbr>Metadata</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/encodetools.html#binaryinputoutput" class="tsd-kind-icon">Binary<wbr>Input<wbr>Output</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/encodetools.html#cropdims" class="tsd-kind-icon">Crop<wbr>Dims</a>
+						<a href="../modules/encodetools.html#convertableformat" class="tsd-kind-icon">Convertable<wbr>Format</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/encodetools.html#encodetoolsformat" class="tsd-kind-icon">Encode<wbr>Tools<wbr>Format</a>
@@ -4621,13 +4792,19 @@
 						<a href="../modules/encodetools.html#encodetoolsfunction" class="tsd-kind-icon">Encode<wbr>Tools<wbr>Function</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/encodetools.html#imagedims" class="tsd-kind-icon">Image<wbr>Dims</a>
+						<a href="../modules/encodetools.html#imagemetadata" class="tsd-kind-icon">Image<wbr>Metadata</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/encodetools.html#convertableformatmimetypes" class="tsd-kind-icon">Convertable<wbr>Format<wbr>Mime<wbr>Types</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/encodetools.html#default_encode_tools_options" class="tsd-kind-icon">DEFAULT_<wbr>ENCODE_<wbr>TOOLS_<wbr>OPTIONS</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/encodetools.html#imageformatmimetypes" class="tsd-kind-icon">Image<wbr>Format<wbr>Mime<wbr>Types</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="../modules/encodetools.html#mimetypesconvertableformat" class="tsd-kind-icon">Mime<wbr>Types<wbr>Convertable<wbr>Format</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="../modules/encodetools.html#mimetypesimageformat" class="tsd-kind-icon">Mime<wbr>Types<wbr>Image<wbr>Format</a>
@@ -4659,10 +4836,11 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
