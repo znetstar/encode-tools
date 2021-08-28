@@ -63,7 +63,7 @@ export interface ImageMetadataBase<I> {
   height: number;
 }
 
-export type HTTPRequestWithHeader = { headers: { [name: string]: string; } };
+export type HTTPRequestWithHeader = { headers: { [name: string]: string|string[]; } };
 
 export interface IEncodeTools {
   options: EncodingOptions;
