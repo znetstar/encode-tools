@@ -400,7 +400,7 @@ export class EncodeTools implements IEncodeTools {
 
     return {
       format,
-      mimeType,
+      mimeType: (format ? ConvertableFormatMimeTypes.get(format) : mimeType) || mimeType,
       header: key
     };
   }
