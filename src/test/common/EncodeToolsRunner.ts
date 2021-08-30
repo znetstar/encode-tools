@@ -12,6 +12,7 @@ import EncodeTools, {
 } from "../../EncodeTools";
 import {Buffer} from "buffer";
 import {Chance} from 'chance';
+import Base85 from 'base85';
 import {assert} from 'chai';
 import * as hashWasm from "hash-wasm";
 import * as msgpack from '@msgpack/msgpack';
@@ -151,6 +152,12 @@ export class EncodeBufferRunner extends EncodeToolsRunner<Buffer, BinaryInputOut
           break;
         case BinaryEncoding.base64:
           encoded = decoded.toString('base64');
+          break;
+        // case BinaryEncoding.z85:
+        //   encoded = Base85.encode(decoded, 'z85');
+        //   break;
+        case BinaryEncoding.ascii85:
+          encoded = Base85.encode(decoded, 'ascii85');
           break;
         case BinaryEncoding.hex:
           encoded = decoded.toString('hex');
@@ -346,6 +353,12 @@ export class EncodeObjectRunner extends EncodeToolsRunner<any, BinaryInputOutput
         break;
       case BinaryEncoding.hex:
         encoded = decoded.toString('hex');
+        break;
+      // case BinaryEncoding.z85:
+      //   encoded = Base85.encode(decoded, 'z85');
+      //   break;
+      case BinaryEncoding.ascii85:
+        encoded = Base85.encode(decoded, 'ascii85');
         break;
       case BinaryEncoding.base32:
         const encoder = new base32.Encoder();

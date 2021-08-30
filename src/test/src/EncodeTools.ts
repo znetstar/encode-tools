@@ -39,6 +39,7 @@ import {
   randomOptions,
   SerializeObjectRunner
 } from "../common/EncodeToolsRunner";
+import Base85 from 'base85';
 
 const cborX = require('cbor-x');
 
@@ -143,12 +144,12 @@ describe('EncodeTools', async function () {
       assert.equal(format.header, 'content-type');
     });
 
-    it('mime type should be null if it cannot be detected',async function () {
+    it('mime type should be the mime type of the detected format if it cannot be detected',async function () {
       const enc = new EncodeTools();
 
       const req = { headers: {} };
       const format = enc.headerToConvertableFormat(req, 'content-type', ImageFormat.png);
-      assert.isNull(format.mimeType);
+      assert.equal(format.mimeType, ConvertableFormatMimeTypes.get(format.format));
       assert.equal(format.format, ImageFormat.png);
     });
 
@@ -322,6 +323,93 @@ describe('EncodeTools', async function () {
         hex2,
         hex1,
         'Hex string were not equal'
+      );
+    });
+  });
+
+  // describe('z85ToNodeBuffer', async function () {
+  //   it('should return a base85 (z85) representation of data', async function () {
+  //     let buf1 = randomBuffer();
+  //     let str1 = Base85.encode(buf1, 'z85');
+  //     let buf2 = EncodeTools.z85ToNodeBuffer(str1);
+  //
+  //     assert.isTrue(Buffer.isBuffer(buf2));
+  //
+  //     assert.isTrue(
+  //       buf1.equals(buf2),
+  //       'Buffers were not equal'
+  //     );
+  //   });
+  // });
+  //
+  // describe('nodeBufferToZ85', async function () {
+  //   it('should return data from its base85 (z85) representation', async function () {
+  //     let buf1 = randomBuffer();
+  //     let str1 = Base85.encode(buf1, 'z85');
+  //     let str2 = EncodeTools.nodeBufferToZ85(buf1);
+  //
+  //     assert.equal(
+  //       str2,
+  //       str1,
+  //       'Base85 (z85) strings were not equal'
+  //     );
+  //   });
+  // });
+
+  describe('ascii85ToNodeBuffer', async function () {
+    it('should return a base85 (ascii85) representation of data', async function () {
+      let buf1 = Buffer.from(chance.string());
+      let str1 = Base85.encode(buf1, 'ascii85');
+      let buf2 = EncodeTools.ascii85ToNodeBuffer(str1);
+
+      assert.isTrue(Buffer.isBuffer(buf2));
+
+      assert.isTrue(
+        buf1.equals(buf2),
+        'Buffers were not equal'
+      );
+    });
+  });
+
+  describe('nodeBufferToAscii85', async function () {
+    it('should return data from its base85 (ascii85) representation', async function () {
+      let buf1 = Buffer.from(chance.string());
+      let str1 = Base85.encode(buf1, 'ascii85');
+      let str2 = EncodeTools.nodeBufferToAscii85(buf1);
+
+      assert.equal(
+        str2,
+        str1,
+        'Base85 (ascii85) strings were not equal'
+      );
+    });
+  });
+
+  describe('base64ToNodeBuffer', async function () {
+    it('should return a base64 representation of data', async function () {
+      let buf1 = Buffer.from(chance.string());
+      let str1 = buf1.toString('base64');
+      let buf2 = EncodeTools.base64ToNodeBuffer(str1);
+
+      assert.isTrue(Buffer.isBuffer(buf2));
+
+      assert.isTrue(
+        buf1.equals(buf2),
+        'Buffers were not equal'
+      );
+    });
+  });
+
+  describe('nodeBufferToBase64', async function () {
+    it('should return data from its base64 representation', async function () {
+      let buf1 = Buffer.from(chance.string());
+      let str1 = buf1.toString('base64');
+      let str2 = EncodeTools.nodeBufferToBase64(buf1);
+
+      assert.equal(
+        str2,
+        str1,
+        'Base64 strings were not equal'
       );
     });
   });

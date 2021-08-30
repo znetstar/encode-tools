@@ -38,6 +38,7 @@ import {IncomingMessage} from "http";
 const cborX = require('cbor-x');
 import * as ContentType from 'content-type';
 import * as _ from 'lodash';
+import Base85 from 'base85';
 
 /**
  * Is thrown when a content type cannot be determined
@@ -86,7 +87,25 @@ export enum BinaryEncoding {
     /**
      * A platform agnostic ArrayBuffer
      */
-    arrayBuffer = 'arrayBuffer'
+    arrayBuffer = 'arrayBuffer',
+    /**
+     * Base85 in the ASCII-85 encoding, requires escaping when used in JSON
+     *
+     * https://en.wikipedia.org/wiki/Ascii85
+     */
+    ascii85 = 'ascii85',
+    // /**
+    //  * Base85 in the ZeroMQ-85 (z85) encoding, does not require escaping when used in JSON
+    //  *
+    //  * https://rfc.zeromq.org/spec/32/
+    //  */
+    // z85 = 'z85',
+    /**
+     * Base85 in the ASCII-85 encoding, requires escaping when used in JSON
+     *
+     * https://en.wikipedia.org/wiki/Ascii85
+     */
+    base85 = 'ascii85'
 }
 
 export enum HashAlgorithm {
@@ -526,6 +545,52 @@ export class EncodeTools implements IEncodeTools {
      */
     public static nodeBufferToBase64(buffer: Buffer): string { return buffer.toString('base64'); }
 
+    //
+    // /**
+    //  * Encodes a base64 string to a node.js buffer.
+    //  * @param hex
+    //  */
+    // public static z85ToNodeBuffer(base85: string): Buffer {
+    //   return ensureBuffer(Base85.decode(base85, 'z85') as Buffer);
+    // }
+    // /**
+    //  * Encodes a node.js buffer as a base64 string.
+    //  * @param hex
+    //  */
+    // public static nodeBufferToZ85(buffer: Buffer): string {
+    //   return Base85.encode(buffer, 'z85');
+    // }
+
+  /**
+   * Encodes a base64 string to a node.js buffer.
+   * @param hex
+   */
+  public static base85ToNodeBuffer(base85: string): Buffer {
+    return EncodeTools.ascii85ToNodeBuffer(base85);
+  }
+  /**
+   * Encodes a node.js buffer as a base64 string.
+   * @param hex
+   */
+  public static nodeBufferToBase85(buffer: Buffer): string {
+    return EncodeTools.nodeBufferToAscii85(buffer);
+  }
+
+    /**
+     * Encodes a base64 string to a node.js buffer.
+     * @param hex
+     */
+    public static ascii85ToNodeBuffer(base85: string): Buffer {
+      return ensureBuffer(Base85.decode(base85, 'ascii85') as Buffer);
+    }
+    /**
+     * Encodes a node.js buffer as a base64 string.
+     * @param hex
+     */
+    public static nodeBufferToAscii85(buffer: Buffer): string {
+      return Base85.encode(buffer, 'ascii85');
+    }
+
     /**
      * Encodes a base64url string to a node.js buffer.
      * @author https://zb.gy/ESRN
@@ -623,6 +688,24 @@ export class EncodeTools implements IEncodeTools {
    * @param buffer
    * @param format
    */
+  public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.base85, ...args: any[]): string;
+  // /**
+  //  * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.z85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param buffer
+   * @param format
+   */
+  public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.ascii85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param buffer
+   * @param format
+   */
     public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
@@ -638,6 +721,8 @@ export class EncodeTools implements IEncodeTools {
         else if (format === BinaryEncoding.base32) return EncodeTools.nodeBufferToBase32(buffer);
         else if (format === BinaryEncoding.hashids) return EncodeTools.nodeBufferToHashids(buffer, ...args);
         else if (format === BinaryEncoding.hex) return EncodeTools.nodeBufferToHex(buffer);
+        // else if (format === BinaryEncoding.z85) return EncodeTools.nodeBufferToZ85(buffer);
+        else if (format === BinaryEncoding.ascii85) return EncodeTools.nodeBufferToAscii85(buffer);
         throw new InvalidFormat(format);
     }
 
@@ -688,6 +773,24 @@ export class EncodeTools implements IEncodeTools {
    * @param buffer
    * @param format
    */
+  public decodeBuffer(input: string, format?: BinaryEncoding.base85, ...args: any[]): Buffer;
+  // /**
+  //  * Decodes binary data from the provided format returning either a node.js buffer.
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public decodeBuffer(input: string, format?: BinaryEncoding.z85, ...args: any[]): Buffer;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeBuffer(input: string, format?: BinaryEncoding.ascii85, ...args: any[]): Buffer;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
     public decodeBuffer(buffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): Buffer;
   /**
    * Decodes binary data from the provided format returning either a node.js buffer.
@@ -703,6 +806,8 @@ export class EncodeTools implements IEncodeTools {
         else if (format === BinaryEncoding.base32) return EncodeTools.base32ToNodeBuffer(buffer.toString());
         else if (format === BinaryEncoding.hashids) return EncodeTools.hashidsToNodeBuffer(buffer.toString(), ...args);
         else if (format === BinaryEncoding.hex) return EncodeTools.hexToNodeBuffer(buffer.toString());
+        // else if (format === BinaryEncoding.z85) return EncodeTools.z85ToNodeBuffer(buffer.toString());
+        else if (format === BinaryEncoding.ascii85) return EncodeTools.ascii85ToNodeBuffer(buffer.toString());
         throw new InvalidFormat(format);
     }
 
@@ -1245,6 +1350,24 @@ export class EncodeTools implements IEncodeTools {
    * @param inputObject
    * @param format
    */
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.base85, ...args: any[]): string;
+  // /**
+  //  * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+  //  * @param inputObject
+  //  * @param format
+  //  */
+  // public encodeObject<T>(inputObject: T, format?: BinaryEncoding.z85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param inputObject
+   * @param format
+   */
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.ascii85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param inputObject
+   * @param format
+   */
   public encodeObject<T>(inputObject: T, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
@@ -1305,6 +1428,24 @@ export class EncodeTools implements IEncodeTools {
    * @param format
    */
   public decodeObject<T>(buffer: ArrayBuffer, format?: BinaryEncoding.arrayBuffer, ...args: any[]): T;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.base85, ...args: any[]): T;
+  // /**
+  //  * Decodes binary data from the provided format returning either a node.js buffer.
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public decodeObject<T>(buffer: string, format?: BinaryEncoding.z85, ...args: any[]): T;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.ascii85, ...args: any[]): T;
   /**
    * Decodes binary data from the provided format returning either a node.js buffer.
    * @param inputBuffer

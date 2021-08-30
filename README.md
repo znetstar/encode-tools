@@ -71,15 +71,17 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 ### Binary Encoding
 
-| Name        | Browser? | Underlying Package |
-|-------------|----------|--------------------|
-| nodeBuffer  | ✓        | buffer/(built-in)  |
-| base64      | ✓        | (built-in)         |
-| base64url   | ✓        | (built-in)         |
-| hex         | ✓        | (built-in)         |
-| base32      | ✓        | base32.js          |
-| hashids     | ✓        | hashids            |
-| arrayBuffer | ✓        | (built-in)         |
+| Name            | Browser? | Underlying Package |
+|-----------------|----------|--------------------|
+| nodeBuffer      | ✓        | buffer/(built-in)  |
+| base64          | ✓        | (built-in)         |
+| base64url       | ✓        | (built-in)         |
+| hex             | ✓        | (built-in)         |
+| base32          | ✓        | base32.js          |
+| hashids         | ✓        | hashids            |
+| arrayBuffer     | ✓        | (built-in)         |
+| base85 (ascii85)| ✓        | base85             |
+| ascii85         | ✓        | base85             |
 
 ### Hashing
 | Name     | Browser? | Underlying Package     |

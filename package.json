@@ -1,6 +1,6 @@
 {
     "name": "@etomon/encode-tools",
-    "version": "2.6.1",
+    "version": "2.7.0",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -23,6 +23,7 @@
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
         "base32.js": "^0.1.0",
+        "base85": "npm:@thirdact/base85@^3.0.2",
         "bson": "^4.4.1",
         "buffer": "^6.0.3",
         "cbor-x": "^0.8.3",
@@ -30,8 +31,8 @@
         "hash-wasm": "^4.6.0",
         "hashids": "^2.2.8",
         "jimp": "^0.16.1",
-        "lzma": "npm:@etomon/lzma@^2.3.5",
         "lodash": "^4.17.21",
+        "lzma": "npm:@etomon/lzma@^2.3.5",
         "nanoid": "^3.1.22",
         "node-object-hash": "^2.3.1",
         "slugid": "^2.0.0",
@@ -76,5 +77,8 @@
         "xxhash-addon": "^1.x",
         "lzma-native": "^8.x",
         "sharp": "^0.x"
+    },
+    "engines": {
+        "node": ">=12.21.0"
     }
 }
