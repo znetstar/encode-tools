@@ -17,7 +17,7 @@ import {assert} from 'chai';
 import * as hashWasm from "hash-wasm";
 import * as msgpack from '@msgpack/msgpack';
 const Jimp = require('jimp');
-const cborX = require('cbor-x');
+const cbor = require('cbor-web');
 
 const sharp = require('sharp');
 
@@ -305,7 +305,7 @@ export class SerializeObjectRunner extends EncodeToolsRunner<any, BinaryInputOut
         encoded = msgpack.encode(decoded);
         break;
       case SerializationFormat.cbor:
-        encoded = cborX.encode(decoded);
+        encoded = cbor.encode(decoded);
         break;
       case SerializationFormat.bson:
         encoded = bson.serialize(decoded);
