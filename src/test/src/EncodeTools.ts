@@ -54,7 +54,7 @@ const toBuffer = require('typedarray-to-buffer');
 const  Hashids = require('hashids/cjs');
 
 const base32 = require('base32.js');
-const Jimp = require('jimp');
+const Jimp = require('jimp/dist');
 
 describe('MimeTypesImageFormat', async function  () {
   it('should have the same entries as ImageFormatMimeType except the key and value reversed', async function () {

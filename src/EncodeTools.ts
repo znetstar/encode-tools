@@ -25,7 +25,7 @@ import {
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
-const Jimp = require('jimp');
+const Jimp = require('jimp/dist');
 import {
   CropDims,
   ExtractedContentType, ExtractedImageFormatContentType,

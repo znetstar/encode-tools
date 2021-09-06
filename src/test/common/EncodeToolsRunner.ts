@@ -16,7 +16,7 @@ import Base85 from 'base85';
 import {assert} from 'chai';
 import * as hashWasm from "hash-wasm";
 import * as msgpack from '@msgpack/msgpack';
-const Jimp = require('jimp');
+const Jimp = require('jimp/dist');
 const cbor = require('cbor-web');
 
 const sharp = require('sharp');
