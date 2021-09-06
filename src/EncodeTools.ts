@@ -35,7 +35,7 @@ import {
   ImageMetadataBase
 } from "./IEncodeTools";
 import {IncomingMessage} from "http";
-const cborX = require('cbor-x');
+const cbor = require('cbor-web');
 import * as ContentType from 'content-type';
 import * as _ from 'lodash';
 import Base85 from 'base85';
@@ -1070,7 +1070,7 @@ export class EncodeTools implements IEncodeTools {
    *
    */
     public static get ObjectId() {
-      return this.bson.ObjectId;
+      return this.bson.default.ObjectId;
     }
 
   /**
@@ -1158,13 +1158,13 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-  public static objectToCbor<T>(obj: T): Buffer { return cborX.encode(obj); }
+  public static objectToCbor<T>(obj: T): Buffer { return cbor.encode(obj); }
   /**
    * Deserializes a CBOR-encoded Buffer to an object
    *
    * @param data CBOR to deserialize
    */
-  public static cborToObject<T>(data: Buffer): T { return cborX.decode(data) as T; }
+  public static cborToObject<T>(data: Buffer): T { return cbor.decode(data) as T; }
 
 
   /**
@@ -1198,13 +1198,13 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-    public static objectToBson<T>(obj: T): Buffer { return this.bson.serialize(obj); }
+    public static objectToBson<T>(obj: T): Buffer { return EncodeTools.bson.default.serialize(obj); }
   /**
    * Deserializes a BSON encoded Buffer to an `object`
    *
    * @param bson BSON to deserialize
    */
-    public static bsonToObject<T>(bson: Buffer): T { return this.bson.deserialize(bson) as T; }
+    public static bsonToObject<T>(bson: Buffer): T { return EncodeTools.bson.default.deserialize(bson) as T; }
 
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string

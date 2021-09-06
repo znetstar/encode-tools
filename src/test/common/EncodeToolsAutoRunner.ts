@@ -13,7 +13,6 @@ import {
 import {Buffer} from "buffer";
 import {Chance} from 'chance';
 import {assert} from 'chai';
-const cborX = require('cbor-x');
 import {ImageFormat} from "../../EncodeTools";
 
 const crypto = require('crypto');

@@ -41,7 +41,7 @@ import {
 } from "../common/EncodeToolsRunner";
 import Base85 from 'base85';
 
-const cborX = require('cbor-x');
+const cbor = require('cbor-web');
 
 const ZstdCodec = require('zstd-codec').ZstdCodec;
 const LZMA = require('lzma').LZMA;
@@ -923,7 +923,7 @@ describe('EncodeTools', async function () {
   describe('objectToCbor', async function () {
     it('should convert object to cbor', async function () {
       let obj = randomObject();
-      let buf1 = cborX.encode(obj);
+      let buf1 = cbor.encode(obj);
       let buf2 = EncodeTools.objectToCbor<unknown>(obj);
 
       assert.deepEqual(buf2, buf1, 'cbor buffer of the object is not the same');
@@ -933,7 +933,7 @@ describe('EncodeTools', async function () {
   describe('cborToObject', async function () {
     it('should convert cbor to object', async function () {
       let obj = randomObject();
-      let buf1 = cborX.encode(obj);
+      let buf1 = cbor.encode(obj);
       let obj2 = EncodeTools.cborToObject<unknown>(Buffer.from(buf1));
 
       assert.deepEqual(obj2, obj, 'object from cbor buffer is not the same');
