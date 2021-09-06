@@ -171,8 +171,7 @@ Also make sure `cbor-x` resolves to the `index.js` file in the root folder of th
       'bson-ext': 'commonjs bson-ext',
       'shelljs': 'commonjs shelljs',
       'lzma-native': 'commonjs lzma-native',
-      'sharp': 'commonjs sharp',
-      'cbor-extract': 'commonjs cbor-extract'
+      'sharp': 'commonjs sharp'
   },
   resolve: {
     extensions: [ '.css', '.scss', '.html', '.ejs', '.ts', '.js' ],
