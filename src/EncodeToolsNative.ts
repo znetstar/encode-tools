@@ -468,7 +468,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
   public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat): Buffer|string {
     if (serializationFormat === SerializationFormat.cbor) return EncodeToolsNative.objectToCbor<T>(obj);
     else if (serializationFormat === SerializationFormat.bson) return EncodeToolsNative.objectToBson<T>(obj);
-    return this.serializeObject<T>(obj, serializationFormat);
+    return super.serializeObject<T>(obj, serializationFormat);
   }
   /**
    * Deserializes an object serialized using one of the available algorithms, returning the result as an object
@@ -514,7 +514,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
   public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat: SerializationFormat = this.options.serializationFormat): T {
     if (serializationFormat === SerializationFormat.cbor) return EncodeToolsNative.cborToObject<T>(EncodeTools.ensureBuffer(data)) as T;
     else if (serializationFormat === SerializationFormat.bson) return EncodeToolsNative.bsonToObject<T>(EncodeTools.ensureBuffer(data)) as T;
-    return this.deserializeObject<T>(data as Buffer|ArrayBuffer, serializationFormat);
+    return super.deserializeObject<T>(data as Buffer|ArrayBuffer, serializationFormat);
   }
 
   /**
