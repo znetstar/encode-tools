@@ -1,6 +1,6 @@
 {
     "name": "@etomon/encode-tools",
-    "version": "2.3.2",
+    "version": "2.7.8",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -23,12 +23,16 @@
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
         "base32.js": "^0.1.0",
+        "base85": "npm:@thirdact/base85@^3.0.2",
         "bson": "^4.4.1",
         "buffer": "^6.0.3",
-        "cbor-x": "^0.8.3",
+        "cbor": "^8.0.0",
+        "cbor-web": "^8.0.1",
+        "content-type": "^1.0.4",
         "hash-wasm": "^4.6.0",
         "hashids": "^2.2.8",
         "jimp": "^0.16.1",
+        "lodash": "^4.17.21",
         "lzma": "npm:@etomon/lzma@^2.3.5",
         "nanoid": "^3.1.22",
         "node-object-hash": "^2.3.1",
@@ -41,6 +45,7 @@
     "devDependencies": {
         "@types/chai": "^4.2.18",
         "@types/chance": "^1.1.2",
+        "@types/content-type": "^1.1.5",
         "@types/lodash": "^4.14.170",
         "@types/mocha": "^8.2.2",
         "@types/nanoid": "^2.1.0",
@@ -48,7 +53,6 @@
         "@types/sharp": "^0.28.1",
         "@types/uuid": "^8.3.0",
         "bson-ext": "^2",
-        "cbor-extract": "^0.3.1",
         "chai": "^4.3.4",
         "chance": "^1.1.7",
         "docdash": "^1.2.0",
@@ -58,21 +62,22 @@
         "grunt-jsdoc": "^2.4.1",
         "grunt-ts": "^6.0.0-beta.22",
         "grunt-typedoc": "^0.2.4",
-        "lodash": "^4.17.21",
         "lzma-native": "^8.0.1",
         "mocha": "^8.4.0",
         "sharp": "^0.28.3",
         "shelljs": "^0.8.4",
         "ts-node": "^9.1.1",
         "typedoc": "^0.20.37",
-        "typescript": "^4.2.4",
+        "typescript": "^4.1.6",
         "xxhash-addon": "^1.4.0"
     },
     "optionalDependencies": {
-        "cbor-extract": "^0.3.1",
         "bson-ext": "^2.x",
         "xxhash-addon": "^1.x",
         "lzma-native": "^8.x",
         "sharp": "^0.x"
+    },
+    "engines": {
+        "node": ">=12.21.0"
     }
 }

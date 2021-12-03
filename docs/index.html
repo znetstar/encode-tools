@@ -158,6 +158,16 @@
 							<td>✓</td>
 							<td>(built-in)</td>
 						</tr>
+						<tr>
+							<td>base85 (ascii85)</td>
+							<td>✓</td>
+							<td>base85</td>
+						</tr>
+						<tr>
+							<td>ascii85</td>
+							<td>✓</td>
+							<td>base85</td>
+						</tr>
 				</tbody></table>
 				<a href="#hashing" id="hashing" style="color: inherit; text-decoration: none;">
 					<h3>Hashing</h3>
@@ -381,21 +391,44 @@
 					<h2>Webpack</h2>
 				</a>
 				<p>For issues with Webpack, try adding all the native dependencies to the <code>externals</code> section.</p>
-				<p>Also make sure <code>cbor-x</code> resolves to the <code>index.js</code> file in the root folder of the repository, instead of the <code>dist</code> folder.</p>
 				<pre><code class="language-javascript"><span style="color: #000000">{</span>
 <span style="color: #000000">  externals: {</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;xxhash-addon&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs xxhash-addon&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;bson-ext&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs bson-ext&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;shelljs&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs shelljs&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">      </span><span style="color: #A31515">&#039;lzma-native&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs lzma-native&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">      </span><span style="color: #A31515">&#039;sharp&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs sharp&#039;</span><span style="color: #000000">,</span>
-<span style="color: #000000">      </span><span style="color: #A31515">&#039;cbor-extract&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs cbor-extract&#039;</span>
+<span style="color: #000000">      </span><span style="color: #A31515">&#039;sharp&#039;</span><span style="color: #000000">: </span><span style="color: #A31515">&#039;commonjs sharp&#039;</span>
 <span style="color: #000000">  },</span>
-<span style="color: #000000">  resolve: {</span>
-<span style="color: #000000">    extensions: [ </span><span style="color: #A31515">&#039;.css&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.scss&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.html&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.ejs&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.ts&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;.js&#039;</span><span style="color: #000000"> ],</span>
-<span style="color: #000000">      alias: {</span>
-<span style="color: #000000">        </span><span style="color: #A31515">&#039;cbor-x&#039;</span><span style="color: #000000">: </span><span style="color: #001080">path</span><span style="color: #000000">.</span><span style="color: #795E26">resolve</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;./node_modules/cbor-x/index.js&#039;</span><span style="color: #000000">)</span>
+<span style="color: #000000">  </span><span style="color: #008000">// For Webpack 5+ only, add `node-polyfill-webpack-plugin`</span>
+<span style="color: #000000">  plugins: [</span>
+<span style="color: #000000">    </span><span style="color: #0000FF">new</span><span style="color: #000000"> (</span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;node-polyfill-webpack-plugin&#039;</span><span style="color: #000000">))()</span>
+<span style="color: #000000">  ]</span>
+<span style="color: #000000">}</span>
+</code></pre>
+				<a href="#nextjs" id="nextjs" style="color: inherit; text-decoration: none;">
+					<h2>Next.js</h2>
+				</a>
+				<p>For Next.js, you can insert into <code>next.config.js</code></p>
+				<pre><code class="language-javascript"><span style="color: #000000">{</span>
+<span style="color: #000000">  webpack: (</span><span style="color: #001080">config</span><span style="color: #000000">, { </span><span style="color: #001080">isServer</span><span style="color: #000000"> }) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">isServer</span><span style="color: #000000">) {</span>
+<span style="color: #000000">      </span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #001080">resolve</span><span style="color: #000000">.</span><span style="color: #001080">fallback</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">        </span><span style="color: #001080">fs:</span><span style="color: #000000"> </span><span style="color: #0000FF">false</span>
+<span style="color: #000000">      }</span>
+<span style="color: #000000">      </span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #001080">externals</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">        ...</span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #001080">externals</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;xxhash-addon&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;commonjs xxhash-addon&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;bson-ext&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;commonjs bson-ext&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;shelljs&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;commonjs shelljs&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;lzma-native&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;commonjs lzma-native&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #A31515">&#039;sharp&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;commonjs sharp&#039;</span>
+<span style="color: #000000">      }</span>
+<span style="color: #000000">      </span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #001080">plugins</span><span style="color: #000000"> = [</span>
+<span style="color: #000000">        ...</span><span style="color: #001080">config</span><span style="color: #000000">.</span><span style="color: #001080">plugins</span><span style="color: #000000">,</span>
+<span style="color: #000000">        </span><span style="color: #0000FF">new</span><span style="color: #000000"> (</span><span style="color: #795E26">require</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;node-polyfill-webpack-plugin&#039;</span><span style="color: #000000">))()</span>
+<span style="color: #000000">      ]</span>
 <span style="color: #000000">    }</span>
+<span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">config</span><span style="color: #000000">;</span>
 <span style="color: #000000">  }</span>
 <span style="color: #000000">}</span>
 </code></pre>
@@ -449,10 +482,11 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
