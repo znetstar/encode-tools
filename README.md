@@ -71,15 +71,17 @@ Below are a list of supported algorithms, their backing library, and their suppo
 
 ### Binary Encoding
 
-| Name        | Browser? | Underlying Package |
-|-------------|----------|--------------------|
-| nodeBuffer  | ✓        | buffer/(built-in)  |
-| base64      | ✓        | (built-in)         |
-| base64url   | ✓        | (built-in)         |
-| hex         | ✓        | (built-in)         |
-| base32      | ✓        | base32.js          |
-| hashids     | ✓        | hashids            |
-| arrayBuffer | ✓        | (built-in)         |
+| Name            | Browser? | Underlying Package |
+|-----------------|----------|--------------------|
+| nodeBuffer      | ✓        | buffer/(built-in)  |
+| base64          | ✓        | (built-in)         |
+| base64url       | ✓        | (built-in)         |
+| hex             | ✓        | (built-in)         |
+| base32          | ✓        | base32.js          |
+| hashids         | ✓        | hashids            |
+| arrayBuffer     | ✓        | (built-in)         |
+| base85 (ascii85)| ✓        | base85             |
+| ascii85         | ✓        | base85             |
 
 ### Hashing
 | Name     | Browser? | Underlying Package     |
@@ -160,8 +162,6 @@ Please see the documentation located at https://etomonusa.github.io/encode-tools
 
 For issues with Webpack, try adding all the native dependencies to the `externals` section.
 
-Also make sure `cbor-x` resolves to the `index.js` file in the root folder of the repository, instead of the `dist` folder.
-
 ```javascript
 {
   externals: {
@@ -169,14 +169,39 @@ Also make sure `cbor-x` resolves to the `index.js` file in the root folder of th
       'bson-ext': 'commonjs bson-ext',
       'shelljs': 'commonjs shelljs',
       'lzma-native': 'commonjs lzma-native',
-      'sharp': 'commonjs sharp',
-      'cbor-extract': 'commonjs cbor-extract'
+      'sharp': 'commonjs sharp'
   },
-  resolve: {
-    extensions: [ '.css', '.scss', '.html', '.ejs', '.ts', '.js' ],
-      alias: {
-        'cbor-x': path.resolve('./node_modules/cbor-x/index.js')
+  // For Webpack 5+ only, add `node-polyfill-webpack-plugin`
+  plugins: [
+    new (require('node-polyfill-webpack-plugin'))()
+  ]
+}
+```
+
+## Next.js
+
+For Next.js, you can insert into `next.config.js`
+```javascript
+{
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false
+      }
+      config.externals = {
+        ...config.externals,
+        'xxhash-addon': 'commonjs xxhash-addon',
+        'bson-ext': 'commonjs bson-ext',
+        'shelljs': 'commonjs shelljs',
+        'lzma-native': 'commonjs lzma-native',
+        'sharp': 'commonjs sharp'
+      }
+      config.plugins = [
+        ...config.plugins,
+        new (require('node-polyfill-webpack-plugin'))()
+      ]
     }
+    return config;
   }
 }
 ```

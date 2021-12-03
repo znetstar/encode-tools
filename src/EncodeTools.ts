@@ -25,9 +25,39 @@ import {
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
-import * as Jimp from 'jimp';
-import {IEncodeTools} from "./IEncodeTools";
-const cborX = require('cbor-x');
+const Jimp = require('jimp/dist');
+import {
+  CropDims,
+  ExtractedContentType, ExtractedImageFormatContentType,
+  ExtractedSerializationFormatContentType, HTTPRequestWithHeader,
+  IEncodeTools,
+  ImageDims,
+  ImageMetadataBase
+} from "./IEncodeTools";
+import {IncomingMessage} from "http";
+const cbor = require('cbor-web');
+import * as ContentType from 'content-type';
+import * as _ from 'lodash';
+import Base85 from 'base85';
+
+/**
+ * Is thrown when a content type cannot be determined
+ */
+export class InvalidContentTypeError extends Error {
+  constructor(contentType: string) {
+    super(`Invalid content type ${contentType}`);
+  }
+}
+
+/**
+ * Is thrown when a header cannot be found
+ */
+export class InvalidHeaderError extends Error {
+  constructor(contentType: string) {
+    super(`Invalid header ${contentType}`);
+  }
+}
+
 
 export enum BinaryEncoding {
     /**
@@ -57,7 +87,25 @@ export enum BinaryEncoding {
     /**
      * A platform agnostic ArrayBuffer
      */
-    arrayBuffer = 'arrayBuffer'
+    arrayBuffer = 'arrayBuffer',
+    /**
+     * Base85 in the ASCII-85 encoding, requires escaping when used in JSON
+     *
+     * https://en.wikipedia.org/wiki/Ascii85
+     */
+    ascii85 = 'ascii85',
+    // /**
+    //  * Base85 in the ZeroMQ-85 (z85) encoding, does not require escaping when used in JSON
+    //  *
+    //  * https://rfc.zeromq.org/spec/32/
+    //  */
+    // z85 = 'z85',
+    /**
+     * Base85 in the ASCII-85 encoding, requires escaping when used in JSON
+     *
+     * https://en.wikipedia.org/wiki/Ascii85
+     */
+    base85 = 'ascii85'
 }
 
 export enum HashAlgorithm {
@@ -241,14 +289,7 @@ export class InvalidFormat extends Error {
     }
 }
 
-/**
- * Image dimensions for resize
- */
-export type ImageDims = { height: number, width?: number }|{ height?: number, width: number }
-/**
- * Image dimensions for crop
- */
-export type CropDims = { height: number, width: number, left: number, top: number };
+
 /**
  * The input type commonly accepted by most functions
  */
@@ -273,11 +314,12 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   imageFormat: ImageFormat.png
 };
 
-export interface ImageMetadata {
-  format: ImageFormat;
-  width: number;
-  height: number;
-}
+export type ImageMetadata = ImageMetadataBase<ImageFormat>;
+
+/**
+ * A `SerializationFormat` or `ImageFormat`
+ */
+export type ConvertableFormat = ImageFormat|SerializationFormat;
 
 /**
  * MIME Types for all serialization formats
@@ -299,6 +341,13 @@ export const SerializationFormatMimeTypes: Map<SerializationFormat, string> = ne
 ]);
 
 /**
+ * Serialization formats for each MIME Type
+ */
+export const MimeTypesSerializationFormat: Map<string, SerializationFormat> = new Map<string, SerializationFormat>(Array.from(
+  SerializationFormatMimeTypes.entries()
+).map(([a,b]) => [b,a]));
+
+/**
  * MIME Types for all image formats
  */
 export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageFormat, string>([
@@ -311,12 +360,77 @@ export const ImageFormatMimeTypes: Map<ImageFormat, string> = new Map<ImageForma
 ]);
 
 /**
+ * Image formats for each MIME Type
+ */
+export const MimeTypesImageFormat: Map<string, ImageFormat> = new Map<string, ImageFormat>(
+  Array.from(ImageFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
+
+/**
+ * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+ */
+export const ConvertableFormatMimeTypes: Map<ConvertableFormat, string>  = new  Map<ConvertableFormat, string>(
+  [
+    ...Array.from(ImageFormatMimeTypes),
+    ...Array.from(SerializationFormatMimeTypes),
+  ]
+);
+
+
+/**
+ * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+ */
+export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Map<string, ConvertableFormat>(
+  Array.from(ConvertableFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
+
+/**
  * Contains tools for encoding/decoding data in different circumstances.
  *
  */
 export class EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
     }
+
+  /**
+   * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+   */
+    public get convertableFormatMimeTypes()  { return ConvertableFormatMimeTypes; }
+  /**
+   * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+   */
+    public get mimeTypesConvertableFormat()  { return MimeTypesConvertableFormat; }
+
+  public headerToConvertableFormat(req: HTTPRequestWithHeader, key: string, defaultValue?: ConvertableFormat): ExtractedContentType<ConvertableFormat> {
+    let format: ConvertableFormat|null = defaultValue || null;
+    let mimeType: string|null = null;
+
+    if (req.headers[key] && !_.isEmpty(req.headers[key])) {
+      try {
+        const contentType = ContentType.parse(req.headers[key] as string);
+        mimeType = contentType?.type || null;
+      } catch (err) { }
+    }
+
+    if (mimeType) {
+      if (MimeTypesConvertableFormat.has(mimeType) )
+        format = MimeTypesConvertableFormat.get(mimeType);
+    }
+
+    return {
+      format,
+      mimeType: (format ? ConvertableFormatMimeTypes.get(format) : mimeType) || mimeType,
+      header: key
+    };
+  }
+
+  public headerToSerializationFormat(req: HTTPRequestWithHeader, key: string): ExtractedSerializationFormatContentType {
+    return this.headerToConvertableFormat(req, key, this.options.serializationFormat) as ExtractedSerializationFormatContentType;
+  }
+
+  public headerToImageFormat(req: HTTPRequestWithHeader, key: string): ExtractedImageFormatContentType {
+    return this.headerToConvertableFormat(req, key, this.options.imageFormat) as ExtractedImageFormatContentType;
+  }
 
   /**
    * Always returns the provided data as a `Buffer`, passing the data through `Buffer.from` if not already a Buffer
@@ -431,6 +545,52 @@ export class EncodeTools implements IEncodeTools {
      */
     public static nodeBufferToBase64(buffer: Buffer): string { return buffer.toString('base64'); }
 
+    //
+    // /**
+    //  * Encodes a base64 string to a node.js buffer.
+    //  * @param hex
+    //  */
+    // public static z85ToNodeBuffer(base85: string): Buffer {
+    //   return ensureBuffer(Base85.decode(base85, 'z85') as Buffer);
+    // }
+    // /**
+    //  * Encodes a node.js buffer as a base64 string.
+    //  * @param hex
+    //  */
+    // public static nodeBufferToZ85(buffer: Buffer): string {
+    //   return Base85.encode(buffer, 'z85');
+    // }
+
+  /**
+   * Encodes a base64 string to a node.js buffer.
+   * @param hex
+   */
+  public static base85ToNodeBuffer(base85: string): Buffer {
+    return EncodeTools.ascii85ToNodeBuffer(base85);
+  }
+  /**
+   * Encodes a node.js buffer as a base64 string.
+   * @param hex
+   */
+  public static nodeBufferToBase85(buffer: Buffer): string {
+    return EncodeTools.nodeBufferToAscii85(buffer);
+  }
+
+    /**
+     * Encodes a base64 string to a node.js buffer.
+     * @param hex
+     */
+    public static ascii85ToNodeBuffer(base85: string): Buffer {
+      return ensureBuffer(Base85.decode(base85, 'ascii85') as Buffer);
+    }
+    /**
+     * Encodes a node.js buffer as a base64 string.
+     * @param hex
+     */
+    public static nodeBufferToAscii85(buffer: Buffer): string {
+      return Base85.encode(buffer, 'ascii85');
+    }
+
     /**
      * Encodes a base64url string to a node.js buffer.
      * @author https://zb.gy/ESRN
@@ -528,6 +688,24 @@ export class EncodeTools implements IEncodeTools {
    * @param buffer
    * @param format
    */
+  public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.base85, ...args: any[]): string;
+  // /**
+  //  * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.z85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param buffer
+   * @param format
+   */
+  public encodeBuffer(inputBuffer: Buffer|ArrayBuffer|string, format?: BinaryEncoding.ascii85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param buffer
+   * @param format
+   */
     public encodeBuffer(inputBuffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
@@ -543,6 +721,8 @@ export class EncodeTools implements IEncodeTools {
         else if (format === BinaryEncoding.base32) return EncodeTools.nodeBufferToBase32(buffer);
         else if (format === BinaryEncoding.hashids) return EncodeTools.nodeBufferToHashids(buffer, ...args);
         else if (format === BinaryEncoding.hex) return EncodeTools.nodeBufferToHex(buffer);
+        // else if (format === BinaryEncoding.z85) return EncodeTools.nodeBufferToZ85(buffer);
+        else if (format === BinaryEncoding.ascii85) return EncodeTools.nodeBufferToAscii85(buffer);
         throw new InvalidFormat(format);
     }
 
@@ -593,6 +773,24 @@ export class EncodeTools implements IEncodeTools {
    * @param buffer
    * @param format
    */
+  public decodeBuffer(input: string, format?: BinaryEncoding.base85, ...args: any[]): Buffer;
+  // /**
+  //  * Decodes binary data from the provided format returning either a node.js buffer.
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public decodeBuffer(input: string, format?: BinaryEncoding.z85, ...args: any[]): Buffer;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeBuffer(input: string, format?: BinaryEncoding.ascii85, ...args: any[]): Buffer;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
     public decodeBuffer(buffer: BinaryInputOutput, format?: BinaryEncoding, ...args: any[]): Buffer;
   /**
    * Decodes binary data from the provided format returning either a node.js buffer.
@@ -608,6 +806,8 @@ export class EncodeTools implements IEncodeTools {
         else if (format === BinaryEncoding.base32) return EncodeTools.base32ToNodeBuffer(buffer.toString());
         else if (format === BinaryEncoding.hashids) return EncodeTools.hashidsToNodeBuffer(buffer.toString(), ...args);
         else if (format === BinaryEncoding.hex) return EncodeTools.hexToNodeBuffer(buffer.toString());
+        // else if (format === BinaryEncoding.z85) return EncodeTools.z85ToNodeBuffer(buffer.toString());
+        else if (format === BinaryEncoding.ascii85) return EncodeTools.ascii85ToNodeBuffer(buffer.toString());
         throw new InvalidFormat(format);
     }
 
@@ -870,7 +1070,7 @@ export class EncodeTools implements IEncodeTools {
    *
    */
     public static get ObjectId() {
-      return this.bson.ObjectId;
+      return this.bson.default.ObjectId;
     }
 
   /**
@@ -958,13 +1158,13 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-  public static objectToCbor<T>(obj: T): Buffer { return cborX.encode(obj); }
+  public static objectToCbor<T>(obj: T): Buffer { return cbor.encode(obj); }
   /**
    * Deserializes a CBOR-encoded Buffer to an object
    *
    * @param data CBOR to deserialize
    */
-  public static cborToObject<T>(data: Buffer): T { return cborX.decode(data) as T; }
+  public static cborToObject<T>(data: Buffer): T { return cbor.decode(data) as T; }
 
 
   /**
@@ -998,13 +1198,13 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-    public static objectToBson<T>(obj: T): Buffer { return this.bson.serialize(obj); }
+    public static objectToBson<T>(obj: T): Buffer { return EncodeTools.bson.default.serialize(obj); }
   /**
    * Deserializes a BSON encoded Buffer to an `object`
    *
    * @param bson BSON to deserialize
    */
-    public static bsonToObject<T>(bson: Buffer): T { return this.bson.deserialize(bson) as T; }
+    public static bsonToObject<T>(bson: Buffer): T { return EncodeTools.bson.default.deserialize(bson) as T; }
 
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
@@ -1150,6 +1350,24 @@ export class EncodeTools implements IEncodeTools {
    * @param inputObject
    * @param format
    */
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.base85, ...args: any[]): string;
+  // /**
+  //  * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+  //  * @param inputObject
+  //  * @param format
+  //  */
+  // public encodeObject<T>(inputObject: T, format?: BinaryEncoding.z85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param inputObject
+   * @param format
+   */
+  public encodeObject<T>(inputObject: T, format?: BinaryEncoding.ascii85, ...args: any[]): string;
+  /**
+   * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
+   * @param inputObject
+   * @param format
+   */
   public encodeObject<T>(inputObject: T, format?: BinaryEncoding, ...args: any[]): BinaryInputOutput;
   /**
    * Encodes binary data using the provided format returning either a node.js buffer, array buffer, or string
@@ -1210,6 +1428,24 @@ export class EncodeTools implements IEncodeTools {
    * @param format
    */
   public decodeObject<T>(buffer: ArrayBuffer, format?: BinaryEncoding.arrayBuffer, ...args: any[]): T;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.base85, ...args: any[]): T;
+  // /**
+  //  * Decodes binary data from the provided format returning either a node.js buffer.
+  //  * @param buffer
+  //  * @param format
+  //  */
+  // public decodeObject<T>(buffer: string, format?: BinaryEncoding.z85, ...args: any[]): T;
+  /**
+   * Decodes binary data from the provided format returning either a node.js buffer.
+   * @param buffer
+   * @param format
+   */
+  public decodeObject<T>(buffer: string, format?: BinaryEncoding.ascii85, ...args: any[]): T;
   /**
    * Decodes binary data from the provided format returning either a node.js buffer.
    * @param inputBuffer

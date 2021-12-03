@@ -2,17 +2,19 @@ import {Buffer} from 'buffer';
 import EncodeTools, {
   BinaryEncoding,
   BinaryInputOutput,
-  CompressionFormat, CropDims,
+  CompressionFormat,
   EncodingOptions as BaseEncodingOptions,
   HashAlgorithm as HashAlgorithmBase,
-  IDFormat, ImageMetadata,
+  IDFormat,
   InvalidFormat,
-  SerializationFormat
+  SerializationFormat, SerializationFormatMimeTypes
 } from './EncodeTools';
+import * as cbor from 'cbor';
 
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 import * as crypto from 'crypto';
-import {IEncodeTools} from "./IEncodeTools";
+import {CropDims, IEncodeTools, ImageMetadataBase} from "./IEncodeTools";
+import bson from "bson";
 export {
   BinaryEncoding,
   BinaryInputOutput,
@@ -144,6 +146,31 @@ export const DEFAULT_ENCODE_TOOLS_NATIVE_OPTIONS: EncodingOptions = {
 };
 
 
+export type ImageMetadata = ImageMetadataBase<ImageFormat>;
+
+/**
+ * A `SerializationFormat` or `ImageFormat`
+ */
+export type ConvertableFormat = ImageFormat|SerializationFormat;
+
+/**
+ * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+ */
+export const ConvertableFormatMimeTypes: Map<ConvertableFormat, string>  = new  Map<ConvertableFormat, string>(
+  [
+    ...Array.from(ImageFormatMimeTypes),
+    ...Array.from(SerializationFormatMimeTypes),
+  ]
+);
+
+
+/**
+ * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+ */
+export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Map<string, ConvertableFormat>(
+  Array.from(ConvertableFormatMimeTypes.entries()).map(([a,b]) => [b,a])
+);
+
 /**
  * Contains tools for encoding/decoding data in different circumstances.
  *
@@ -156,6 +183,15 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
     }
 
   /**
+   * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
+   */
+  public get convertableFormatMimeTypes()  { return ConvertableFormatMimeTypes; }
+  /**
+   * Map of MIME Type to each `ImageFormat` or `SerializationFormat`.
+   */
+  public get mimeTypesConvertableFormat()  { return MimeTypesConvertableFormat; }
+
+  /**
    * Returns an instance of LZMA Native
    */
   public static lzmaNative(): any {
@@ -163,6 +199,19 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
       return null;
     return require('lzma-native');
   }
+
+  /**
+   * Serializes an object as a CBOR-encoded Buffer
+   *
+   * @param obj Object to serialize
+   */
+  public static objectToCbor<T>(obj: T): Buffer { return cbor.encode(obj); }
+  /**
+   * Deserializes a CBOR-encoded Buffer to an object
+   *
+   * @param data CBOR to deserialize
+   */
+  public static cborToObject<T>(data: Buffer): T { return cbor.decode(data) as T; }
 
   // /**
   //  * Returns an instance of node-zstd
@@ -173,6 +222,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
   //   // @ts-ignore
   //   return require('@etomon/node-zstd');
   // }
+
 
   /**
    * Returns an instance of the `bson` node module, using the native `bson-ext` if available.
@@ -203,6 +253,13 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
       return require('sharp');
     }
 
+  /**
+   * Returns an instance of the `ObjectId` constructor `bson` node module, using the native `bson-ext` if available.
+   *
+   */
+  public static get ObjectId() {
+    return this.bson.default.ObjectId;
+  }
 
   /**
      * Hashes using XXHash-3 (https://zb.gy/l4kN), a fast, non-cryptographic,
@@ -218,6 +275,21 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
         let hash = xxhash3.hash(EncodeToolsNative.ensureBuffer(buffer));
         return Buffer.from(hash);
     }
+
+  /**
+   * Serializes data as BSON, returning the result as a `Buffer`
+   *
+   * @param obj Object to serialize
+   */
+  public static objectToBson<T>(obj: T): Buffer { return EncodeToolsNative.bson.default.serialize(obj); }
+  /**
+   * Deserializes a BSON encoded Buffer to an `object`
+   *
+   * @param bson BSON to deserialize
+   */
+  public static bsonToObject<T>(bson: Buffer): T {
+    return EncodeToolsNative.bson.default.deserialize(bson) as T;
+  }
 
     /**
      * Hashes using XXHash-32 (https://zb.gy/l4kN), a fast, non-cryptographic,
@@ -333,6 +405,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
     });
   }
 
+
   // /**
   //  * Compresses a buffer using ZStd
   //  * @param buf - Buffer
@@ -350,6 +423,99 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
   // public static async decompressZStd(buf: Buffer): Promise<Buffer> {
   //   return (await EncodeToolsNative.cppzstNative()).decompress(buf);
   // }
+
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json): string;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.cbor): Buffer;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack): Buffer;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson): Buffer;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat): Buffer;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   */
+  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat): Buffer|string {
+    if (serializationFormat === SerializationFormat.cbor) return EncodeToolsNative.objectToCbor<T>(obj);
+    else if (serializationFormat === SerializationFormat.bson) return EncodeToolsNative.objectToBson<T>(obj);
+    return super.serializeObject<T>(obj, serializationFormat);
+  }
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat?: SerializationFormat.json): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat.cbor): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat.msgpack): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat.bson): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer, serializationFormat?: SerializationFormat): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat: SerializationFormat = this.options.serializationFormat): T {
+    if (serializationFormat === SerializationFormat.cbor) return EncodeToolsNative.cborToObject<T>(EncodeTools.ensureBuffer(data)) as T;
+    else if (serializationFormat === SerializationFormat.bson) return EncodeToolsNative.bsonToObject<T>(EncodeTools.ensureBuffer(data)) as T;
+    return super.deserializeObject<T>(data as Buffer|ArrayBuffer, serializationFormat);
+  }
 
   /**
    * Compresses arbitrary data using the provided format and any options
@@ -387,6 +553,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
     // }
     return super.compress(data, format, level);
   }
+
 
   /**
    * Decompresses arbitrary data using the provided format and any options
