@@ -1,6 +1,6 @@
 {
     "name": "@etomon/encode-tools",
-    "version": "2.7.8",
+    "version": "3.0.0",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -23,8 +23,8 @@
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
         "base32.js": "^0.1.0",
+        "bson": "^4.6.0",
         "base85": "npm:@thirdact/base85@^3.0.2",
-        "bson": "^4.4.1",
         "buffer": "^6.0.3",
         "cbor": "^8.0.0",
         "cbor-web": "^8.0.1",
@@ -52,7 +52,8 @@
         "@types/node": "^15.0.2",
         "@types/sharp": "^0.28.1",
         "@types/uuid": "^8.3.0",
-        "bson-ext": "^2",
+        "bson-ext": "^4.0.2",
+        "cbor-extract": "^0.3.1",
         "chai": "^4.3.4",
         "chance": "^1.1.7",
         "docdash": "^1.2.0",
@@ -72,7 +73,8 @@
         "xxhash-addon": "^1.4.0"
     },
     "optionalDependencies": {
-        "bson-ext": "^2.x",
+        "bson-ext": "^4.x",
+        "cbor-extract": "^0.x",
         "xxhash-addon": "^1.x",
         "lzma-native": "^8.x",
         "sharp": "^0.x"

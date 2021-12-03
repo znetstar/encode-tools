@@ -1070,7 +1070,7 @@ export class EncodeTools implements IEncodeTools {
    *
    */
     public static get ObjectId() {
-      return this.bson.default.ObjectId;
+      return this.bson.ObjectId;
     }
 
   /**
@@ -1198,13 +1198,13 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-    public static objectToBson<T>(obj: T): Buffer { return EncodeTools.bson.default.serialize(obj); }
+    public static objectToBson<T>(obj: T): Buffer { return EncodeTools.bson.serialize(obj); }
   /**
    * Deserializes a BSON encoded Buffer to an `object`
    *
    * @param bson BSON to deserialize
    */
-    public static bsonToObject<T>(bson: Buffer): T { return EncodeTools.bson.default.deserialize(bson) as T; }
+    public static bsonToObject<T>(bson: Buffer): T { return EncodeTools.bson.deserialize(bson) as T; }
 
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
