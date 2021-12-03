@@ -14,7 +14,7 @@ import * as cbor from 'cbor';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 import * as crypto from 'crypto';
 import {CropDims, IEncodeTools, ImageMetadataBase} from "./IEncodeTools";
-import bson from "bson";
+import * as bson from "bson";
 export {
   BinaryEncoding,
   BinaryInputOutput,
@@ -258,7 +258,7 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
    *
    */
   public static get ObjectId() {
-    return this.bson.default.ObjectId;
+    return this.bson.ObjectId;
   }
 
   /**
@@ -281,14 +281,14 @@ export class EncodeToolsNative extends EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    */
-  public static objectToBson<T>(obj: T): Buffer { return EncodeToolsNative.bson.default.serialize(obj); }
+  public static objectToBson<T>(obj: T): Buffer { return EncodeToolsNative.bson.serialize(obj); }
   /**
    * Deserializes a BSON encoded Buffer to an `object`
    *
    * @param bson BSON to deserialize
    */
   public static bsonToObject<T>(bson: Buffer): T {
-    return EncodeToolsNative.bson.default.deserialize(bson) as T;
+    return EncodeToolsNative.bson.deserialize(bson) as T;
   }
 
     /**
