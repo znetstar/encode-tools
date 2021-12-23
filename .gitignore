@@ -1,9 +1,0 @@
-.tscache
-.DS_STORE
-.vscode
-.idea
-lib
-tscommand*
-node_modules
-.env
-.nyc_output
