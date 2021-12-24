@@ -39,7 +39,8 @@ import {
   randomOptions,
   SerializeObjectRunner
 } from "../common/EncodeToolsRunner";
-import Base85 from 'base85';
+
+const Base85 = require('base85');
 
 const cbor = require('cbor-web');
 
@@ -1078,6 +1079,20 @@ describe('EncodeTools', async function () {
       let obj2 = await EncodeTools.getImageMetadata(image);
 
       assert.deepEqual(obj2, dims, 'Image metadata is not the same as the image that was create');
+    });
+  });
+
+  describe('serializeObject(useToPojoBeforeSerializing = true)', async function () {
+    it('if useToPojoBeforeSerializing is set to true, a Buffer should be returned as an array of numbers', async function () {
+      const enc = new EncodeTools({ useToPojoBeforeSerializing: true, serializationFormat: SerializationFormat.json });
+      const bufArr: number[]  = [];
+      for (let i = 0; i < chance.integer({ min: 1, max: 1024 }); i++) {
+        bufArr.push(chance.integer({ min: 0, max: 255 }));
+      }
+      const buf = (Buffer.from(bufArr));
+      const jsonObj = enc.serializeObject({ foo: buf });
+      const obj = JSON.parse(jsonObj);
+      assert.deepEqual(obj.foo, bufArr);
     });
   });
 

@@ -1,6 +1,6 @@
 {
     "name": "@znetstar/encode-tools",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -33,6 +33,7 @@
     "license": "LGPL-3.0",
     "dependencies": {
         "@msgpack/msgpack": "^2.6.3",
+        "@thirdact/to-pojo": "^2.4.0",
         "base32.js": "^0.1.0",
         "base85": "^3.1.0",
         "bson": "^4.6.0",

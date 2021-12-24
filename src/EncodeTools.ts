@@ -39,6 +39,10 @@ const cbor = require('cbor-web');
 import * as ContentType from 'content-type';
 import * as _ from 'lodash';
 import Base85 from 'base85';
+import {
+  ToPojo,
+  ToPojoOptions
+} from '@thirdact/to-pojo';
 
 /**
  * Is thrown when a content type cannot be determined
@@ -278,6 +282,8 @@ export interface EncodingOptions {
     compressionFormat?: CompressionFormat;
     compressionLevel?: number;
     imageFormat?: ImageFormat;
+    toPojoOptions?: Partial<ToPojoOptions<unknown, unknown>>
+    useToPojoBeforeSerializing?: boolean;
 }
 export class InvalidFormat extends Error {
     constructor(format?: any) {
@@ -311,7 +317,8 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   serializationFormat: SerializationFormat.json,
   uniqueIdFormat: IDFormat.uuidv1String,
   compressionFormat: CompressionFormat.lzma,
-  imageFormat: ImageFormat.png
+  imageFormat: ImageFormat.png,
+  useToPojoBeforeSerializing: false
 };
 
 export type ImageMetadata = ImageMetadataBase<ImageFormat>;
@@ -391,6 +398,11 @@ export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Ma
 export class EncodeTools implements IEncodeTools {
     constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
     }
+
+  /**
+   * Instance of toPojo to use when serializing objects
+   */
+  public toPojoInstance: ToPojo<unknown, unknown> = new ToPojo<unknown, unknown>();
 
   /**
    * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
@@ -1211,47 +1223,57 @@ export class EncodeTools implements IEncodeTools {
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json): string;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json, useToPojoBeforeSerializing?: boolean): string;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.cbor): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.cbor, useToPojoBeforeSerializing?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack, useToPojoBeforeSerializing?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson, useToPojoBeforeSerializing?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat, useToPojoBeforeSerializing?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat): Buffer|string {
-      if (serializationFormat === SerializationFormat.json) return EncodeTools.objectToJson<T>(obj);
-      else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.objectToCbor<T>(obj);
-      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.objectToMsgpack<T>(obj);
-      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.objectToBson<T>(obj);
+  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat, useToPojoBeforeSerializing: boolean = this.options.useToPojoBeforeSerializing): Buffer|string {
+      let convObj: any = obj;
+      if (useToPojoBeforeSerializing) {
+        convObj = this.toPojoInstance.toPojo(obj, this.options.toPojoOptions);
+      }
+      if (serializationFormat === SerializationFormat.json) return EncodeTools.objectToJson<T>(convObj);
+      else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.objectToCbor<T>(convObj);
+      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.objectToMsgpack<T>(convObj);
+      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.objectToBson<T>(convObj);
       throw new InvalidFormat(serializationFormat);
   }
   /**

@@ -149,8 +149,9 @@ export interface IEncodeTools {
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  serializeObject<T>(obj: T, serializationFormat: SerializationFormat): Buffer|string;
+  serializeObject<T>(obj: T, serializationFormat: SerializationFormat, useToPojoBeforeSerializing?: boolean): Buffer|string;
 
   /**
    * Deserializes an object serialized using one of the available algorithms, returning the result as an object
