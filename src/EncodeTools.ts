@@ -274,17 +274,24 @@ export enum ImageFormat {
  * Default options for the encoding tools.
  * These will be used if none are passed to the functions used.
  */
-export interface EncodingOptions {
-    uniqueIdFormat?: IDFormat;
-    serializationFormat?: SerializationFormat;
-    hashAlgorithm?: HashAlgorithm;
-    binaryEncoding?: BinaryEncoding;
-    compressionFormat?: CompressionFormat;
+export interface ConfiguredEncodingOptions {
+    uniqueIdFormat: IDFormat;
+    serializationFormat: SerializationFormat;
+    hashAlgorithm: HashAlgorithm;
+    binaryEncoding: BinaryEncoding;
+    compressionFormat: CompressionFormat;
     compressionLevel?: number;
-    imageFormat?: ImageFormat;
+    imageFormat: ImageFormat;
     toPojoOptions?: Partial<ToPojoOptions<unknown, unknown>>
-    useToPojoBeforeSerializing?: boolean;
+    useToPojoBeforeSerializing: boolean;
 }
+
+/**
+ * Default options for the encoding tools.
+ * These will be used if none are passed to the functions used.
+ */
+export type  EncodingOptions = Partial<ConfiguredEncodingOptions>
+
 export class InvalidFormat extends Error {
     constructor(format?: any) {
         super(
@@ -311,7 +318,7 @@ function ensureBuffer(...args: any[]): Buffer {
 /**
  * Default options used by encode tools
  */
-export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
+export const DEFAULT_ENCODE_TOOLS_OPTIONS: ConfiguredEncodingOptions = Object.freeze({
   binaryEncoding: BinaryEncoding.base64,
   hashAlgorithm: HashAlgorithm.xxhash64,
   serializationFormat: SerializationFormat.json,
@@ -319,7 +326,7 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: EncodingOptions = {
   compressionFormat: CompressionFormat.lzma,
   imageFormat: ImageFormat.png,
   useToPojoBeforeSerializing: false
-};
+});
 
 export type ImageMetadata = ImageMetadataBase<ImageFormat>;
 
@@ -396,7 +403,12 @@ export const MimeTypesConvertableFormat: Map<string, ConvertableFormat> = new Ma
  *
  */
 export class EncodeTools implements IEncodeTools {
-    constructor(public options: EncodingOptions = DEFAULT_ENCODE_TOOLS_OPTIONS) {
+    public options: ConfiguredEncodingOptions;
+    constructor(options?: EncodingOptions) {
+      this.options = {
+        ...DEFAULT_ENCODE_TOOLS_OPTIONS,
+        ...(options || {})
+      };
     }
 
   /**

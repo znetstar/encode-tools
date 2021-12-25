@@ -3,6 +3,7 @@ import {Buffer} from "buffer";
 import {ConvertableFormat, MimeTypesConvertableFormat} from "./EncodeTools";
 
 export type EncodingOptions = Regular.EncodingOptions;
+export type ConfiguredEncodingOptions = Regular.ConfiguredEncodingOptions;
 export type BaseEncodingOptions = EncodingOptions;
 export type BinaryEncoding = Regular.BinaryEncoding;
 export type BinaryInputOutput = Regular.BinaryInputOutput;
@@ -64,7 +65,7 @@ export interface ImageMetadataBase<I> {
 export type HTTPRequestWithHeader = { headers: { [name: string]: string|string[]; } };
 
 export interface IEncodeTools {
-  options: EncodingOptions;
+  options: ConfiguredEncodingOptions;
   /**
    * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
    */

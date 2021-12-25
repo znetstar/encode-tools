@@ -66,6 +66,8 @@ export function randomOptions(): EncodingOptions {
     binaryEncoding: randomOption<BinaryEncoding>(BinaryEncoding),
     hashAlgorithm: randomOption<HashAlgorithm>(HashAlgorithm),
     uniqueIdFormat: randomOption<IDFormat>(IDFormat),
+    imageFormat: randomOption<ImageFormat>(ImageFormat),
+    useToPojoBeforeSerializing: false,
     compressionLevel: chance.integer({ min: 1, max: 9 })
   }
 }
