@@ -1277,7 +1277,7 @@ export class EncodeTools implements IEncodeTools {
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat, useToPojoBeforeSerializing: boolean = this.options.useToPojoBeforeSerializing): Buffer|string {
+  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat, useToPojoBeforeSerializing: boolean|undefined = this.options.useToPojoBeforeSerializing): Buffer|string {
       let convObj: any = obj;
       if (useToPojoBeforeSerializing) {
         convObj = this.toPojoInstance.toPojo(obj, this.options.toPojoOptions);
