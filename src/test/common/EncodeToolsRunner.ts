@@ -68,7 +68,8 @@ export function randomOptions(): EncodingOptions {
     uniqueIdFormat: randomOption<IDFormat>(IDFormat),
     imageFormat: randomOption<ImageFormat>(ImageFormat),
     useToPojoBeforeSerializing: false,
-    compressionLevel: chance.integer({ min: 1, max: 9 })
+    compressionLevel: chance.integer({ min: 1, max: 9 }),
+    encodeBuffersWhenUsingToPojo: false
   }
 }
 

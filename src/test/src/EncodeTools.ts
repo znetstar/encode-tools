@@ -2,6 +2,7 @@ import {assert} from 'chai';
 import {Chance} from 'chance';
 import {Buffer} from 'buffer';
 import {
+  BinaryEncoding,
   ConvertableFormatMimeTypes,
   DEFAULT_ENCODE_TOOLS_OPTIONS,
   EncodeTools,
@@ -1084,7 +1085,7 @@ describe('EncodeTools', async function () {
 
   describe('serializeObject(useToPojoBeforeSerializing = true)', async function () {
     it('if useToPojoBeforeSerializing is set to true, a Buffer should be returned as an array of numbers', async function () {
-      const enc = new EncodeTools({ useToPojoBeforeSerializing: true, serializationFormat: SerializationFormat.json });
+      const enc = new EncodeTools({ useToPojoBeforeSerializing: true, serializationFormat: SerializationFormat.json, encodeBuffersWhenUsingToPojo: false });
       const bufArr: number[]  = [];
       for (let i = 0; i < chance.integer({ min: 1, max: 1024 }); i++) {
         bufArr.push(chance.integer({ min: 0, max: 255 }));
@@ -1095,6 +1096,26 @@ describe('EncodeTools', async function () {
       assert.deepEqual(obj.foo, bufArr);
     });
   });
+
+  describe('serializeObject(useToPojoBeforeSerializing = true, encodeBuffersWhenUsingToPojo = true)', async function () {
+    it('if useToPojoBeforeSerializing is set to true, a Buffer should be returned as an array of numbers', async function () {
+      const enc = new EncodeTools({
+        useToPojoBeforeSerializing: true,
+        serializationFormat: SerializationFormat.json,
+        encodeBuffersWhenUsingToPojo: true,
+        binaryEncoding: BinaryEncoding.hex
+      });
+      const bufArr: number[]  = [];
+      for (let i = 0; i < chance.integer({ min: 1, max: 1024 }); i++) {
+        bufArr.push(chance.integer({ min: 0, max: 255 }));
+      }
+      const buf = (Buffer.from(bufArr));
+      const jsonObj = enc.serializeObject({ foo: buf });
+      const obj = JSON.parse(jsonObj);
+      assert.deepEqual(obj.foo, buf.toString('hex'));
+    });
+  });
+
 
   for (let test of tests) {
     await test.testEncode();

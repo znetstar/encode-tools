@@ -1,6 +1,7 @@
 import * as Regular from "./EncodeTools";
 import {Buffer} from "buffer";
 import {ConvertableFormat, MimeTypesConvertableFormat} from "./EncodeTools";
+import {ToPojo} from "@thirdact/to-pojo";
 
 export type EncodingOptions = Regular.EncodingOptions;
 export type ConfiguredEncodingOptions = Regular.ConfiguredEncodingOptions;
@@ -65,6 +66,11 @@ export interface ImageMetadataBase<I> {
 export type HTTPRequestWithHeader = { headers: { [name: string]: string|string[]; } };
 
 export interface IEncodeTools {
+  /**
+   * Instance of toPojo to use when serializing objects
+   */
+  toPojoInstance: ToPojo<unknown, unknown>;
+
   options: ConfiguredEncodingOptions;
   /**
    * Combined map of all `SerializationFormat` and `ImageFormat` entries to their respective MIME Types
@@ -151,8 +157,9 @@ export interface IEncodeTools {
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
+   * @param encodeBuffersWhenUsingToPojo If true, Buffers will be encoded with `this.encodeBuffer` when encountered.
    */
-  serializeObject<T>(obj: T, serializationFormat: SerializationFormat, useToPojoBeforeSerializing?: boolean): Buffer|string;
+  serializeObject<T>(obj: T, serializationFormat: SerializationFormat, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): Buffer|string;
 
   /**
    * Deserializes an object serialized using one of the available algorithms, returning the result as an object

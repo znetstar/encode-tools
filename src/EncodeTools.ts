@@ -40,6 +40,7 @@ import * as ContentType from 'content-type';
 import * as _ from 'lodash';
 import Base85 from 'base85';
 import {
+  makeBinaryEncoders,
   ToPojo,
   ToPojoOptions
 } from '@thirdact/to-pojo';
@@ -284,6 +285,7 @@ export interface ConfiguredEncodingOptions {
     imageFormat: ImageFormat;
     toPojoOptions?: Partial<ToPojoOptions<unknown, unknown>>
     useToPojoBeforeSerializing: boolean;
+    encodeBuffersWhenUsingToPojo?: boolean;
 }
 
 /**
@@ -300,6 +302,7 @@ export class InvalidFormat extends Error {
             )+' is not available for this operation'
         );
     }
+
 }
 
 
@@ -325,7 +328,8 @@ export const DEFAULT_ENCODE_TOOLS_OPTIONS: ConfiguredEncodingOptions = Object.fr
   uniqueIdFormat: IDFormat.uuidv1String,
   compressionFormat: CompressionFormat.lzma,
   imageFormat: ImageFormat.png,
-  useToPojoBeforeSerializing: false
+  useToPojoBeforeSerializing: false,
+  encodeBuffersWhenUsingToPojo: false
 });
 
 export type ImageMetadata = ImageMetadataBase<ImageFormat>;
@@ -409,6 +413,32 @@ export class EncodeTools implements IEncodeTools {
         ...DEFAULT_ENCODE_TOOLS_OPTIONS,
         ...(options || {})
       };
+
+      if (this.options.encodeBuffersWhenUsingToPojo) {
+        this.options.toPojoOptions = EncodeTools.createToPojoOptions(this, void(0), { ...this.toPojoInstance.DEFAULT_TO_POJO_OPTIONS, ... this.options.toPojoOptions });
+      }
+    }
+
+  /**
+   * Returns options for `@thirdact/to-pojo` with binary encoders set to the options in encode tools.
+   * This produces POJOs with, for example, buffers encoded as `base64` or ``base85`
+   * @param encoder - Encoder to use
+   * @param binaryEncoding - Binary encoding
+   * @param toPojoOptions
+   */
+    public static createToPojoOptions<I, O>(encoder: IEncodeTools, binaryEncoding?: BinaryEncoding, toPojoOptions?: ToPojoOptions<I, O>) {
+      const toPojoInstance = encoder.toPojoInstance;
+      const finalToPojoOptions = toPojoOptions || { ...toPojoInstance.DEFAULT_TO_POJO_OPTIONS };
+      finalToPojoOptions.conversions = [
+        // @ts-ignore
+        ...makeBinaryEncoders<unknown, unknown>(
+          encoder,
+          binaryEncoding
+        ),
+        ...finalToPojoOptions.conversions
+      ];
+
+      return finalToPojoOptions;
     }
 
   /**
@@ -528,6 +558,7 @@ export class EncodeTools implements IEncodeTools {
      * in npm:hashids
      */
     public static hashidsToNodeBuffer(hashid: string, ...args: any[]): Buffer {
+        // @ts-ignore
         const hasher = new Hashids(...args);
 
         const hex = hasher.decodeHex(hashid);
@@ -1237,7 +1268,7 @@ export class EncodeTools implements IEncodeTools {
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json, useToPojoBeforeSerializing?: boolean): string;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): string;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
@@ -1245,7 +1276,7 @@ export class EncodeTools implements IEncodeTools {
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.cbor, useToPojoBeforeSerializing?: boolean): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.cbor, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
@@ -1253,34 +1284,38 @@ export class EncodeTools implements IEncodeTools {
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack, useToPojoBeforeSerializing?: boolean): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.msgpack, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
+   * @param encodeBuffersWhenUsingToPojo If true, Buffers will be encoded with `this.encodeBuffer` when encountered.
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson, useToPojoBeforeSerializing?: boolean): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.bson, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
+   * @param encodeBuffersWhenUsingToPojo If true, Buffers will be encoded with `this.encodeBuffer` when encountered.
    */
-  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat, useToPojoBeforeSerializing?: boolean): Buffer;
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): Buffer;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
    * @param obj Object to serialize
    * @param serializationFormat - Algorithm to serialize with
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
+   * @param encodeBuffersWhenUsingToPojo If true, Buffers will be encoded with `this.encodeBuffer` when encountered.
    */
-  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat, useToPojoBeforeSerializing: boolean|undefined = this.options.useToPojoBeforeSerializing): Buffer|string {
+  public serializeObject<T>(obj: T, serializationFormat: SerializationFormat = this.options.serializationFormat, useToPojoBeforeSerializing: boolean|undefined = this.options.useToPojoBeforeSerializing, encodeBuffersWhenUsingToPojo: undefined|boolean = this.options.encodeBuffersWhenUsingToPojo): Buffer|string {
       let convObj: any = obj;
       if (useToPojoBeforeSerializing) {
-        convObj = this.toPojoInstance.toPojo(obj, this.options.toPojoOptions);
+        const opts = encodeBuffersWhenUsingToPojo ? EncodeTools.createToPojoOptions(this, this.options.binaryEncoding, { ...this.toPojoInstance.DEFAULT_TO_POJO_OPTIONS, ... this.options.toPojoOptions }) : this.options.toPojoOptions;
+        convObj = this.toPojoInstance.toPojo(obj, opts);
       }
       if (serializationFormat === SerializationFormat.json) return EncodeTools.objectToJson<T>(convObj);
       else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.objectToCbor<T>(convObj);
