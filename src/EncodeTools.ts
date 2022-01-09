@@ -1317,11 +1317,15 @@ export class EncodeTools implements IEncodeTools {
         const opts = encodeBuffersWhenUsingToPojo ? EncodeTools.createToPojoOptions(this, this.options.binaryEncoding, { ...this.toPojoInstance.DEFAULT_TO_POJO_OPTIONS, ... this.options.toPojoOptions }) : this.options.toPojoOptions;
         convObj = this.toPojoInstance.toPojo(obj, opts);
       }
-      if (serializationFormat === SerializationFormat.json) return EncodeTools.objectToJson<T>(convObj);
-      else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.objectToCbor<T>(convObj);
-      else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.objectToMsgpack<T>(convObj);
-      else if (serializationFormat === SerializationFormat.bson) return EncodeTools.objectToBson<T>(convObj);
-      throw new InvalidFormat(serializationFormat);
+      let outBuf: Buffer|string;
+
+      if (serializationFormat === SerializationFormat.json) outBuf = EncodeTools.objectToJson<T>(convObj);
+      else if (serializationFormat === SerializationFormat.cbor) outBuf = EncodeTools.objectToCbor<T>(convObj);
+      else if (serializationFormat === SerializationFormat.msgpack) outBuf = EncodeTools.objectToMsgpack<T>(convObj);
+      else if (serializationFormat === SerializationFormat.bson) outBuf = EncodeTools.objectToBson<T>(convObj);
+      else throw new InvalidFormat(serializationFormat);
+
+      return encodeBuffersWhenUsingToPojo ? this.encodeBuffer(outBuf) : outBuf;
   }
   /**
    * Deserializes an object serialized using one of the available algorithms, returning the result as an object
