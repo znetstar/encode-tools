@@ -26,6 +26,7 @@ const bson = require('bson');
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 
 import IntegerOptions = Chance.IntegerOptions;
+import JSON5 from "json5";
 
 const  Hashids = require('hashids/cjs');
 const base32 = require('base32.js');
@@ -303,6 +304,9 @@ export class SerializeObjectRunner extends EncodeToolsRunner<any, BinaryInputOut
     switch (format) {
       case SerializationFormat.json:
         encoded = JSON.stringify(decoded);
+        break;
+      case SerializationFormat.json5:
+        encoded = JSON5.stringify(decoded);
         break;
       case SerializationFormat.msgpack:
         encoded = msgpack.encode(decoded);

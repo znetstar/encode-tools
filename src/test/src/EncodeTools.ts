@@ -22,6 +22,7 @@ import {BcryptOptions} from "hash-wasm";
 import {serialize as BSONSerialize} from 'bson';
 import {parse as UUIDParse, stringify as UUIDStringify} from "uuid";
 import * as msgpack from "@msgpack/msgpack";
+import JSON5 from 'json5';
 import {
   CompressRunner,
   EncodeBufferRunner,
@@ -897,6 +898,26 @@ describe('EncodeTools', async function () {
       let obj = randomObject();
       let str1 = JSON.stringify(obj);
       let obj2 = EncodeTools.jsonToObject<unknown>(str1);
+
+      assert.deepEqual(obj2, obj, 'object from json text is not the same');
+    });
+  });
+
+  describe('objectToJson5', async function () {
+    it('should convert object to json5', async function () {
+      let obj = randomObject();
+      let str1 = JSON5.stringify(obj);
+      let str2 = EncodeTools.objectToJson5<unknown>(obj);
+
+      assert.equal(str2, str1, 'json text of the object is not the same');
+    });
+  });
+
+  describe('json5ToObject', async function () {
+    it('should convert json5 to object', async function () {
+      let obj = randomObject();
+      let str1 = JSON5.stringify(obj);
+      let obj2 = EncodeTools.json5ToObject<unknown>(str1);
 
       assert.deepEqual(obj2, obj, 'object from json text is not the same');
     });

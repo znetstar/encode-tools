@@ -26,6 +26,7 @@ import {
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
 const Jimp = require('jimp/dist');
+import JSON5 from 'json5';
 import {
   CropDims,
   ExtractedContentType, ExtractedImageFormatContentType,
@@ -34,7 +35,6 @@ import {
   ImageDims,
   ImageMetadataBase
 } from "./IEncodeTools";
-import {IncomingMessage} from "http";
 const cbor = require('cbor-web');
 import * as ContentType from 'content-type';
 import * as _ from 'lodash';
@@ -215,7 +215,11 @@ export enum SerializationFormat {
     /**
      * MongoDB BSON, may throw an error if the object does not contain BSON elements.
      */
-    bson = 'bson'
+    bson = 'bson',
+    /**
+     * JSON 5
+     */
+    json5 = 'json5'
 }
 
 /**
@@ -355,7 +359,11 @@ export const SerializationFormatMimeTypes: Map<SerializationFormat, string> = ne
   /**
    * Seems to be https://zb.gy/AYR1
    */
-  [ SerializationFormat.bson, 'application/bson' ]
+  [ SerializationFormat.bson, 'application/bson' ],
+  /**
+   * Seems to be https://bit.ly/3IYNuuB
+   */
+  [ SerializationFormat.json5, 'application/json5' ]
 ]);
 
 /**
@@ -1236,6 +1244,19 @@ export class EncodeTools implements IEncodeTools {
     public static jsonToObject<T>(data: string|Buffer): T { return JSON.parse(EncodeTools.ensureBuffer(data).toString('utf8')) as T; }
 
   /**
+   * Serializes data as a JSON5 encoded string
+   *
+   * @param obj Object to serialize
+   */
+  public static objectToJson5<T>(obj: T): string { return JSON5.stringify(obj); }
+  /**
+   * Deserializes a JSON5 encoded string to an `object`
+   *
+   * @param data JSON5 to deserialize
+   */
+  public static json5ToObject<T>(data: string|Buffer): T { return JSON5.parse(EncodeTools.ensureBuffer(data).toString('utf8')) as T; }
+
+  /**
    * Serializes data as msgpack, returning the result as a `Buffer`
    *
    * @param obj Object to serialize
@@ -1269,6 +1290,14 @@ export class EncodeTools implements IEncodeTools {
    * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
    */
   public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): string;
+  /**
+   * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
+   *
+   * @param obj Object to serialize
+   * @param serializationFormat - Algorithm to serialize with
+   * @param useToPojoBeforeSerializing Use `toPojo` on the object before serializing
+   */
+  public serializeObject<T>(obj: T, serializationFormat?: SerializationFormat.json5, useToPojoBeforeSerializing?: boolean, encodeBuffersWhenUsingToPojo?: boolean): string;
   /**
    * Serializes an object using one of the available algorithms, returning the result as a Buffer or a string
    *
@@ -1323,6 +1352,7 @@ export class EncodeTools implements IEncodeTools {
       else if (serializationFormat === SerializationFormat.cbor) outBuf = EncodeTools.objectToCbor<T>(convObj);
       else if (serializationFormat === SerializationFormat.msgpack) outBuf = EncodeTools.objectToMsgpack<T>(convObj);
       else if (serializationFormat === SerializationFormat.bson) outBuf = EncodeTools.objectToBson<T>(convObj);
+      else if (serializationFormat === SerializationFormat.json5) outBuf = EncodeTools.objectToJson5<T>(convObj);
       else throw new InvalidFormat(serializationFormat);
 
       return encodeBuffersWhenUsingToPojo ? this.encodeBuffer(outBuf) : outBuf;
@@ -1334,6 +1364,13 @@ export class EncodeTools implements IEncodeTools {
    * @param serializationFormat - Algorithm to deserialize with
    */
   public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat?: SerializationFormat.json): T;
+  /**
+   * Deserializes an object serialized using one of the available algorithms, returning the result as an object
+   *
+   * @param data Data to deserialize
+   * @param serializationFormat - Algorithm to deserialize with
+   */
+  public deserializeObject<T>(data: Buffer|ArrayBuffer|string, serializationFormat?: SerializationFormat.json5): T;
   /**
    * Deserializes an object serialized using one of the available algorithms, returning the result as an object
    *
@@ -1373,6 +1410,7 @@ export class EncodeTools implements IEncodeTools {
       else if (serializationFormat === SerializationFormat.cbor) return EncodeTools.cborToObject<T>(EncodeTools.ensureBuffer(data)) as T;
       else if (serializationFormat === SerializationFormat.msgpack) return EncodeTools.msgpackToObject<T>(EncodeTools.ensureBuffer(data)) as T;
       else if (serializationFormat === SerializationFormat.bson) return EncodeTools.bsonToObject<T>(EncodeTools.ensureBuffer(data)) as T;
+      else if (serializationFormat === SerializationFormat.json5) return EncodeTools.json5ToObject<T>(EncodeTools.ensureBuffer(data)) as T;
       throw new InvalidFormat(serializationFormat);
   }
 
