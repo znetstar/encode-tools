@@ -1,6 +1,6 @@
 {
     "name": "@znetstar/encode-tools",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "description": "This package aggregates different libraries for encoding, serializing, generating ids and hashing things, exposing a common interface.",
     "main": "lib/index.js",
     "scripts": {
@@ -40,7 +40,7 @@
         "buffer": "^6.0.3",
         "cbor-web": "^8.0.1",
         "content-type": "^1.0.4",
-        "hash-wasm": "^4.6.0",
+        "hash-wasm": "^4.9.0",
         "hashids": "^2.2.8",
         "jimp": "^0.16.1",
         "json5": "^2.2.0",

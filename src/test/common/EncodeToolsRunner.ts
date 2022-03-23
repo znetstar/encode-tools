@@ -196,7 +196,7 @@ export abstract class HashRunnerBase<I> extends EncodeToolsRunner<I, BinaryInput
   constructor(formats: HashAlgorithm[] = Object.keys(HashAlgorithm).map(enc => (HashAlgorithm as any)[enc]), factory?: EncodeToolsFactory<EncodeTools>) {
     super(formats, factory);
 
-    this.formats.delete(HashAlgorithm.xxhash3);
+    // this.formats.delete(HashAlgorithm.xxhash3);
     this.formats.delete(HashAlgorithm.bcrypt);
     this.formats.delete(HashAlgorithm.sha2);
   }
@@ -218,6 +218,7 @@ export abstract class HashRunnerBase<I> extends EncodeToolsRunner<I, BinaryInput
       case HashAlgorithm.crc32:
       case HashAlgorithm.xxhash32:
       case HashAlgorithm.xxhash64:
+      case HashAlgorithm.xxhash3:
       case HashAlgorithm.sha3:
         encoded = await (hashWasm as any)[format](decoded) as BinaryInputOutput;
         break;

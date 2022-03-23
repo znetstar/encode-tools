@@ -90,7 +90,7 @@ Below are a list of supported algorithms, their backing library, and their suppo
 | Name          | Works In Browser? | Package                                              | Native Package                                             |
 | ------------- | ----------------- | ---------------------------------------------------- | ---------------------------------------------------------- |
 | crc32         | ✓                 | [hash-wasm](https://www.npmjs.com/package/hash-wasm) |                                                            |
-| xxhash3       |                   |                                                      | [xxhash-addon](https://www.npmjs.com/package/xxhash-addon) |
+| xxhash3       | ✓                 | [hash-wasm](https://www.npmjs.com/package/hash-wasm) | [xxhash-addon](https://www.npmjs.com/package/xxhash-addon) |
 | xxhash64      | ✓                 | [hash-wasm](https://www.npmjs.com/package/hash-wasm) | [xxhash-addon](https://www.npmjs.com/package/xxhash-addon) |
 | xxhash32      | ✓                 | [hash-wasm](https://www.npmjs.com/package/hash-wasm) | [xxhash-addon](https://www.npmjs.com/package/xxhash-addon) |
 | md5           | ✓                 | [hash-wasm](https://www.npmjs.com/package/hash-wasm) | [(built-in)](https://nodejs.org/api/crypto.html)           |
@@ -105,9 +105,9 @@ Below are a list of supported algorithms, their backing library, and their suppo
 | Name         | Works In Browser? | Package    | Native Package |
 | ------------ | ----------------- | ---------- | -------------- |
 | uuidv4       | ✓                 | uuid       |                |
-| uuidv2       | ✓                 | uuid       |                |
+| uuidv1       | ✓                 | uuid       |                |
 | uuidv4string | ✓                 | uuid       |                |
-| uuidv2string | ✓                 | uuid       |                |
+| uuidv1string | ✓                 | uuid       |                |
 | objectId     | ✓                 | bson       | bson-ext       |
 | nanoid       | ✓                 | nanoid     |                |
 | timestamp    | ✓                 | (built in) |                |

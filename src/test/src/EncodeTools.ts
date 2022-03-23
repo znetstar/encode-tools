@@ -518,6 +518,7 @@ describe('EncodeTools', async function () {
 
   for (let hashWasamAlgo of [
     'crc32',
+    'xxhash3',
     'xxhash32',
     'xxhash64',
     'sha1',

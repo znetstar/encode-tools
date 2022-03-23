@@ -21,7 +21,8 @@ import {
     crc32,
     bcrypt as Bcrypt,
     bcryptVerify,
-    xxhash64, BcryptOptions, BcryptVerifyOptions
+    xxhash64, BcryptOptions, BcryptVerifyOptions,
+    xxhash3
 } from 'hash-wasm';
 const ObjSorter = require('node-object-hash/dist/objectSorter');
 const LZMA = require('lzma').LZMA;
@@ -114,6 +115,10 @@ export enum BinaryEncoding {
 }
 
 export enum HashAlgorithm {
+    /**
+     * Super fast non-cryptographic hashing algorithm.
+     */
+    xxhash3 = 'xxhash3',
     crc32 = 'crc32',
     /**
      * Super fast non-cryptographic hashing algorithm.
@@ -150,12 +155,7 @@ export enum HashAlgorithm {
     /**
      * BCrypt hashing algorithm
      */
-    bcrypt = 'bcrypt',
-    /**
-     * Must use EncodeToolsNative
-     * @deprecated
-     */
-    xxhash3 = 'xxhash3'
+    bcrypt = 'bcrypt'
 }
 
 /**
@@ -901,6 +901,17 @@ export class EncodeTools implements IEncodeTools {
     public static async xxhash64(buffer: BinaryInputOutput, ...args: any[]): Promise<Buffer> {
         return ensureBuffer(await xxhash64(EncodeTools.ensureBuffer(buffer), ...args), 'hex');
     }
+  /**
+   * Hashes using XXHash-3 (https://zb.gy/l4kN), a fast, non-cryptographic,
+   * hashing function.
+   *
+   * Uses XXHash from npm:hash-wasm
+   * @param buffer
+   * @param args
+   */
+  public static async xxhash3(buffer: BinaryInputOutput, ...args: any[]): Promise<Buffer> {
+    return ensureBuffer(await xxhash3(EncodeTools.ensureBuffer(buffer), ...args), 'hex');
+  }
     /**
      * Uses the very popular, but UNSAFE, SHA-1 cryptographic algorithm.
      * Use SHA3 for new projects.
@@ -989,7 +1000,8 @@ export class EncodeTools implements IEncodeTools {
      * @param algorithm
      */
     public async hash(buffer: BinaryInputOutput, algorithm: HashAlgorithm = this.options.hashAlgorithm, ...args: any[]): Promise<Buffer> {
-      if (algorithm === HashAlgorithm.xxhash64) return EncodeTools.xxhash64(buffer, ...args);
+      if (algorithm === HashAlgorithm.xxhash3) return EncodeTools.xxhash3(buffer, ...args);
+      else if (algorithm === HashAlgorithm.xxhash64) return EncodeTools.xxhash64(buffer, ...args);
       else if (algorithm === HashAlgorithm.xxhash32) return EncodeTools.xxhash32(buffer, ...args);
       else if (algorithm === HashAlgorithm.sha1) return EncodeTools.sha1(buffer);
       else if (algorithm === HashAlgorithm.sha512) return EncodeTools.sha512(buffer);
