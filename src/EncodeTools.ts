@@ -660,11 +660,14 @@ export class EncodeTools implements IEncodeTools {
      * @param hex
      */
     public static base64urlToNodeBuffer(base64url: string): Buffer {
-        base64url = (base64url + '==='.slice((base64url.length + 3) % 4))
-            .replace(/-/g, '+')
-            .replace(/_/g, '/');
+      if (Buffer.isEncoding('base64url'))
+        return Buffer.from(base64url, 'base64url');
 
-        return EncodeTools.base64ToNodeBuffer(base64url);
+      base64url = (base64url + '==='.slice((base64url.length + 3) % 4))
+          .replace(/-/g, '+')
+          .replace(/_/g, '/');
+
+      return EncodeTools.base64ToNodeBuffer(base64url);
     }
     /**
      * Encodes a node.js buffer as a base64url string.
@@ -672,6 +675,9 @@ export class EncodeTools implements IEncodeTools {
      * @param hex
      */
     public static nodeBufferToBase64url(buffer: BinaryInputOutput): string {
+        if (Buffer.isEncoding('base64url'))
+          return EncodeTools.ensureBuffer(buffer).toString('base64url');
+
         let base64url = EncodeTools.nodeBufferToBase64(EncodeTools.ensureBuffer(buffer));
         base64url = base64url.replace(/\+/g, '-')
             .replace(/\//g, '_')
